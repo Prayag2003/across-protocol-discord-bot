@@ -4,7 +4,7 @@ import json
 import os
 
 BASE_URL = "https://docs.across.to/"
-OUTPUT_FILE = "knowledge_base.json"
+OUTPUT_FILE = "knowledge_base/knowledge_base3.json"
 
 def scrape_page(url):
     response = requests.get(url)
