@@ -3,3 +3,4 @@ __pycache__/
 .vscode/
 .venv/
 README.md
+query_response_log.json

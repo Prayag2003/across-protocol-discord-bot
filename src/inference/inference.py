@@ -122,31 +122,3 @@ def generate_response_with_context(user_query: str):
     except Exception as e:
         print(f"Error generating response: {str(e)}")
         return "Sorry, there was an error generating the response."
-
-# if __name__ == "__main__":
-
-#     logger.info("Starting Across Protocol Bot")
-#     client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
-
-#     embeddings_path = os.path.join('..', 'src', 'knowledge_base', 'knowledge_base_embeddings.json')
-#     logger.info(f"Loading embeddings from: {embeddings_path}")
-
-#     try:
-#         embeddings_list = load_embeddings(embeddings_path)
-#         logger.info(f"Successfully loaded embeddings.")
-#     except Exception as e:
-#         logger.error(f"Failed to load embeddings: {str(e)}")
-#         exit(1)
-
-#     user_query = "I am new to across protocol, can you explain me how can I bridge my USDC on Eth Mainnet to Polygon network?"
-#     logger.info(f"Processing query: {user_query}")
-
-#     try:
-#         query_embedding = generate_embedding_for_query(user_query)
-#         most_similar_docs = find_most_similar_documents(query_embedding, embeddings_list, user_query, top_n=3)
-
-#         response = generate_response_with_context(context, user_query)
-#         print(f"\nResponse:\n{response}")
-        
-#     except Exception as e:
-#         print(f"Error processing query: {str(e)}")
