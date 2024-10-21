@@ -22,11 +22,19 @@ async def on_message(message):
     if message.author.bot:
         return
 
-    if message.content == 'ping':
+    if isinstance(message.channel, discord.Thread):
+        try:
+            response = await asyncio.to_thread(generate_response_with_context, message.content)
+            
+            chunks = chunk_message(response)
+            for chunk in chunks:
+                await message.channel.send(chunk)
+        except Exception as e:
+            logging.error(f"Error processing thread message: {str(e)}")
+            await message.channel.send(f"An error occurred: {str(e)}")
+    elif message.content == 'ping':
         await message.channel.send('Pong!')
-        return
-
-    await message.channel.send('Hello from the bot!')
+    
     await bot.process_commands(message)
 
 @bot.event
