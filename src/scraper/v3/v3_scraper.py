@@ -4,7 +4,7 @@ import json
 import os
 
 BASE_URL = "https://docs.across.to/"
-OUTPUT_FILE = "knowledge_base/knowledge_base.json"
+OUTPUT_FILE = "scraper/v3/scraped_data_v3.json"
 
 def scrape_page(url):
     response = requests.get(url)
@@ -20,6 +20,7 @@ def extract_links(soup):
         link = li.get('href')
         if link and link.startswith('/'):
             links.append(BASE_URL + link.lstrip('/'))  
+    print(f"Found {len(links)} links")
     return links
 
 def build_knowledge_base():

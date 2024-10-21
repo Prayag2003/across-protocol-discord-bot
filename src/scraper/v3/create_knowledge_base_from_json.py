@@ -48,6 +48,6 @@ def save_processed_data(processed_data, output_file):
         json.dump(processed_data, f, ensure_ascii=False, indent=4)
 
 if __name__ == "__main__":
-    knowledge_base = load_knowledge_base("knowledge_base/extracted_data.json")
+    knowledge_base = load_knowledge_base("scraper/v3/scraped_data_v3.json")
     processed_data = process_knowledge_base(knowledge_base)
-    save_processed_data(processed_data, "knowledge_base/knowledge_base.json")
+    save_processed_data(processed_data, "knowledge_base/embeddings/v3/knowledge_base_v3.json")
