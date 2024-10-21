@@ -68,7 +68,7 @@ def find_most_similar_documents(query_embedding, embeddings_list, query, top_n=3
     
     sorted_similarities = sorted(filtered_similarities, key=lambda x: x[1], reverse=True)
     
-    print("\nSimilarity scores:")
+    print("Similarity scores:")
     for url, sim, _ in sorted_similarities[:top_n]:
         print(f"{url}: {sim:.3f}")
     
@@ -90,7 +90,7 @@ def generate_response_with_context(user_query: str):
     print(f"Processing query: {user_query}")
     client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 
-    embeddings_path = os.path.join('..', 'src', 'knowledge_base', 'knowledge_base_embeddings.json')
+    embeddings_path = os.path.join('knowledge_base', 'embeddings', 'v3', 'knowledge_base_v3_embeddings.json')
     logger.info(f"Loading embeddings from: {embeddings_path}")
 
     try:
@@ -111,10 +111,9 @@ def generate_response_with_context(user_query: str):
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=messages,
-            max_tokens=800,
+            max_tokens=700,
             temperature=0.15,
         )
-        # response_text = response.choices[0]['message']['content'].strip()
         response_text = response.choices[0].message.content.strip()
         log_query_and_response(user_query, response_text)
         return response_text
