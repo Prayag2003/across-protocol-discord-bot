@@ -4,3 +4,5 @@ openai
 numpy 
 scikit-learn
 loguru
+beautifulsoup4
+pymongo

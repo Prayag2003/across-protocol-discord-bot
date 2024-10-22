@@ -49,12 +49,6 @@ def create_embeddings_for_kb(knowledge_base):
                 embeddings_list.append({
                     'url': url,
                     'embedding': embedding,
-                    'content': {
-                        'title': content.get('title', ''),
-                        'headers': content.get('headers', []),
-                        'paragraphs': content.get('paragraphs', []),
-                        'lists': content.get('lists', [])
-                    }
                 })
                 print(f"Generated embedding for: {url}")
             else:
@@ -83,8 +77,8 @@ def save_embeddings(embeddings_list, output_file):
 if __name__ == "__main__":
     client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
     
-    knowledge_base_path = os.path.join('knowledge_base', 'embeddings', 'v3', 'knowledge_base_v3.json')
-    embeddings_output_path = os.path.join('knowledge_base', 'embeddings', 'v3','knowledge_base_v3_embeddings.json')
+    knowledge_base_path = os.path.join('knowledge_base', 'embeddings', 'v2', 'knowledge_base_v2.json')
+    embeddings_output_path = os.path.join('knowledge_base', 'embeddings', 'v2','knowledge_base_v2_embeddings.json')
 
     knowledge_base = load_knowledge_base(knowledge_base_path)
     print(f"Loaded knowledge base with {len(knowledge_base)} entries")

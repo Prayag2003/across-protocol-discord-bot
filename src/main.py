@@ -1,4 +1,5 @@
 import os
+import re
 import asyncio
 import discord
 from loguru import logger as logging
@@ -43,9 +44,28 @@ async def on_interaction(interaction):
         if interaction.data['name'] == 'ping':
             await interaction.response.send_message('Pong!')
 
-def chunk_message(message, chunk_size=1800):
-    """Splits a message into chunks of specified size, ensuring no chunks exceed the limit."""
-    return [message[i:i + chunk_size] for i in range(0, len(message), chunk_size)]
+
+def chunk_message_by_paragraphs(message, max_chunk_size=1980):
+    """Splits a message by paragraphs or sentences while ensuring no chunks exceed the specified limit."""
+    
+    paragraphs = re.split(r'\n\n+', message.strip())
+    
+    chunks = []
+    current_chunk = ""
+    
+    for paragraph in paragraphs:
+        if len(current_chunk) + len(paragraph) + 2 > max_chunk_size:
+            chunks.append(current_chunk.strip())
+            current_chunk = paragraph
+        else:
+            if current_chunk:
+                current_chunk += "\n\n"  
+            current_chunk += paragraph
+    
+    if current_chunk:
+        chunks.append(current_chunk.strip()) 
+    
+    return chunks
 
 @bot.command('explain')
 async def explain(ctx, *, user_query: str):
@@ -59,12 +79,12 @@ async def explain(ctx, *, user_query: str):
         # Create a thread from the original message
         thread = await ctx.message.create_thread(name=f"Explanation for: {user_query}", auto_archive_duration=60)
 
-        # Check if the explanation exceeds the character limit
-        explanation_chunks = chunk_message(explanation)
+        # Use the new chunking method to break explanation into paragraphs or sentences
+        explanation_chunks = chunk_message_by_paragraphs(explanation)
         for chunk in explanation_chunks:
             chunk = chunk.strip()
             logging.info(f"Chunk length: {len(chunk)}")
-            await thread.send(f"Explanation: {chunk}")
+            await thread.send(chunk)
 
     except discord.errors.HTTPException as http_ex:
         logging.error(f"Error sending the explanation: {str(http_ex)}")
