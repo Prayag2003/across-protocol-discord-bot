@@ -3,3 +3,4 @@ __pycache__/
 .vscode/
 .venv/
 query_response_log.json
+*.log
