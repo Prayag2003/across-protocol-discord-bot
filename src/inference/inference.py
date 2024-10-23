@@ -90,7 +90,7 @@ def generate_response_with_context(user_query: str):
     print(f"Processing query: {user_query}")
     client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 
-    embeddings_path = os.path.join('knowledge_base', 'embeddings', 'v3', 'knowledge_base_v3_embeddings.json')
+    embeddings_path = os.path.join('knowledge_base', 'embeddings', 'merged_knowledge_base_embeddings.json')
     logger.info(f"Loading embeddings from: {embeddings_path}")
 
     try:
@@ -103,8 +103,11 @@ def generate_response_with_context(user_query: str):
     query_embedding = generate_embedding_for_query(client, user_query)
 
     most_similar_docs = find_most_similar_documents(query_embedding, embeddings_list, user_query, top_n=3)
+    logger.info(f"Found {len(most_similar_docs)} most similar documents.")
 
     context = generate_context_from_documents(most_similar_docs)
+    logger.info(f"Generated context with {len(context)} characters.")
+
     messages = generate_prompt_template(context, user_query)
 
     try:
