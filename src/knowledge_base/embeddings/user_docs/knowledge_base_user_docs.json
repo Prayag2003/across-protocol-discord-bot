@@ -60,13 +60,13 @@
             "Looking for something else? Get in touch"
         ],
         "paragraphs": [
+            "Last updated 2 months ago",
             "Across is an interoperability protocol powered by intents. It is the first cross-chain intents protocol in production today, enabling the fastest and lowest-cost way to transfer value without security tradeoffs.",
             "Across can be easily integrated via our easy to use REST API into any application requiring instant, low cost cross-chain value transfer. Let users easily onboard assets without leaving your app. ",
             "Across can also be integrated in your application to abstract bridging completely, enabling users to directly interact with your app from any chain. ",
             "Across Settlement is the only production-ready, modular settlement layer built to facilitate cross-chain intents. Powers use cases that require customization beyond the Across Core offering, like cross-chain token swaps, new request for quote auction designs and more. ",
             "Join the growing network of independent relayers (a.k.a solvers, fillers, market makers) fulfilling intent order flow on Across. Earn up to 100% APY. ",
-            "",
-            "Last updated 2 months ago"
+            ""
         ],
         "lists": [
             "👋\nIntroduction\nGetting Started\nWhat is Across?\nTechnical FAQ\nMigration Guides\nMigration from V2 to V3\nMigration to CCTP\nMigration Guide for Relayers\nMigration Guide for API Users\n🔗\nUse Cases\nInstant Bridging in your Application\nBridge Integration Guide\nMulti Chain Bridge UI Guide\nSingle Chain Bridge UI Guide\nEmbedded Cross-chain Actions\nCross-chain Actions Integration Guide\nUsing the Generic Multicaller Handler Contract\nUsing a Custom Handler Contract\nCross-chain Actions UI Guide\nSettle Cross-chain Intents\n🧠\nConcepts\nWhat are Cross-chain Intents?\nIntents Architecture in Across\nIntent Lifecycle in Across\nCanonical Asset Maximalism\n🛠️\nReference\nAPI Reference\nSDK Reference\nContracts\nArbitrum (Chain ID: 42161)\nBase (Chain ID: 8453)\nBlast (Chain ID: 81457)\nEthereum Mainnet (Chain ID: 1)\nLinea (Chain ID: 59144)\nLisk (Chain ID: 1135)\nMode (Chain ID: 34443)\nOptimism (Chain ID: 10)\nPolygon (Chain ID: 137)\nRedstone (Chain ID: 690)\nScroll (Chain ID: 534352)\nWorld Chain (Chain ID: 480)\nzkSync (Chain ID: 324)\nZora (Chain ID: 7777777)\nSepolia Testnet\nSelected Contract Functions\nSupported Chains\nFees in the System\nActors in the System\nSecurity Model and Verification\nDisputing Root Bundles\nValidating Root Bundles\nTracking Events\n🔁\nRelayers\nRunning a Relayer\nRelayer Exclusivity\n📚\nResources\nRelease Notes\nDeveloper Support\nBug Bounty\nAudits\nNew Chain Requests",
@@ -901,6 +901,7 @@
             "Step 4: Results"
         ],
         "paragraphs": [
+            "Last updated 1 day ago",
             "Treasury Funding",
             "Governance Updates",
             "Committee implementation or replacement",
@@ -908,8 +909,7 @@
             "Post a proposal draft in Ideas and Feedback in Forum. Collect feedback from the community and update the proposal as needed. There is no hard timeline for this step, but proposals that don’t take this step seriously are not likely to pass. Once your idea is ready to submit as a proposal, it will need to follow the template below, so you should consider drafting your idea in this format to start. ",
             "After implementing any changes to the proposal based on feedback received in step 1, you should present a final draft in the Proposal section of forum and request to proceed to Snapshot. You will want to make sure to include a link to your discussion draft in the final proposal. Any Forum admin can review the proposal for format compliance and provide an indication that the proposal can move to Snapshot. This is not an indication of support for the ideas in the proposal, but rather an indication that the proposal meets the requirements needed to move to a vote. Proposals that are not properly formatted should not move to a formal vote.",
             "Proposals that have been approved in step 2 are ready to be voted on and may be posted to snapshot with a 7-day voting period. A proposer must have a voting weight of at least 50,000 ACX in order to submit a proposal. If you do not meet the requirement for submitting a proposal, a qualified voter may post the proposal on your behalf if they wish to do so. ",
-            "If a proposal passes Snapshot, it will be executed by the Across DAO Safe.\n",
-            "Last updated 20 hours ago"
+            "If a proposal passes Snapshot, it will be executed by the Across DAO Safe.\n"
         ],
         "lists": [
             "How to Use Across\nAbout\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History\nHow across works\nOverview\nSecurity\nFees\nSpeed\nSupported Chains and Tokens\n🪙\n$ACX Token\nToken Overview\nInitial Allocations\nACX Emissions Committee\nGovernance\nGovernance Model\nProposals and Voting\nAdditional Info\nFAQ\nSupport Links\nMigrating from V1\nAcross Brand Assets",

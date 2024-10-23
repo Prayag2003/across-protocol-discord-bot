@@ -40,23 +40,30 @@ def extract_content_for_embedding(content):
 def create_embeddings_for_kb(knowledge_base):
     """Generate embeddings with improved content processing"""
     embeddings_list = []
-    
-    for url, content in knowledge_base.items():
+
+    for url, content in knowledge_base.items():  
         try:
-            formatted_content = extract_content_for_embedding(content)
-            if formatted_content.strip(): 
-                embedding = generate_embedding(formatted_content)
-                embeddings_list.append({
-                    'url': url,
-                    'embedding': embedding,
-                })
-                print(f"Generated embedding for: {url}")
+            if content:  
+                paragraphs = content.get('paragraphs', [])
+                
+                formatted_content = ' '.join(paragraphs)
+                
+                if formatted_content.strip():  
+                    embedding = generate_embedding(formatted_content)
+                    embeddings_list.append({
+                        'url': url,
+                        'embedding': embedding,
+                    })
+                    print(f"Generated embedding for: {url}")
+                else:
+                    print(f"Skipping {url} - no content to embed")
             else:
-                print(f"Skipping {url} - no content to embed")
+                print(f"Skipping {url} - content is missing")
         except Exception as e:
             print(f"Error processing {url}: {str(e)}")
     
     return embeddings_list
+
 
 def generate_embedding(content):
     try:
@@ -77,14 +84,31 @@ def save_embeddings(embeddings_list, output_file):
 if __name__ == "__main__":
     client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
     
-    knowledge_base_path = os.path.join('knowledge_base', 'embeddings', 'v2', 'knowledge_base_v2.json')
-    embeddings_output_path = os.path.join('knowledge_base', 'embeddings', 'v2','knowledge_base_v2_embeddings.json')
+    knowledge_base_paths = [
+        {
+            "input": os.path.join('knowledge_base', 'embeddings', 'v2', 'knowledge_base_v2.json'),
+            "output": os.path.join('knowledge_base', 'embeddings', 'v2', 'knowledge_base_v2_embeddings.json')
+        },
+        {
+            "input": os.path.join('knowledge_base', 'embeddings', 'v3', 'knowledge_base_v3.json'),
+            "output": os.path.join('knowledge_base', 'embeddings', 'v3', 'knowledge_base_v3_embeddings.json')
+        },
+        {
+            "input": os.path.join('knowledge_base', 'embeddings', 'user_docs', 'knowledge_base_user_docs.json'),
+            "output": os.path.join('knowledge_base', 'embeddings', 'user_docs', 'knowledge_base_user_docs_embeddings.json')
+        }
+    ]
+    
+    for kb_paths in knowledge_base_paths:
+        knowledge_base_path = kb_paths["input"]
+        embeddings_output_path = kb_paths["output"]
 
-    knowledge_base = load_knowledge_base(knowledge_base_path)
-    print(f"Loaded knowledge base with {len(knowledge_base)} entries")
-    
-    embeddings_list = create_embeddings_for_kb(knowledge_base)
-    print(f"Generated {len(embeddings_list)} embeddings")
-    
-    save_embeddings(embeddings_list, embeddings_output_path)
-    print("Process completed successfully!")
+        knowledge_base = load_knowledge_base(knowledge_base_path)
+        print(f"Loaded knowledge base from {knowledge_base_path} with {len(knowledge_base)} entries")
+
+        embeddings_list = create_embeddings_for_kb(knowledge_base)
+        print(f"Generated {len(embeddings_list)} embeddings for {knowledge_base_path}")
+
+        save_embeddings(embeddings_list, embeddings_output_path)
+
+    print("Embedding generation process completed for all knowledge bases.")
