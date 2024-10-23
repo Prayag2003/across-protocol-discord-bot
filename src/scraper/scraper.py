@@ -50,7 +50,7 @@ def run_scrapers_sequentially():
     """Run the scrapers sequentially"""
     scrapers = [
         {"BASE_URL": "https://docs.across.to/", "OUTPUT_FILE": "scraper/v3/scraped_data_v3.json"},
-        {"BASE_URL": "https://docs.across.to/", "OUTPUT_FILE": "scraper/v2/scraped_data_v2.json"}, 
+        {"BASE_URL": "https://docs.across.to/developer-docs", "OUTPUT_FILE": "scraper/v2/scraped_data_v2.json"}, 
         {"BASE_URL": "https://docs.across.to/user-docs/", "OUTPUT_FILE": "scraper/user_docs/scraped_data_user_docs.json"} 
     ]
     
