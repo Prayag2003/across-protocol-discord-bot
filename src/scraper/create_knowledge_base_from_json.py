@@ -20,7 +20,6 @@ def extract_important_info(html_content):
         "summaries": []
     }
     
-    # Extract tables
     for table in soup.find_all('table'):
         table_data = []
         for row in table.find_all('tr'):
@@ -28,14 +27,12 @@ def extract_important_info(html_content):
             table_data.append(row_data)
         info["tables"].append(table_data)
 
-    # Extract code blocks
     for code in soup.find_all('code', id=True):  
         info["code_blocks"].append({
             "id": code['id'],
             "code": code.get_text().strip()
         })
     
-    # Extract summaries
     for summary in soup.find_all('summary'):
         info["summaries"].append(summary.get_text().strip())
     
