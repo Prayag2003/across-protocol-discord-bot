@@ -50,7 +50,7 @@ def compute_similarity(query_embedding, embeddings_list, query):
             similarities.append((url, similarity, url))  
                 
         except Exception as e:
-            print(f"Error processing document {entry.get('url', 'unknown')}: {str(e)}")
+            logger.error(f"Error processing document {entry.get('url', 'unknown')}: {str(e)}")
             continue
 
     return similarities
@@ -83,9 +83,9 @@ def find_most_similar_documents(query_embedding, embeddings_list, query, top_n=3
     
     sorted_similarities = sorted(filtered_similarities, key=lambda x: x[1], reverse=True)
     
-    print("Similarity scores:")
+    logger.info("Similarity scores:")
     for url, sim, _ in sorted_similarities[:top_n]:
-        print(f"{url}: {sim:.3f}")
+        logger.info(f"{url}: {sim:.3f}")
     
     return sorted_similarities[:top_n]
 
@@ -100,9 +100,9 @@ def generate_embedding_for_query(client, text):
     except Exception as e:
         raise Exception(f"Error generating embedding: {str(e)}")
 
-def generate_response_with_context(user_query: str):
+def generate_response_with_context(user_query: str, username: str):
     logger.info("Starting Across Protocol Bot")
-    print(f"Processing query: {user_query}")
+    logger.info(f"Processing query: {user_query}")
     client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 
     embeddings_path = os.path.join('knowledge_base', 'embeddings', 'merged_knowledge_base_embeddings.json')
@@ -133,9 +133,9 @@ def generate_response_with_context(user_query: str):
             temperature=0.15,
         )
         response_text = response.choices[0].message.content.strip()
-        log_query_and_response(user_query, response_text)
+        log_query_and_response(user_query, response_text, username)
         return response_text
 
     except Exception as e:
-        print(f"Error generating response: {str(e)}")
+        logger.error(f"Error generating response: {str(e)}")
         return "Sorry, there was an error generating the response."

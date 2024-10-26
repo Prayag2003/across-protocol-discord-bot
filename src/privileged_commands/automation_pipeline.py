@@ -2,6 +2,7 @@ import subprocess
 import sys
 import os
 from datetime import datetime
+from loguru import logger
 import logging
 
 logging.basicConfig(
@@ -42,7 +43,7 @@ class PipelineExecutor:
                 shell=True
             )
 
-            print("Process", process)
+            logger.info("Process", process)
             
             stdout_lines = []
             stderr_lines = []

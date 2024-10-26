@@ -1,4 +1,5 @@
 import json
+from loguru import logger
 from bs4 import BeautifulSoup
 
 def load_knowledge_base(file_path):
@@ -63,7 +64,7 @@ knowledge_bases = [
 ]
 
 for kb in knowledge_bases:
-    print(f"Processing {kb['input_file']}...")
+    logger.info(f"Processing {kb['input_file']}...")
     process_and_save_knowledge_base(kb['input_file'], kb['output_file'])
 
-print("All knowledge bases processed successfully!")
+logger.info("All knowledge bases processed successfully!")

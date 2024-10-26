@@ -1,6 +1,7 @@
 import os
 import json
 from openai import OpenAI   
+from loguru import logger
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -45,7 +46,6 @@ def create_embeddings_for_kb(knowledge_base):
         try:
             if content:  
                 paragraphs = content.get('paragraphs', [])
-                
                 formatted_content = ' '.join(paragraphs)
                 
                 if formatted_content.strip():  
@@ -54,13 +54,15 @@ def create_embeddings_for_kb(knowledge_base):
                         'url': url,
                         'embedding': embedding,
                     })
-                    print(f"Generated embedding for: {url}")
+                    logger.info(f"Generated embedding for: {url}")
                 else:
-                    print(f"Skipping {url} - no content to embed")
+                    logger.warning(f"Skipping {url} - no content to embed")
+
             else:
-                print(f"Skipping {url} - content is missing")
+                logger.warning(f"Skipping {url} - content is missing")
+
         except Exception as e:
-            print(f"Error processing {url}: {str(e)}")
+            logger.error(f"Error processing {url}: {str(e)}")
     
     return embeddings_list
 
@@ -79,7 +81,7 @@ def save_embeddings(embeddings_list, output_file):
     """Save embeddings with proper formatting"""
     with open(output_file, 'w', encoding='utf-8') as file:
         json.dump(embeddings_list, file, ensure_ascii=False, indent=4)
-    print(f"Embeddings saved to {output_file}")
+    logger.info(f"Embeddings saved to {output_file}")
 
 if __name__ == "__main__":
     client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
@@ -104,11 +106,11 @@ if __name__ == "__main__":
         embeddings_output_path = kb_paths["output"]
 
         knowledge_base = load_knowledge_base(knowledge_base_path)
-        print(f"Loaded knowledge base from {knowledge_base_path} with {len(knowledge_base)} entries")
+        logger.info(f"Loaded knowledge base from {knowledge_base_path} with {len(knowledge_base)} entries")
 
         embeddings_list = create_embeddings_for_kb(knowledge_base)
-        print(f"Generated {len(embeddings_list)} embeddings for {knowledge_base_path}")
+        logger.info(f"Generated {len(embeddings_list)} embeddings for {knowledge_base_path}")
 
         save_embeddings(embeddings_list, embeddings_output_path)
 
-    print("Embedding generation process completed for all knowledge bases.")
+    logger.info("Embedding generation process completed for all knowledge bases.")

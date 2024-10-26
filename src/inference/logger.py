@@ -1,29 +1,26 @@
-from loguru import logger
-import json
 import os
+from dotenv import load_dotenv
+from datetime import datetime
+from loguru import logger
+from pymongo import MongoClient
+load_dotenv()
 
-def format_response(response):
-    formatted_response = response.replace("```", "\n```")  
-    return formatted_response
+client = MongoClient(os.getenv("MONGO_URI"))
+db = client[os.getenv("MONGO_DB_NAME")]
+log_collection = db[os.getenv("LOGS_COLLECTION")]
 
-def log_query_and_response(query, response):
-    logger.info(f"Query: {query}")
-    
-    formatted_response = format_response(response)
-    logger.info(f"Response:\n{formatted_response}")
-
-    file_path = "query_response_log.json"
-    if os.path.exists(file_path) and os.path.getsize(file_path) > 0:
-        with open(file_path, 'r', encoding='utf-8') as file:
-            entries = json.load(file)
-    else:
-        entries = []
-
-    entry = {
+def log_query_and_response(query, response, username):
+    """Logs the query, response, and metadata to MongoDB."""
+    timestamp = datetime.now().isoformat()
+    log_entry = {
+        "timestamp": timestamp,
+        "username": username,
         "query": query,
-        "response": formatted_response
+        "response": response
     }
-    entries.append(entry)
-
-    with open(file_path, 'w', encoding='utf-8') as file:
-        json.dump(entries, file, ensure_ascii=False, indent=4)
+    
+    try:
+        log_collection.insert_one(log_entry)
+        logger.info("Log successfully written to MongoDB.")
+    except Exception as e:
+        logger.error(f"Error writing log to MongoDB: {str(e)}")

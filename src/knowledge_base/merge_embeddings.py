@@ -1,7 +1,8 @@
 import os
 import json
-from pymongo import MongoClient
 from dotenv import load_dotenv
+from loguru import logger
+from pymongo import MongoClient
 
 load_dotenv()
 
@@ -31,7 +32,7 @@ merged_file_path = 'knowledge_base/embeddings/merged_knowledge_base_embeddings.j
 with open(merged_file_path, 'w', encoding='utf-8') as merged_file:
     json.dump(merged_data, merged_file, indent=4, ensure_ascii=False)
 
-print("Data from all files has been merged successfully into 'merged_knowledge_base_embeddings.json'")
+logger.info("Data from all files has been merged successfully into 'merged_knowledge_base_embeddings.json'")
 
 # Remove existing documents in the MongoDB collection
 collection.delete_many({})
@@ -40,8 +41,8 @@ collection.delete_many({})
 try:
     if merged_data:
         collection.insert_many(merged_data)
-        print("Merged data has been successfully uploaded to MongoDB.")
+        logger.info("Merged data has been successfully uploaded to MongoDB.")
     else:
-        print("No data to upload to MongoDB.")
+        logger.warning("No data to upload to MongoDB.")
 except Exception as e:
-    print(f"Error uploading data to MongoDB: {e}")
+    logger.error(f"Error uploading data to MongoDB: {e}")
