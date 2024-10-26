@@ -46,8 +46,6 @@ async def setup_events(bot):
         if not message.content.startswith("!"):
             await bot.process_commands(message)
 
-        
-
     @bot.event
     async def on_interaction(interaction):
         if interaction.type == discord.InteractionType.application_command:
