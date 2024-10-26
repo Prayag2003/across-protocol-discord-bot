@@ -1,7 +1,7 @@
 import discord
 from loguru import logger as logging
 import asyncio
-from utils.message import chunk_message, chunk_message_by_paragraphs
+from utils.message import chunk_message
 from utils.logging import log_manager
 from inference.inference import generate_response_with_context
 
@@ -20,18 +20,17 @@ async def setup_events(bot):
         if message.author.bot:
             return
 
-        # Only process messages inside a thread and ignore commands
+        # Only process messages inside threads
         if isinstance(message.channel, discord.Thread):
             try:
-                response = await asyncio.to_thread(generate_response_with_context, message.content)
-                
-                # Log the interaction
-                await log_manager.stream_log(message, response)
-                
-                # Send response in chunks
-                chunks = chunk_message(response)
-                for chunk in chunks:
-                    await message.channel.send(chunk)
+                if not message.reference:
+                    response = await asyncio.to_thread(generate_response_with_context, message.content)
+                    
+                    await log_manager.stream_log(message, response)
+                    
+                    chunks = chunk_message(response)
+                    for chunk in chunks:
+                        await message.channel.send(chunk)
             except Exception as e:
                 error_msg = f"Error processing thread message: {str(e)}"
                 logging.error(error_msg)
@@ -52,7 +51,6 @@ async def setup_events(bot):
             if interaction.data['name'] == 'ping':
                 response = 'Pong!'
                 await interaction.response.send_message(response)
-                # Create a mock message for logging
                 mock_message = type('obj', (), {'author': interaction.user, 'content': 'ping (interaction)'})
                 await log_manager.stream_log(mock_message, response)
 

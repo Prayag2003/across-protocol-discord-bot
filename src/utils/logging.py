@@ -13,7 +13,7 @@ class LogManager:
             'error': discord.Color.red()
         }
         self.MAX_FIELD_LENGTH = 1024
-        self.MAX_CHUNKS = 4  # Maximum number of chunks to split the response into
+        self.MAX_CHUNKS = 4  
 
     async def setup_log_channel(self, guild):
         """Create or get the logging channel with admin and owner-only permissions."""
@@ -48,7 +48,6 @@ class LogManager:
         chunks = []
         current_chunk = ""
         
-        # Split by paragraphs first
         paragraphs = text.split('\n\n')
         
         for paragraph in paragraphs:
@@ -62,7 +61,6 @@ class LogManager:
         if current_chunk:
             chunks.append(current_chunk.strip())
         
-        # If any chunk is still too long, split it further
         final_chunks = []
         for chunk in chunks:
             if len(chunk) > max_length:
@@ -79,21 +77,18 @@ class LogManager:
             if not self.log_channel:
                 return
 
-            # Create the initial embed with user info and query
             main_embed = discord.Embed(
                 title="Bot Interaction Log",
                 color=self.colors.get(log_type, self.colors['default']),
                 timestamp=datetime.utcnow()
             )
 
-            # Add user information
             main_embed.add_field(
                 name="👤 User",
                 value=f"{message.author.name} ({message.author.id})",
                 inline=False
             )
 
-            # Add query (truncate if necessary)
             query_content = message.content
             if len(query_content) > self.MAX_FIELD_LENGTH:
                 query_content = query_content[:self.MAX_FIELD_LENGTH-3] + "..."
@@ -103,7 +98,6 @@ class LogManager:
                 inline=False
             )
 
-            # Add metadata
             main_embed.add_field(
                 name="📍 Channel",
                 value=f"#{message.channel.name}",
@@ -116,7 +110,6 @@ class LogManager:
                 inline=True
             )
 
-            # Set author and footer
             main_embed.set_author(
                 name=message.author.display_name,
                 icon_url=message.author.avatar.url if message.author.avatar else message.author.default_avatar.url
@@ -126,14 +119,12 @@ class LogManager:
                 icon_url=message.guild.icon.url if message.guild.icon else None
             )
 
-            # Send the main embed
             await self.log_channel.send(embed=main_embed)
 
-            # Handle the response in chunks if it's too long
             response_chunks = self.split_long_message(response, self.MAX_FIELD_LENGTH)
             
             for i, chunk in enumerate(response_chunks):
-                if i >= self.MAX_CHUNKS:  # Limit the number of chunks
+                if i >= self.MAX_CHUNKS: 
                     remaining_chunks = len(response_chunks) - self.MAX_CHUNKS
                     await self.log_system_message(
                         f"⚠️ Response truncated. {remaining_chunks} more chunks were omitted.",

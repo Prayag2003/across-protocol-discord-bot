@@ -20,7 +20,6 @@ def load_embeddings(file_path):
         logger.error(f"Failed to load embeddings from file: {str(e)}")
         logger.info("Attempting to load embeddings from MongoDB as fallback...")
         try:
-            # MongoDB connection setup
             client = MongoClient(os.getenv('MONGO_URI'))
             db = client[os.getenv('MONGO_DB_NAME')]
             collection = db[os.getenv('EMBEDDINGS_COLLECTION')]
@@ -106,7 +105,7 @@ def generate_response_with_context(user_query: str):
     print(f"Processing query: {user_query}")
     client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 
-    embeddings_path = os.path.join('knowledge_base', '', 'merged_knowledge_base_embeddings.json')
+    embeddings_path = os.path.join('knowledge_base', 'embeddings', 'merged_knowledge_base_embeddings.json')
     logger.info(f"Loading embeddings from: {embeddings_path}")
 
     try:
