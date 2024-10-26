@@ -41,13 +41,13 @@
             "Looking for something else? Get in touch"
         ],
         "paragraphs": [
-            "Last updated 2 months ago",
             "Across is an interoperability protocol powered by intents. It is the first cross-chain intents protocol in production today, enabling the fastest and lowest-cost way to transfer value without security tradeoffs.",
             "Across can be easily integrated via our easy to use REST API into any application requiring instant, low cost cross-chain value transfer. Let users easily onboard assets without leaving your app. ",
             "Across can also be integrated in your application to abstract bridging completely, enabling users to directly interact with your app from any chain. ",
             "Across Settlement is the only production-ready, modular settlement layer built to facilitate cross-chain intents. Powers use cases that require customization beyond the Across Core offering, like cross-chain token swaps, new request for quote auction designs and more. ",
             "Join the growing network of independent relayers (a.k.a solvers, fillers, market makers) fulfilling intent order flow on Across. Earn up to 100% APY. ",
-            ""
+            "",
+            "Last updated 2 months ago"
         ],
         "lists": [
             "👋\nIntroduction\nGetting Started\nWhat is Across?\nTechnical FAQ\nMigration Guides\nMigration from V2 to V3\nMigration to CCTP\nMigration Guide for Relayers\nMigration Guide for API Users\n🔗\nUse Cases\nInstant Bridging in your Application\nBridge Integration Guide\nMulti Chain Bridge UI Guide\nSingle Chain Bridge UI Guide\nEmbedded Cross-chain Actions\nCross-chain Actions Integration Guide\nUsing the Generic Multicaller Handler Contract\nUsing a Custom Handler Contract\nCross-chain Actions UI Guide\nSettle Cross-chain Intents\n🧠\nConcepts\nWhat are Cross-chain Intents?\nIntents Architecture in Across\nIntent Lifecycle in Across\nCanonical Asset Maximalism\n🛠️\nReference\nAPI Reference\nSDK Reference\nContracts\nArbitrum (Chain ID: 42161)\nBase (Chain ID: 8453)\nBlast (Chain ID: 81457)\nEthereum Mainnet (Chain ID: 1)\nLinea (Chain ID: 59144)\nLisk (Chain ID: 1135)\nMode (Chain ID: 34443)\nOptimism (Chain ID: 10)\nPolygon (Chain ID: 137)\nRedstone (Chain ID: 690)\nScroll (Chain ID: 534352)\nWorld Chain (Chain ID: 480)\nzkSync (Chain ID: 324)\nZora (Chain ID: 7777777)\nSepolia Testnet\nSelected Contract Functions\nSupported Chains\nFees in the System\nActors in the System\nSecurity Model and Verification\nDisputing Root Bundles\nValidating Root Bundles\nTracking Events\n🔁\nRelayers\nRunning a Relayer\nRelayer Exclusivity\n📚\nResources\nRelease Notes\nDeveloper Support\nBug Bounty\nAudits\nNew Chain Requests",
@@ -201,7 +201,7 @@
             "If the input asset is WETH, and the recipient is a contract, the contract will receive WETH",
             "",
             "To deposit ETH, or the native token for a network, set msg.value = inputAmount. To deposit WETH, set msg.value = 0. When depositing ETH or WETH, the inputAmount should be the same and the inputToken should be the WETH address for the current chain. ",
-            "Last updated 11 days ago"
+            "Last updated 14 days ago"
         ],
         "lists": [
             "👋\nIntroduction\nGetting Started\nWhat is Across?\nTechnical FAQ\nMigration Guides\nMigration from V2 to V3\nMigration to CCTP\nMigration Guide for Relayers\nMigration Guide for API Users\n🔗\nUse Cases\nInstant Bridging in your Application\nBridge Integration Guide\nMulti Chain Bridge UI Guide\nSingle Chain Bridge UI Guide\nEmbedded Cross-chain Actions\nCross-chain Actions Integration Guide\nUsing the Generic Multicaller Handler Contract\nUsing a Custom Handler Contract\nCross-chain Actions UI Guide\nSettle Cross-chain Intents\n🧠\nConcepts\nWhat are Cross-chain Intents?\nIntents Architecture in Across\nIntent Lifecycle in Across\nCanonical Asset Maximalism\n🛠️\nReference\nAPI Reference\nSDK Reference\nContracts\nArbitrum (Chain ID: 42161)\nBase (Chain ID: 8453)\nBlast (Chain ID: 81457)\nEthereum Mainnet (Chain ID: 1)\nLinea (Chain ID: 59144)\nLisk (Chain ID: 1135)\nMode (Chain ID: 34443)\nOptimism (Chain ID: 10)\nPolygon (Chain ID: 137)\nRedstone (Chain ID: 690)\nScroll (Chain ID: 534352)\nWorld Chain (Chain ID: 480)\nzkSync (Chain ID: 324)\nZora (Chain ID: 7777777)\nSepolia Testnet\nSelected Contract Functions\nSupported Chains\nFees in the System\nActors in the System\nSecurity Model and Verification\nDisputing Root Bundles\nValidating Root Bundles\nTracking Events\n🔁\nRelayers\nRunning a Relayer\nRelayer Exclusivity\n📚\nResources\nRelease Notes\nDeveloper Support\nBug Bounty\nAudits\nNew Chain Requests",
@@ -802,6 +802,7 @@
             "UI Guide"
         ],
         "paragraphs": [
+            "Last updated 1 month ago",
             "This guide provides technical instructions for bundling a bridge with user actions. The integration process is simple and consists of three steps:",
             "Craft the message that is the set of transactions to execute on the destination",
             "Request quotes from Across GET /suggested-fees API, passing in the message parameter defined above",
@@ -827,8 +828,7 @@
             "Do NOT use f001 identifier in your implementation, see below on how to request your unique ID. ",
             "Request your unique identifier in our shared communication channel (TG, Slack, etc), if already set up, or reach out to [email protected]. Please do not use any other identifier other than the one provided to you.",
             "See Cross-chain Actions Integration Guide for recommended UI and UX patterns. ",
-            "",
-            "Last updated 1 month ago"
+            ""
         ],
         "lists": [
             "👋\nIntroduction\nGetting Started\nWhat is Across?\nTechnical FAQ\nMigration Guides\nMigration from V2 to V3\nMigration to CCTP\nMigration Guide for Relayers\nMigration Guide for API Users\n🔗\nUse Cases\nInstant Bridging in your Application\nBridge Integration Guide\nMulti Chain Bridge UI Guide\nSingle Chain Bridge UI Guide\nEmbedded Cross-chain Actions\nCross-chain Actions Integration Guide\nUsing the Generic Multicaller Handler Contract\nUsing a Custom Handler Contract\nCross-chain Actions UI Guide\nSettle Cross-chain Intents\n🧠\nConcepts\nWhat are Cross-chain Intents?\nIntents Architecture in Across\nIntent Lifecycle in Across\nCanonical Asset Maximalism\n🛠️\nReference\nAPI Reference\nSDK Reference\nContracts\nArbitrum (Chain ID: 42161)\nBase (Chain ID: 8453)\nBlast (Chain ID: 81457)\nEthereum Mainnet (Chain ID: 1)\nLinea (Chain ID: 59144)\nLisk (Chain ID: 1135)\nMode (Chain ID: 34443)\nOptimism (Chain ID: 10)\nPolygon (Chain ID: 137)\nRedstone (Chain ID: 690)\nScroll (Chain ID: 534352)\nWorld Chain (Chain ID: 480)\nzkSync (Chain ID: 324)\nZora (Chain ID: 7777777)\nSepolia Testnet\nSelected Contract Functions\nSupported Chains\nFees in the System\nActors in the System\nSecurity Model and Verification\nDisputing Root Bundles\nValidating Root Bundles\nTracking Events\n🔁\nRelayers\nRunning a Relayer\nRelayer Exclusivity\n📚\nResources\nRelease Notes\nDeveloper Support\nBug Bounty\nAudits\nNew Chain Requests",
@@ -1190,7 +1190,7 @@
             "Modular Intents Settlement Layer"
         ],
         "paragraphs": [
-            "Last updated 4 days ago",
+            "Last updated 7 days ago",
             "Across' cross-chain intents architecture can be distilled into a 3-layered system: a request for quote mechanism to house users' intents, enabling a competitive network of relayers to bid, claim and fill those orders, and lastly a settlement layer to verify intent fulfillment and repay relayers. ",
             "Below is a diagram of the planned architecture of Across after implementing a RFQ price auction to enable gasless orders and cross-chain swaps:",
             "Users Request Quotes to Fill their Intent",
@@ -1594,7 +1594,7 @@
             "zkSync",
             "Zora",
             "These addresses can also be found on the Across GitHub. See Sepolia Testnet for testnet deployment information.",
-            "Last updated 6 days ago"
+            "Last updated 9 days ago"
         ],
         "lists": [
             "👋\nIntroduction\nGetting Started\nWhat is Across?\nTechnical FAQ\nMigration Guides\nMigration from V2 to V3\nMigration to CCTP\nMigration Guide for Relayers\nMigration Guide for API Users\n🔗\nUse Cases\nInstant Bridging in your Application\nBridge Integration Guide\nMulti Chain Bridge UI Guide\nSingle Chain Bridge UI Guide\nEmbedded Cross-chain Actions\nCross-chain Actions Integration Guide\nUsing the Generic Multicaller Handler Contract\nUsing a Custom Handler Contract\nCross-chain Actions UI Guide\nSettle Cross-chain Intents\n🧠\nConcepts\nWhat are Cross-chain Intents?\nIntents Architecture in Across\nIntent Lifecycle in Across\nCanonical Asset Maximalism\n🛠️\nReference\nAPI Reference\nSDK Reference\nContracts\nArbitrum (Chain ID: 42161)\nBase (Chain ID: 8453)\nBlast (Chain ID: 81457)\nEthereum Mainnet (Chain ID: 1)\nLinea (Chain ID: 59144)\nLisk (Chain ID: 1135)\nMode (Chain ID: 34443)\nOptimism (Chain ID: 10)\nPolygon (Chain ID: 137)\nRedstone (Chain ID: 690)\nScroll (Chain ID: 534352)\nWorld Chain (Chain ID: 480)\nzkSync (Chain ID: 324)\nZora (Chain ID: 7777777)\nSepolia Testnet\nSelected Contract Functions\nSupported Chains\nFees in the System\nActors in the System\nSecurity Model and Verification\nDisputing Root Bundles\nValidating Root Bundles\nTracking Events\n🔁\nRelayers\nRunning a Relayer\nRelayer Exclusivity\n📚\nResources\nRelease Notes\nDeveloper Support\nBug Bounty\nAudits\nNew Chain Requests",
@@ -1978,12 +1978,12 @@
             "Lisk (Chain ID: 1135)"
         ],
         "paragraphs": [
+            "Last updated 3 months ago",
+            "",
             "Lisk_SpokePool",
             "0x9552a0a6624A23B848060AE5901659CDDa1f83f8",
             "MulticallHandler",
-            "0x924a9f036260DdD5808007E1AA95f08eD08aA569",
-            "",
-            "Last updated 3 months ago"
+            "0x924a9f036260DdD5808007E1AA95f08eD08aA569"
         ],
         "lists": [
             "👋\nIntroduction\nGetting Started\nWhat is Across?\nTechnical FAQ\nMigration Guides\nMigration from V2 to V3\nMigration to CCTP\nMigration Guide for Relayers\nMigration Guide for API Users\n🔗\nUse Cases\nInstant Bridging in your Application\nBridge Integration Guide\nMulti Chain Bridge UI Guide\nSingle Chain Bridge UI Guide\nEmbedded Cross-chain Actions\nCross-chain Actions Integration Guide\nUsing the Generic Multicaller Handler Contract\nUsing a Custom Handler Contract\nCross-chain Actions UI Guide\nSettle Cross-chain Intents\n🧠\nConcepts\nWhat are Cross-chain Intents?\nIntents Architecture in Across\nIntent Lifecycle in Across\nCanonical Asset Maximalism\n🛠️\nReference\nAPI Reference\nSDK Reference\nContracts\nArbitrum (Chain ID: 42161)\nBase (Chain ID: 8453)\nBlast (Chain ID: 81457)\nEthereum Mainnet (Chain ID: 1)\nLinea (Chain ID: 59144)\nLisk (Chain ID: 1135)\nMode (Chain ID: 34443)\nOptimism (Chain ID: 10)\nPolygon (Chain ID: 137)\nRedstone (Chain ID: 690)\nScroll (Chain ID: 534352)\nWorld Chain (Chain ID: 480)\nzkSync (Chain ID: 324)\nZora (Chain ID: 7777777)\nSepolia Testnet\nSelected Contract Functions\nSupported Chains\nFees in the System\nActors in the System\nSecurity Model and Verification\nDisputing Root Bundles\nValidating Root Bundles\nTracking Events\n🔁\nRelayers\nRunning a Relayer\nRelayer Exclusivity\n📚\nResources\nRelease Notes\nDeveloper Support\nBug Bounty\nAudits\nNew Chain Requests",
@@ -2008,12 +2008,12 @@
                     "Address"
                 ],
                 [
-                    "Lisk_SpokePool",
-                    "0x9552a0a6624A23B848060AE5901659CDDa1f83f8"
+                    "",
+                    ""
                 ],
                 [
-                    "MulticallHandler",
-                    "0x924a9f036260DdD5808007E1AA95f08eD08aA569"
+                    "",
+                    ""
                 ]
             ]
         ],
@@ -2129,7 +2129,6 @@
             "Polygon (Chain ID: 137)"
         ],
         "paragraphs": [
-            "Last updated 3 months ago",
             "",
             "PolygonTokenBridger",
             "0x0330E9b4D0325cCfF515E81DFbc7754F2a02ac57",
@@ -2138,7 +2137,8 @@
             "Across Governance Token",
             "0xF328b73B6c685831F238c30a23Fc19140CB4D8FC",
             "MulticallHandler",
-            "0x924a9f036260DdD5808007E1AA95f08eD08aA569"
+            "0x924a9f036260DdD5808007E1AA95f08eD08aA569",
+            "Last updated 3 months ago"
         ],
         "lists": [
             "👋\nIntroduction\nGetting Started\nWhat is Across?\nTechnical FAQ\nMigration Guides\nMigration from V2 to V3\nMigration to CCTP\nMigration Guide for Relayers\nMigration Guide for API Users\n🔗\nUse Cases\nInstant Bridging in your Application\nBridge Integration Guide\nMulti Chain Bridge UI Guide\nSingle Chain Bridge UI Guide\nEmbedded Cross-chain Actions\nCross-chain Actions Integration Guide\nUsing the Generic Multicaller Handler Contract\nUsing a Custom Handler Contract\nCross-chain Actions UI Guide\nSettle Cross-chain Intents\n🧠\nConcepts\nWhat are Cross-chain Intents?\nIntents Architecture in Across\nIntent Lifecycle in Across\nCanonical Asset Maximalism\n🛠️\nReference\nAPI Reference\nSDK Reference\nContracts\nArbitrum (Chain ID: 42161)\nBase (Chain ID: 8453)\nBlast (Chain ID: 81457)\nEthereum Mainnet (Chain ID: 1)\nLinea (Chain ID: 59144)\nLisk (Chain ID: 1135)\nMode (Chain ID: 34443)\nOptimism (Chain ID: 10)\nPolygon (Chain ID: 137)\nRedstone (Chain ID: 690)\nScroll (Chain ID: 534352)\nWorld Chain (Chain ID: 480)\nzkSync (Chain ID: 324)\nZora (Chain ID: 7777777)\nSepolia Testnet\nSelected Contract Functions\nSupported Chains\nFees in the System\nActors in the System\nSecurity Model and Verification\nDisputing Root Bundles\nValidating Root Bundles\nTracking Events\n🔁\nRelayers\nRunning a Relayer\nRelayer Exclusivity\n📚\nResources\nRelease Notes\nDeveloper Support\nBug Bounty\nAudits\nNew Chain Requests",
@@ -2163,20 +2163,20 @@
                     "Address"
                 ],
                 [
-                    "",
-                    ""
+                    "PolygonTokenBridger",
+                    "0x0330E9b4D0325cCfF515E81DFbc7754F2a02ac57"
                 ],
                 [
-                    "",
-                    ""
+                    "Polygon_SpokePool",
+                    "0x9295ee1d8C5b022Be115A2AD3c30C72E34e7F096"
                 ],
                 [
-                    "",
-                    ""
+                    "Across Governance Token",
+                    "0xF328b73B6c685831F238c30a23Fc19140CB4D8FC"
                 ],
                 [
-                    "",
-                    ""
+                    "MulticallHandler",
+                    "0x924a9f036260DdD5808007E1AA95f08eD08aA569"
                 ]
             ]
         ],
@@ -2291,7 +2291,7 @@
             "MulticallHandler",
             "0x924a9f036260DdD5808007E1AA95f08eD08aA569",
             "",
-            "Last updated 6 days ago"
+            "Last updated 9 days ago"
         ],
         "lists": [
             "👋\nIntroduction\nGetting Started\nWhat is Across?\nTechnical FAQ\nMigration Guides\nMigration from V2 to V3\nMigration to CCTP\nMigration Guide for Relayers\nMigration Guide for API Users\n🔗\nUse Cases\nInstant Bridging in your Application\nBridge Integration Guide\nMulti Chain Bridge UI Guide\nSingle Chain Bridge UI Guide\nEmbedded Cross-chain Actions\nCross-chain Actions Integration Guide\nUsing the Generic Multicaller Handler Contract\nUsing a Custom Handler Contract\nCross-chain Actions UI Guide\nSettle Cross-chain Intents\n🧠\nConcepts\nWhat are Cross-chain Intents?\nIntents Architecture in Across\nIntent Lifecycle in Across\nCanonical Asset Maximalism\n🛠️\nReference\nAPI Reference\nSDK Reference\nContracts\nArbitrum (Chain ID: 42161)\nBase (Chain ID: 8453)\nBlast (Chain ID: 81457)\nEthereum Mainnet (Chain ID: 1)\nLinea (Chain ID: 59144)\nLisk (Chain ID: 1135)\nMode (Chain ID: 34443)\nOptimism (Chain ID: 10)\nPolygon (Chain ID: 137)\nRedstone (Chain ID: 690)\nScroll (Chain ID: 534352)\nWorld Chain (Chain ID: 480)\nzkSync (Chain ID: 324)\nZora (Chain ID: 7777777)\nSepolia Testnet\nSelected Contract Functions\nSupported Chains\nFees in the System\nActors in the System\nSecurity Model and Verification\nDisputing Root Bundles\nValidating Root Bundles\nTracking Events\n🔁\nRelayers\nRunning a Relayer\nRelayer Exclusivity\n📚\nResources\nRelease Notes\nDeveloper Support\nBug Bounty\nAudits\nNew Chain Requests",
@@ -2927,7 +2927,7 @@
             "Capital opportunity costs: The fact that the relayer is using their capital to perform a relay means that they are not using it for other yield opportunities.",
             "Capital at risk: A relayer takes on certain risks by relaying funds. If they make a mistake when relaying that could jeopardize their repayment of the capital they invested.",
             "Both Liquidity Provider fees and Relayer fees are implied from the spread between inputAmount and outputAmount in a depositV3 transaction. You can intuitively think of liquidity provider fees as being taken out of the full relayer fee. Therefore, relayers are expected to factor in the expected liquidity provider fee when quoting fees to potential depositors.",
-            "Last updated 4 days ago"
+            "Last updated 7 days ago"
         ],
         "lists": [
             "👋\nIntroduction\nGetting Started\nWhat is Across?\nTechnical FAQ\nMigration Guides\nMigration from V2 to V3\nMigration to CCTP\nMigration Guide for Relayers\nMigration Guide for API Users\n🔗\nUse Cases\nInstant Bridging in your Application\nBridge Integration Guide\nMulti Chain Bridge UI Guide\nSingle Chain Bridge UI Guide\nEmbedded Cross-chain Actions\nCross-chain Actions Integration Guide\nUsing the Generic Multicaller Handler Contract\nUsing a Custom Handler Contract\nCross-chain Actions UI Guide\nSettle Cross-chain Intents\n🧠\nConcepts\nWhat are Cross-chain Intents?\nIntents Architecture in Across\nIntent Lifecycle in Across\nCanonical Asset Maximalism\n🛠️\nReference\nAPI Reference\nSDK Reference\nContracts\nArbitrum (Chain ID: 42161)\nBase (Chain ID: 8453)\nBlast (Chain ID: 81457)\nEthereum Mainnet (Chain ID: 1)\nLinea (Chain ID: 59144)\nLisk (Chain ID: 1135)\nMode (Chain ID: 34443)\nOptimism (Chain ID: 10)\nPolygon (Chain ID: 137)\nRedstone (Chain ID: 690)\nScroll (Chain ID: 534352)\nWorld Chain (Chain ID: 480)\nzkSync (Chain ID: 324)\nZora (Chain ID: 7777777)\nSepolia Testnet\nSelected Contract Functions\nSupported Chains\nFees in the System\nActors in the System\nSecurity Model and Verification\nDisputing Root Bundles\nValidating Root Bundles\nTracking Events\n🔁\nRelayers\nRunning a Relayer\nRelayer Exclusivity\n📚\nResources\nRelease Notes\nDeveloper Support\nBug Bounty\nAudits\nNew Chain Requests",
@@ -3130,10 +3130,9 @@
             "Using your own managed service"
         ],
         "paragraphs": [
-            "Last updated 4 months ago",
             "This section contains hints for how you can implement your own managed service to track Across events throughout their lifecycle. As an alternative, we also host a public managed solution that you can learn more about in the API section.",
-            "See API reference for  to query the status of a single deposit. ",
-            "The recommended solution for tracking all Across deposits originating from your integration, for a single user, is to store the user's  depositId and originChainId from each transaction originating from your app, and then get the status of each via . ",
+            "See API reference for GET /deposit/status to query the status of a single deposit. ",
+            "The recommended solution for tracking all Across deposits originating from your integration, for a single user, is to store the user's  depositId and originChainId from each transaction originating from your app, and then get the status of each via GET /deposit/status. ",
             "Deposit and corresponding fill events are conveniently scraped by a database and available here. The database implementation can be found in this repository.",
             "When a user deposits capital to a SpokePool, a V3FundsDeposited event is emitted. This event is now emitted for both deposit() (legacy function interface) and depositV3() calls. FundsDeposited, the V2 event, is no longer possible to emit.",
             "This data comprises the new deposit's \"RelayData\" which is combined with the block.chainId of the SpokePool that emitted the event to form:",
@@ -3146,7 +3145,8 @@
             "In the meantime, we believe its accurate to state that expired deposits will be refunded approximately 90 minutes after their fillDeadline. Expired deposits are sent to the depositor address on the originChainId. The 90 minute figure assumes that on average, deposits expire in the middle of a pending root bundle proposal which implies that the next root bundle will contain the expired deposit refund. Because root bundle proposals are validated optimistically and the current challenge period is 60 minutes, then on average it will take 30 minutes for the next root bundle to be proposed containing a refund for the deposit and another 60 minutes for that root bundle to be executed.",
             "Fill ETAs for deposits vary based on route and available filler liquidity. For example, most deposit transactions will not be filled until they probabilistically finalized on the origin chain, where the deposit occurred.",
             "In general, deposits that exceed current filler liquidity on the destination chain will be delayed, and unprofitable deposits (where the difference in the output amount and the input amount is insufficient to cover the filler's transaction and opportunity costs) might never be filled until they expire. Expired deposits will eventually be refunded, as described above. ",
-            "The Limits endpoint can be called with the deposit information to forecast the fill ETA. If the deposit amount exceeds the maxDepositShortDelay, then the deposit is likely to have been marked for slow fill. To deterministically check if a deposit has been marked for slow fill, you can call the fillStatuses() function on the destination SpokePool as described above."
+            "The Limits endpoint can be called with the deposit information to forecast the fill ETA. If the deposit amount exceeds the maxDepositShortDelay, then the deposit is likely to have been marked for slow fill. To deterministically check if a deposit has been marked for slow fill, you can call the fillStatuses() function on the destination SpokePool as described above.",
+            "Last updated 4 months ago"
         ],
         "lists": [
             "👋\nIntroduction\nGetting Started\nWhat is Across?\nTechnical FAQ\nMigration Guides\nMigration from V2 to V3\nMigration to CCTP\nMigration Guide for Relayers\nMigration Guide for API Users\n🔗\nUse Cases\nInstant Bridging in your Application\nBridge Integration Guide\nMulti Chain Bridge UI Guide\nSingle Chain Bridge UI Guide\nEmbedded Cross-chain Actions\nCross-chain Actions Integration Guide\nUsing the Generic Multicaller Handler Contract\nUsing a Custom Handler Contract\nCross-chain Actions UI Guide\nSettle Cross-chain Intents\n🧠\nConcepts\nWhat are Cross-chain Intents?\nIntents Architecture in Across\nIntent Lifecycle in Across\nCanonical Asset Maximalism\n🛠️\nReference\nAPI Reference\nSDK Reference\nContracts\nArbitrum (Chain ID: 42161)\nBase (Chain ID: 8453)\nBlast (Chain ID: 81457)\nEthereum Mainnet (Chain ID: 1)\nLinea (Chain ID: 59144)\nLisk (Chain ID: 1135)\nMode (Chain ID: 34443)\nOptimism (Chain ID: 10)\nPolygon (Chain ID: 137)\nRedstone (Chain ID: 690)\nScroll (Chain ID: 534352)\nWorld Chain (Chain ID: 480)\nzkSync (Chain ID: 324)\nZora (Chain ID: 7777777)\nSepolia Testnet\nSelected Contract Functions\nSupported Chains\nFees in the System\nActors in the System\nSecurity Model and Verification\nDisputing Root Bundles\nValidating Root Bundles\nTracking Events\n🔁\nRelayers\nRunning a Relayer\nRelayer Exclusivity\n📚\nResources\nRelease Notes\nDeveloper Support\nBug Bounty\nAudits\nNew Chain Requests",
@@ -3299,7 +3299,7 @@
             "A dataworker can propose a bundle at any time. However, if a current bundle is in liveness - it is required that either that bundle be disputed or the bundle passes liveness and is executed before a new bundle is proposed.",
             "",
             "",
-            "Last updated 4 days ago"
+            "Last updated 7 days ago"
         ],
         "lists": [
             "👋\nIntroduction\nGetting Started\nWhat is Across?\nTechnical FAQ\nMigration Guides\nMigration from V2 to V3\nMigration to CCTP\nMigration Guide for Relayers\nMigration Guide for API Users\n🔗\nUse Cases\nInstant Bridging in your Application\nBridge Integration Guide\nMulti Chain Bridge UI Guide\nSingle Chain Bridge UI Guide\nEmbedded Cross-chain Actions\nCross-chain Actions Integration Guide\nUsing the Generic Multicaller Handler Contract\nUsing a Custom Handler Contract\nCross-chain Actions UI Guide\nSettle Cross-chain Intents\n🧠\nConcepts\nWhat are Cross-chain Intents?\nIntents Architecture in Across\nIntent Lifecycle in Across\nCanonical Asset Maximalism\n🛠️\nReference\nAPI Reference\nSDK Reference\nContracts\nArbitrum (Chain ID: 42161)\nBase (Chain ID: 8453)\nBlast (Chain ID: 81457)\nEthereum Mainnet (Chain ID: 1)\nLinea (Chain ID: 59144)\nLisk (Chain ID: 1135)\nMode (Chain ID: 34443)\nOptimism (Chain ID: 10)\nPolygon (Chain ID: 137)\nRedstone (Chain ID: 690)\nScroll (Chain ID: 534352)\nWorld Chain (Chain ID: 480)\nzkSync (Chain ID: 324)\nZora (Chain ID: 7777777)\nSepolia Testnet\nSelected Contract Functions\nSupported Chains\nFees in the System\nActors in the System\nSecurity Model and Verification\nDisputing Root Bundles\nValidating Root Bundles\nTracking Events\n🔁\nRelayers\nRunning a Relayer\nRelayer Exclusivity\n📚\nResources\nRelease Notes\nDeveloper Support\nBug Bounty\nAudits\nNew Chain Requests",
@@ -3653,6 +3653,11 @@
             "Get started for free"
         ],
         "paragraphs": [
+            "New in GitBook: Revamped Documentation",
+            "Register for the webinar",
+            "",
+            "",
+            "",
             "Product",
             "Features",
             "Resources",
@@ -3661,6 +3666,11 @@
             "",
             "",
             "We're hiring!",
+            "New in GitBook: Revamped Documentation",
+            "Register for the webinar",
+            "",
+            "",
+            "",
             "Forget building your own custom docs platform. With GitBook you get beautiful documentation for your users, and a branch-based Git workflow for your team.",
             "Sign up with GitHub",
             "Home Hero GitHub CTA",
@@ -4121,7 +4131,17 @@
             "",
             "",
             "",
-            "Â© 2024 Copyright GitBook INC. 440 N Barranca Ave #7171, Covina, CA 91723, USA. EIN: 320502699"
+            "Â© 2024 Copyright GitBook INC. 440 N Barranca Ave #7171, Covina, CA 91723, USA. EIN: 320502699",
+            "New in GitBook: Revamped Documentation",
+            "Register for the webinar",
+            "",
+            "",
+            "",
+            "New in GitBook: Revamped Documentation",
+            "Register for the webinar",
+            "",
+            "",
+            ""
         ],
         "lists": [
             "",

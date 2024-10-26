@@ -60,13 +60,13 @@
             "Looking for something else? Get in touch"
         ],
         "paragraphs": [
-            "Last updated 2 months ago",
             "Across is an interoperability protocol powered by intents. It is the first cross-chain intents protocol in production today, enabling the fastest and lowest-cost way to transfer value without security tradeoffs.",
             "Across can be easily integrated via our easy to use REST API into any application requiring instant, low cost cross-chain value transfer. Let users easily onboard assets without leaving your app. ",
             "Across can also be integrated in your application to abstract bridging completely, enabling users to directly interact with your app from any chain. ",
             "Across Settlement is the only production-ready, modular settlement layer built to facilitate cross-chain intents. Powers use cases that require customization beyond the Across Core offering, like cross-chain token swaps, new request for quote auction designs and more. ",
             "Join the growing network of independent relayers (a.k.a solvers, fillers, market makers) fulfilling intent order flow on Across. Earn up to 100% APY. ",
-            ""
+            "",
+            "Last updated 2 months ago"
         ],
         "lists": [
             "👋\nIntroduction\nGetting Started\nWhat is Across?\nTechnical FAQ\nMigration Guides\nMigration from V2 to V3\nMigration to CCTP\nMigration Guide for Relayers\nMigration Guide for API Users\n🔗\nUse Cases\nInstant Bridging in your Application\nBridge Integration Guide\nMulti Chain Bridge UI Guide\nSingle Chain Bridge UI Guide\nEmbedded Cross-chain Actions\nCross-chain Actions Integration Guide\nUsing the Generic Multicaller Handler Contract\nUsing a Custom Handler Contract\nCross-chain Actions UI Guide\nSettle Cross-chain Intents\n🧠\nConcepts\nWhat are Cross-chain Intents?\nIntents Architecture in Across\nIntent Lifecycle in Across\nCanonical Asset Maximalism\n🛠️\nReference\nAPI Reference\nSDK Reference\nContracts\nArbitrum (Chain ID: 42161)\nBase (Chain ID: 8453)\nBlast (Chain ID: 81457)\nEthereum Mainnet (Chain ID: 1)\nLinea (Chain ID: 59144)\nLisk (Chain ID: 1135)\nMode (Chain ID: 34443)\nOptimism (Chain ID: 10)\nPolygon (Chain ID: 137)\nRedstone (Chain ID: 690)\nScroll (Chain ID: 534352)\nWorld Chain (Chain ID: 480)\nzkSync (Chain ID: 324)\nZora (Chain ID: 7777777)\nSepolia Testnet\nSelected Contract Functions\nSupported Chains\nFees in the System\nActors in the System\nSecurity Model and Verification\nDisputing Root Bundles\nValidating Root Bundles\nTracking Events\n🔁\nRelayers\nRunning a Relayer\nRelayer Exclusivity\n📚\nResources\nRelease Notes\nDeveloper Support\nBug Bounty\nAudits\nNew Chain Requests",
@@ -154,7 +154,6 @@
         ],
         "paragraphs": [
             "Please scroll to the bottom of this page for our official bridging tutorial video or follow the written steps provided below.",
-            "Last updated 6 months ago",
             "Step 1: Go to across.to/bridge",
             "Step 2: Connect your wallet ",
             "Step 3: Enter transfer details such as: Origin chain, destination chain, token and amount",
@@ -162,7 +161,8 @@
             "Step 5: Approve the transaction in your wallet",
             "Step 6: Verify transaction details, or monitor its progress, at across.to/transactions",
             "",
-            ""
+            "",
+            "Last updated 6 months ago"
         ],
         "lists": [
             "How to Use Across\nAbout\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History\nHow across works\nOverview\nSecurity\nFees\nSpeed\nSupported Chains and Tokens\n🪙\n$ACX Token\nToken Overview\nInitial Allocations\nACX Emissions Committee\nGovernance\nGovernance Model\nProposals and Voting\nAdditional Info\nFAQ\nSupport Links\nMigrating from V1\nAcross Brand Assets",
@@ -287,7 +287,6 @@
         ],
         "paragraphs": [
             "Across Reward Locking Program is a novel DeFi mechanism to further incentivize bridge LPs. Scroll down to the bottom for instructions on how to get started.",
-            "Last updated 3 months ago",
             "Across is the first protocol to implement reward locking. It is used to further incentivize bridge liquidity positions by incrementally increasing reward APY over time for users who stake capital. For Across’ reward locking programming, an LP’s multiplier starts at 1x on day zero and can grow linearly to a maximum of 2x after capital has been staked for 100+ days.",
             "Reward multipliers reset to 1x once rewards have been claimed or liquidity is unstaked.",
             "In September 2023, a Snapshot proposal was passed to increase liquidity pool APY % by 50% and reduce the original multipler number of 3x to 2x. The following emissions changes were implemented:",
@@ -331,7 +330,8 @@
             "Step 4: At the bottom of the screen, click the \"Caim Rewards\" button",
             "Step 5: Approve the transaction in your wallet",
             "Step 6: To review your liquidity positions go to across.to/rewards",
-            ""
+            "",
+            "Last updated 3 months ago"
         ],
         "lists": [
             "How to Use Across\nAbout\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History\nHow across works\nOverview\nSecurity\nFees\nSpeed\nSupported Chains and Tokens\n🪙\n$ACX Token\nToken Overview\nInitial Allocations\nACX Emissions Committee\nGovernance\nGovernance Model\nProposals and Voting\nAdditional Info\nFAQ\nSupport Links\nMigrating from V1\nAcross Brand Assets",
@@ -638,7 +638,7 @@
             "WBTC",
             "ETH/WETH",
             "USDzC",
-            "Last updated 6 days ago"
+            "Last updated 9 days ago"
         ],
         "lists": [
             "How to Use Across\nAbout\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History\nHow across works\nOverview\nSecurity\nFees\nSpeed\nSupported Chains and Tokens\n🪙\n$ACX Token\nToken Overview\nInitial Allocations\nACX Emissions Committee\nGovernance\nGovernance Model\nProposals and Voting\nAdditional Info\nFAQ\nSupport Links\nMigrating from V1\nAcross Brand Assets",
@@ -677,9 +677,8 @@
             "The Across Protocol token, $ACX, is an ERC-20 token that allows for decentralized ownership and control of the protocol. $ACX governs the decisions affecting the protocol's function as well as the decisions that manage the DAO’s treasury.  ",
             "Governance token power was “turned on” at token launch (November 2022). The lifecycle of a proposal includes ideation, discussion, proposal, feedback, voting and execution. We use Forum and Snapshot as our governance platforms, along with oSnap, a tool for making on-chain transactions based on off-chain voting decisions. oSnap uses Snapshot and Safe to execute the outcomes of DAO governance votes in a decentralized manner that requires no intervention by privileged signers.",
             "To learn more about how oSnap is used by Across Protocol, please refer to this article.",
-            "In addition to governance, $ACX also incentivizes liquidity providers and those participating in the Across Referral Link program. ",
-            "You can see the token addresses here.",
-            "Last updated 6 months ago"
+            "Token addresses are listed here.",
+            "Last updated 2 days ago"
         ],
         "lists": [
             "How to Use Across\nAbout\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History\nHow across works\nOverview\nSecurity\nFees\nSpeed\nSupported Chains and Tokens\n🪙\n$ACX Token\nToken Overview\nInitial Allocations\nACX Emissions Committee\nGovernance\nGovernance Model\nProposals and Voting\nAdditional Info\nFAQ\nSupport Links\nMigrating from V1\nAcross Brand Assets",
@@ -901,7 +900,7 @@
             "Step 4: Results"
         ],
         "paragraphs": [
-            "Last updated 1 day ago",
+            "Last updated 4 days ago",
             "Treasury Funding",
             "Governance Updates",
             "Committee implementation or replacement",
@@ -962,9 +961,9 @@
             "You can see the allocation scripts here.",
             "Risk Labs is a foundation that supports the UMA protocol, which is the optimistic oracle that secures Across.",
             "The Risk Labs foundation supports a team working on Across, full-time. Risk Labs will work alongside the DAO to iterate on the design of the bridge and drive adoption.",
-            "Join the Across community in Discord, bridge with Across, LP in our pools, send your Across referral link to your friends and participate in governance!",
+            "Join the Across community in Discord, bridge with Across, LP in our pools, and participate in governance!",
             "If you have questions or want to connect with the Across community, join our Discord or follow us on Twitter. Our dev support currently operates through Discord. ",
-            "Last updated 6 months ago"
+            "Last updated 2 days ago"
         ],
         "lists": [
             "How to Use Across\nAbout\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History\nHow across works\nOverview\nSecurity\nFees\nSpeed\nSupported Chains and Tokens\n🪙\n$ACX Token\nToken Overview\nInitial Allocations\nACX Emissions Committee\nGovernance\nGovernance Model\nProposals and Voting\nAdditional Info\nFAQ\nSupport Links\nMigrating from V1\nAcross Brand Assets",
@@ -1098,6 +1097,11 @@
             "Get started for free"
         ],
         "paragraphs": [
+            "New in GitBook: Revamped Documentation",
+            "Register for the webinar",
+            "",
+            "",
+            "",
             "Product",
             "Features",
             "Resources",
@@ -1106,6 +1110,11 @@
             "",
             "",
             "We're hiring!",
+            "New in GitBook: Revamped Documentation",
+            "Register for the webinar",
+            "",
+            "",
+            "",
             "Forget building your own custom docs platform. With GitBook you get beautiful documentation for your users, and a branch-based Git workflow for your team.",
             "Sign up with GitHub",
             "Home Hero GitHub CTA",
@@ -1566,7 +1575,17 @@
             "",
             "",
             "",
-            "Â© 2024 Copyright GitBook INC. 440 N Barranca Ave #7171, Covina, CA 91723, USA. EIN: 320502699"
+            "Â© 2024 Copyright GitBook INC. 440 N Barranca Ave #7171, Covina, CA 91723, USA. EIN: 320502699",
+            "New in GitBook: Revamped Documentation",
+            "Register for the webinar",
+            "",
+            "",
+            "",
+            "New in GitBook: Revamped Documentation",
+            "Register for the webinar",
+            "",
+            "",
+            ""
         ],
         "lists": [
             "",
