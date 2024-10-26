@@ -4,23 +4,39 @@ import numpy as np
 from openai import OpenAI
 from loguru import logger
 from dotenv import load_dotenv
-load_dotenv()
-from inference.logger import log_query_and_response
+from pymongo import MongoClient 
 from sklearn.metrics.pairwise import cosine_similarity
+from inference.logger import log_query_and_response
 from inference.template.prompt_template import generate_prompt_template
 
+load_dotenv()
+
 def load_embeddings(file_path):
-    """Load embeddings with error handling"""
+    """Load embeddings from file, with MongoDB fallback."""
     try:
         with open(file_path, 'r', encoding='utf-8') as file:
             return json.load(file)
     except Exception as e:
-        raise Exception(f"Error loading embeddings: {str(e)}")
+        logger.error(f"Failed to load embeddings from file: {str(e)}")
+        logger.info("Attempting to load embeddings from MongoDB as fallback...")
+        try:
+            # MongoDB connection setup
+            client = MongoClient(os.getenv('MONGO_URI'))
+            db = client[os.getenv('MONGO_DB_NAME')]
+            collection = db[os.getenv('EMBEDDINGS_COLLECTION')]
+
+            # Load embeddings from MongoDB
+            embeddings_list = list(collection.find({}, {'_id': 0})) 
+            logger.info("Successfully loaded embeddings from MongoDB.")
+            return embeddings_list
+
+        except Exception as db_e:
+            raise Exception(f"Error loading embeddings from MongoDB: {str(db_e)}")
 
 def compute_similarity(query_embedding, embeddings_list, query):
     """Enhanced similarity computation"""
     similarities = []
-    logger.info(f"Computing similarities for the query embedding...")
+    logger.info("Computing similarities for the query embedding...")
     query_terms = query.lower().split()
 
     for entry in embeddings_list:
@@ -90,15 +106,15 @@ def generate_response_with_context(user_query: str):
     print(f"Processing query: {user_query}")
     client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 
-    embeddings_path = os.path.join('knowledge_base', 'embeddings', 'merged_knowledge_base_embeddings.json')
+    embeddings_path = os.path.join('knowledge_base', '', 'merged_knowledge_base_embeddings.json')
     logger.info(f"Loading embeddings from: {embeddings_path}")
 
     try:
         embeddings_list = load_embeddings(embeddings_path)
-        logger.info(f"Successfully loaded embeddings.")
+        logger.info("Successfully loaded embeddings.")
     except Exception as e:
         logger.error(f"Failed to load embeddings: {str(e)}")
-        exit(1)
+        return "Failed to retrieve embeddings from file and MongoDB."
 
     query_embedding = generate_embedding_for_query(client, user_query)
 
