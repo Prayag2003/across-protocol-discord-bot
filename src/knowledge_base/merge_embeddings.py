@@ -34,10 +34,8 @@ with open(merged_file_path, 'w', encoding='utf-8') as merged_file:
 
 logger.info("Data from all files has been merged successfully into 'merged_knowledge_base_embeddings.json'")
 
-# Remove existing documents in the MongoDB collection
 collection.delete_many({})
 
-# Upload merged data to MongoDB
 try:
     if merged_data:
         collection.insert_many(merged_data)

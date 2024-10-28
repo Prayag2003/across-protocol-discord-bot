@@ -11,28 +11,49 @@ def load_knowledge_base(file_path):
         return json.load(file)
 
 def extract_content_for_embedding(content):
-    """Extract and format content for embedding generation"""
+    """Extract and format content for embedding generation with descriptive labels."""
     parts = []
     
+    # Add the title once with a label
     if content.get('title'):
-        parts.extend([content['title']] * 3)
+        parts.append(f"Title: {content['title']}")
     
+    # Add headers with labels, no repetition
     if content.get('headers'):
-        parts.extend([f"Section: {header}" for header in content['headers']] * 2)
+        parts.extend([f"Section: {header}" for header in content['headers'] if isinstance(header, str)])
     
+    # Add paragraphs directly
     if content.get('paragraphs'):
-        parts.extend(content['paragraphs'])
+        parts.extend([para for para in content['paragraphs'] if isinstance(para, str)])
     
+    # Add code blocks
+    if content.get('code_blocks'):
+        parts.extend([code for code in content['code_blocks'] if isinstance(code, str)])
+
+    # Process lists to ensure items are strings
     if content.get('lists'):
         formatted_lists = []
         for list_item in content['lists']:
-            items = [item.strip() for item in list_item.split('\n') if item.strip()]
-            formatted_lists.extend(items)
+            if isinstance(list_item, str):
+                items = [item.strip() for item in list_item.split('\n') if item.strip()]
+                formatted_lists.extend(items)
+            elif isinstance(list_item, list):  # Handle nested lists
+                formatted_lists.extend([str(sub_item) for sub_item in list_item if isinstance(sub_item, str)])
         parts.extend(formatted_lists)
-    
+
+    # Process tables to ensure items are strings
+    if content.get('tables'):
+        for table in content['tables']:
+            if isinstance(table, list):
+                parts.extend([str(cell) for row in table for cell in row if isinstance(cell, str)])
+            elif isinstance(table, str):
+                parts.append(table)
+
+    # Join all parts into a single content string
     combined_content = " ".join(parts)
     
-    max_chars = 6000  
+    # Limit to a max of 30,000 characters if necessary
+    max_chars = 30000
     if len(combined_content) > max_chars:
         combined_content = combined_content[:max_chars]
     
@@ -45,14 +66,14 @@ def create_embeddings_for_kb(knowledge_base):
     for url, content in knowledge_base.items():  
         try:
             if content:  
-                paragraphs = content.get('paragraphs', [])
-                formatted_content = ' '.join(paragraphs)
+                formatted_content = extract_content_for_embedding(content)
                 
                 if formatted_content.strip():  
                     embedding = generate_embedding(formatted_content)
                     embeddings_list.append({
                         'url': url,
                         'embedding': embedding,
+                        'content': formatted_content 
                     })
                     logger.info(f"Generated embedding for: {url}")
                 else:
@@ -65,7 +86,6 @@ def create_embeddings_for_kb(knowledge_base):
             logger.error(f"Error processing {url}: {str(e)}")
     
     return embeddings_list
-
 
 def generate_embedding(content):
     try:

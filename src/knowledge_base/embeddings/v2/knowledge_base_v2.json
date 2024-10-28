@@ -2,14 +2,12 @@
     "https://docs.across.to/developer-docs": {
         "title": "Overview | Across Docs",
         "headers": [
-            "Overview",
-            "Resources to learn more"
+            "Overview"
         ],
         "paragraphs": [
             "Below is an overview of how a bridge transfer on Across works from start to finish.",
             "Last updated 8 months ago",
             "A user that would like to move funds from chain A to chain B deposits funds into a Spoke Pool on chain A with instructions about where they would like their funds to wind up and the fee that they are willing to pay.",
-            "Relayers view these deposits and, once they have verified that the details of the deposit are correct, immediately provide funds to the user on chain B. The user is now satisfied, having received their funds minus any fees and no longer needs to interact with Across.",
             "After the relayer has performed the relay, a proof of that relay and the validity of the original deposit is submitted to the optimistic oracle (OO) and the relayer is reimbursed once this information has been verified by the OO.",
             "The relayer's reimbursement is taken out of a single liquidity pool on Ethereum Mainnet escrowed in a contract called the Hub Pool. Liquidity providers (\"LP's\") to this pool also earn a fee per transfer that is assessed on the user's deposited amount.",
             "The rules for how funds are moved between the L2 Spoke Pools and the L1 Hub Pool to reimburse relayers are explained in UMIP-157. Anyone who wants to move funds between the pools must submit a valid proof to the OO that abides by the rules explained in the UMIP.",
@@ -18,22 +16,13 @@
             "The smart contracts were audited by OpenZeppelin. The audit report contains a high-level summary of how the smart contract architecture works.",
             "Moreover, here is a 60-minute explainer video of the smart contract architecture. Slides for the explainer video can be found here."
         ],
-        "lists": [
-            "How Across Works\nOverview\nRoles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles\nDevelopers\nAcross API\nAcross SDK\nContract Addresses\nMainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)\nSelected Contract Functions\nRunning a Relayer\nIntegrating Across into your application\nComposable Bridging\nDeveloper notes\nMigration from V2 to V3\nADDITIONAL INFO\nSupport Links\nBug Bounty\nAudits",
-            "Overview\nRoles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles",
-            "Roles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles",
-            "Across API\nAcross SDK\nContract Addresses\nMainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)\nSelected Contract Functions\nRunning a Relayer\nIntegrating Across into your application\nComposable Bridging\nDeveloper notes\nMigration from V2 to V3",
-            "Mainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)",
-            "Support Links\nBug Bounty\nAudits"
-        ],
+        "lists": [],
         "tables": [],
-        "code_blocks": [],
-        "summaries": []
+        "code_blocks": []
     },
     "https://docs.across.to/?fallback=true": {
         "title": "Getting Started | Across Docs",
         "headers": [
-            "Getting Started",
             "Looking for something else? Get in touch"
         ],
         "paragraphs": [
@@ -45,37 +34,19 @@
             "",
             "Last updated 2 months ago"
         ],
-        "lists": [
-            "👋\nIntroduction\nGetting Started\nWhat is Across?\nTechnical FAQ\nMigration Guides\nMigration from V2 to V3\nMigration to CCTP\nMigration Guide for Relayers\nMigration Guide for API Users\n🔗\nUse Cases\nInstant Bridging in your Application\nBridge Integration Guide\nMulti Chain Bridge UI Guide\nSingle Chain Bridge UI Guide\nEmbedded Cross-chain Actions\nCross-chain Actions Integration Guide\nUsing the Generic Multicaller Handler Contract\nUsing a Custom Handler Contract\nCross-chain Actions UI Guide\nSettle Cross-chain Intents\n🧠\nConcepts\nWhat are Cross-chain Intents?\nIntents Architecture in Across\nIntent Lifecycle in Across\nCanonical Asset Maximalism\n🛠️\nReference\nAPI Reference\nSDK Reference\nContracts\nArbitrum (Chain ID: 42161)\nBase (Chain ID: 8453)\nBlast (Chain ID: 81457)\nEthereum Mainnet (Chain ID: 1)\nLinea (Chain ID: 59144)\nLisk (Chain ID: 1135)\nMode (Chain ID: 34443)\nOptimism (Chain ID: 10)\nPolygon (Chain ID: 137)\nRedstone (Chain ID: 690)\nScroll (Chain ID: 534352)\nWorld Chain (Chain ID: 480)\nzkSync (Chain ID: 324)\nZora (Chain ID: 7777777)\nSepolia Testnet\nSelected Contract Functions\nSupported Chains\nFees in the System\nActors in the System\nSecurity Model and Verification\nDisputing Root Bundles\nValidating Root Bundles\nTracking Events\n🔁\nRelayers\nRunning a Relayer\nRelayer Exclusivity\n📚\nResources\nRelease Notes\nDeveloper Support\nBug Bounty\nAudits\nNew Chain Requests",
-            "Getting Started\nWhat is Across?\nTechnical FAQ\nMigration Guides\nMigration from V2 to V3\nMigration to CCTP\nMigration Guide for Relayers\nMigration Guide for API Users",
-            "Migration from V2 to V3\nMigration to CCTP\nMigration Guide for Relayers\nMigration Guide for API Users",
-            "Migration Guide for Relayers\nMigration Guide for API Users",
-            "Instant Bridging in your Application\nBridge Integration Guide\nMulti Chain Bridge UI Guide\nSingle Chain Bridge UI Guide\nEmbedded Cross-chain Actions\nCross-chain Actions Integration Guide\nUsing the Generic Multicaller Handler Contract\nUsing a Custom Handler Contract\nCross-chain Actions UI Guide\nSettle Cross-chain Intents",
-            "Bridge Integration Guide\nMulti Chain Bridge UI Guide\nSingle Chain Bridge UI Guide",
-            "Cross-chain Actions Integration Guide\nUsing the Generic Multicaller Handler Contract\nUsing a Custom Handler Contract\nCross-chain Actions UI Guide",
-            "Using the Generic Multicaller Handler Contract\nUsing a Custom Handler Contract",
-            "What are Cross-chain Intents?\nIntents Architecture in Across\nIntent Lifecycle in Across\nCanonical Asset Maximalism",
-            "API Reference\nSDK Reference\nContracts\nArbitrum (Chain ID: 42161)\nBase (Chain ID: 8453)\nBlast (Chain ID: 81457)\nEthereum Mainnet (Chain ID: 1)\nLinea (Chain ID: 59144)\nLisk (Chain ID: 1135)\nMode (Chain ID: 34443)\nOptimism (Chain ID: 10)\nPolygon (Chain ID: 137)\nRedstone (Chain ID: 690)\nScroll (Chain ID: 534352)\nWorld Chain (Chain ID: 480)\nzkSync (Chain ID: 324)\nZora (Chain ID: 7777777)\nSepolia Testnet\nSelected Contract Functions\nSupported Chains\nFees in the System\nActors in the System\nSecurity Model and Verification\nDisputing Root Bundles\nValidating Root Bundles\nTracking Events",
-            "Arbitrum (Chain ID: 42161)\nBase (Chain ID: 8453)\nBlast (Chain ID: 81457)\nEthereum Mainnet (Chain ID: 1)\nLinea (Chain ID: 59144)\nLisk (Chain ID: 1135)\nMode (Chain ID: 34443)\nOptimism (Chain ID: 10)\nPolygon (Chain ID: 137)\nRedstone (Chain ID: 690)\nScroll (Chain ID: 534352)\nWorld Chain (Chain ID: 480)\nzkSync (Chain ID: 324)\nZora (Chain ID: 7777777)\nSepolia Testnet",
-            "Disputing Root Bundles\nValidating Root Bundles",
-            "Running a Relayer\nRelayer Exclusivity",
-            "Release Notes\nDeveloper Support\nBug Bounty\nAudits\nNew Chain Requests"
-        ],
+        "lists": [],
         "tables": [],
-        "code_blocks": [],
-        "summaries": []
+        "code_blocks": []
     },
     "https://docs.across.to/developer-docs?fallback=true": {
         "title": "Overview | Across Docs",
         "headers": [
-            "Overview",
-            "Resources to learn more"
+            "Overview"
         ],
         "paragraphs": [
             "Below is an overview of how a bridge transfer on Across works from start to finish.",
             "Last updated 8 months ago",
             "A user that would like to move funds from chain A to chain B deposits funds into a Spoke Pool on chain A with instructions about where they would like their funds to wind up and the fee that they are willing to pay.",
-            "Relayers view these deposits and, once they have verified that the details of the deposit are correct, immediately provide funds to the user on chain B. The user is now satisfied, having received their funds minus any fees and no longer needs to interact with Across.",
             "After the relayer has performed the relay, a proof of that relay and the validity of the original deposit is submitted to the optimistic oracle (OO) and the relayer is reimbursed once this information has been verified by the OO.",
             "The relayer's reimbursement is taken out of a single liquidity pool on Ethereum Mainnet escrowed in a contract called the Hub Pool. Liquidity providers (\"LP's\") to this pool also earn a fee per transfer that is assessed on the user's deposited amount.",
             "The rules for how funds are moved between the L2 Spoke Pools and the L1 Hub Pool to reimburse relayers are explained in UMIP-157. Anyone who wants to move funds between the pools must submit a valid proof to the OO that abides by the rules explained in the UMIP.",
@@ -84,17 +55,9 @@
             "The smart contracts were audited by OpenZeppelin. The audit report contains a high-level summary of how the smart contract architecture works.",
             "Moreover, here is a 60-minute explainer video of the smart contract architecture. Slides for the explainer video can be found here."
         ],
-        "lists": [
-            "How Across Works\nOverview\nRoles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles\nDevelopers\nAcross API\nAcross SDK\nContract Addresses\nMainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)\nSelected Contract Functions\nRunning a Relayer\nIntegrating Across into your application\nComposable Bridging\nDeveloper notes\nMigration from V2 to V3\nADDITIONAL INFO\nSupport Links\nBug Bounty\nAudits",
-            "Overview\nRoles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles",
-            "Roles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles",
-            "Across API\nAcross SDK\nContract Addresses\nMainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)\nSelected Contract Functions\nRunning a Relayer\nIntegrating Across into your application\nComposable Bridging\nDeveloper notes\nMigration from V2 to V3",
-            "Mainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)",
-            "Support Links\nBug Bounty\nAudits"
-        ],
+        "lists": [],
         "tables": [],
-        "code_blocks": [],
-        "summaries": []
+        "code_blocks": []
     },
     "https://docs.across.to/user-docs?fallback=true": {
         "title": "About | Across Docs",
@@ -111,17 +74,14 @@
             "Last updated 6 months ago"
         ],
         "lists": [
-            "How to Use Across\nAbout\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History\nHow across works\nOverview\nSecurity\nFees\nSpeed\nSupported Chains and Tokens\n🪙\n$ACX Token\nToken Overview\nInitial Allocations\nACX Emissions Committee\nGovernance\nGovernance Model\nProposals and Voting\nAdditional Info\nFAQ\nSupport Links\nMigrating from V1\nAcross Brand Assets",
             "About\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History",
             "Reward Locking",
-            "Overview\nSecurity\nFees\nSpeed\nSupported Chains and Tokens",
             "Token Overview\nInitial Allocations\nACX Emissions Committee",
             "Governance Model\nProposals and Voting",
             "FAQ\nSupport Links\nMigrating from V1\nAcross Brand Assets"
         ],
         "tables": [],
-        "code_blocks": [],
-        "summaries": []
+        "code_blocks": []
     },
     "https://docs.across.to/developer-docs/how-across-works/readme/roles-within-across": {
         "title": "Roles within Across | Across Docs",
@@ -136,23 +96,15 @@
             "Describing key roles within the Across system.",
             "A user is someone who bridges assets between L2s and L1 with Across. Users pay relayers and liquidity providers in order to send their tokens instantly across networks that support their token. You can find the step by step for users here. ",
             "A liquidity provider or LP is an actor who deposits assets into one of the pools on Across.to/pool. Liquidity Providers insure user funds in exchange for fees. You can find the step-by-step process for liquidity providers here. ",
-            "Relayers give out short-term token loans to Users in exchange for fees. Relayers fulfill deposit requests by sending the depositor their desired token on their requested “destination chain”. Relayers will send the recipient the full deposit amount minus a relayer fee, meaning that they will keep the relayer fee as an incentive for crediting the depositor funds. You can read up on running a relayer here. ",
             "Dataworkers support the stability and healthy functioning of the system by refunding relayers and moving system assets between networks.",
             "",
             "Last updated 1 year ago"
         ],
         "lists": [
-            "How Across Works\nOverview\nRoles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles\nDevelopers\nAcross API\nAcross SDK\nContract Addresses\nMainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)\nSelected Contract Functions\nRunning a Relayer\nIntegrating Across into your application\nComposable Bridging\nDeveloper notes\nMigration from V2 to V3\nADDITIONAL INFO\nSupport Links\nBug Bounty\nAudits",
-            "Overview\nRoles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles",
-            "Roles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles",
-            "Across API\nAcross SDK\nContract Addresses\nMainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)\nSelected Contract Functions\nRunning a Relayer\nIntegrating Across into your application\nComposable Bridging\nDeveloper notes\nMigration from V2 to V3",
-            "Mainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)",
-            "Support Links\nBug Bounty\nAudits",
             "User\nLiquidity Provider\nRelayer \nDataworker"
         ],
         "tables": [],
-        "code_blocks": [],
-        "summaries": []
+        "code_blocks": []
     },
     "https://docs.across.to/developer-docs/how-across-works/readme/fee-model": {
         "title": "Fee Model | Across Docs",
@@ -190,46 +142,28 @@
             "Last updated 11 months ago"
         ],
         "lists": [
-            "How Across Works\nOverview\nRoles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles\nDevelopers\nAcross API\nAcross SDK\nContract Addresses\nMainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)\nSelected Contract Functions\nRunning a Relayer\nIntegrating Across into your application\nComposable Bridging\nDeveloper notes\nMigration from V2 to V3\nADDITIONAL INFO\nSupport Links\nBug Bounty\nAudits",
-            "Overview\nRoles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles",
-            "Roles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles",
-            "Across API\nAcross SDK\nContract Addresses\nMainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)\nSelected Contract Functions\nRunning a Relayer\nIntegrating Across into your application\nComposable Bridging\nDeveloper notes\nMigration from V2 to V3",
-            "Mainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)",
-            "Support Links\nBug Bounty\nAudits",
             "Liquidity Provider Fees\nRelayer Fees",
             "X\nX\nX\ndenote the size of a particular transaction someone is seeking to bridge\n0\n≤\nU\nt\n≤\n1\n0 \\leq U_t \\leq 1\n0\n≤\nU\nt\n​\n≤\n1\ndenote the utilization of the liquidity providers' capital prior to the transaction, i.e. the amount of the liquidity providers' capital that is in use prior to the current transaction\n0\n≤\nU\n^\nt\n≤\n1\n0 \\leq \\hat{U}_t \\leq 1\n0\n≤\nU\n^\nt\n​\n≤\n1\ndenote the utilization of the liquidity providers' capital after to the transaction, i.e. the amount of the liquidity providers' capital that would be in use if the user chose to execute their transaction\nU\nˉ\n\\bar{U}\nU\nˉ\ndenote the \"kink utilization\" where the slope on the interest rate changes\nR\n0\n,\nR\n1\n,\nR\n2\nR_0, R_1, R_2\nR\n0\n​\n,\nR\n1\n​\n,\nR\n2\n​\ndenote the parameters governing the interest rate model slopes\nR\n0\nR_0\nR\n0\n​\nis the interest rate that would be charged at 0% utilization\nR\n0\n+\nR\n1\nR_0 + R_1\nR\n0\n​\n+\nR\n1\n​\nis the interest rate that would be charged at \nU\nˉ\n%\n\\bar{U}\\% \nU\nˉ\n%\nutilization\nR\n0\n+\nR\n1\n+\nR\n2\nR_0 + R_1 + R_2\nR\n0\n​\n+\nR\n1\n​\n+\nR\n2\n​\nis the interest rate that would be charged at 100% utilization",
             "R\n0\nR_0\nR\n0\n​\nis the interest rate that would be charged at 0% utilization\nR\n0\n+\nR\n1\nR_0 + R_1\nR\n0\n​\n+\nR\n1\n​\nis the interest rate that would be charged at \nU\nˉ\n%\n\\bar{U}\\% \nU\nˉ\n%\nutilization\nR\n0\n+\nR\n1\n+\nR\n2\nR_0 + R_1 + R_2\nR\n0\n​\n+\nR\n1\n​\n+\nR\n2\n​\nis the interest rate that would be charged at 100% utilization"
         ],
         "tables": [],
-        "code_blocks": [],
-        "summaries": []
+        "code_blocks": []
     },
     "https://docs.across.to/developer-docs/how-across-works/readme/validating-root-bundles": {
         "title": "Validating Root Bundles | Across Docs",
-        "headers": [
-            "Validating Root Bundles"
-        ],
+        "headers": [],
         "paragraphs": [
             "Root bundles instruct the Across system on how to transfer funds between smart contracts on different chains to refund relayers and fulfill user deposits.",
             "Last updated 1 year ago",
             "This explainer video explains why root bundles are critical to making the Across system work and how they are validated. Root bundles are optimistically validated and ultimately secured by the UMA Oracle. It is recommended that UMA voters and other actors in the UMA ecosystem have an understanding of how Across utilizes the UMA oracle."
         ],
-        "lists": [
-            "How Across Works\nOverview\nRoles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles\nDevelopers\nAcross API\nAcross SDK\nContract Addresses\nMainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)\nSelected Contract Functions\nRunning a Relayer\nIntegrating Across into your application\nComposable Bridging\nDeveloper notes\nMigration from V2 to V3\nADDITIONAL INFO\nSupport Links\nBug Bounty\nAudits",
-            "Overview\nRoles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles",
-            "Roles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles",
-            "Across API\nAcross SDK\nContract Addresses\nMainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)\nSelected Contract Functions\nRunning a Relayer\nIntegrating Across into your application\nComposable Bridging\nDeveloper notes\nMigration from V2 to V3",
-            "Mainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)",
-            "Support Links\nBug Bounty\nAudits"
-        ],
+        "lists": [],
         "tables": [],
-        "code_blocks": [],
-        "summaries": []
+        "code_blocks": []
     },
     "https://docs.across.to/developer-docs/how-across-works/readme/disputing-root-bundles": {
         "title": "Disputing Root Bundles | Across Docs",
         "headers": [
-            "Disputing Root Bundles",
             "About",
             "Manual Dispute Procedure",
             "Automated Dispute Procedure"
@@ -250,12 +184,6 @@
             "Last updated 1 year ago"
         ],
         "lists": [
-            "How Across Works\nOverview\nRoles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles\nDevelopers\nAcross API\nAcross SDK\nContract Addresses\nMainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)\nSelected Contract Functions\nRunning a Relayer\nIntegrating Across into your application\nComposable Bridging\nDeveloper notes\nMigration from V2 to V3\nADDITIONAL INFO\nSupport Links\nBug Bounty\nAudits",
-            "Overview\nRoles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles",
-            "Roles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles",
-            "Across API\nAcross SDK\nContract Addresses\nMainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)\nSelected Contract Functions\nRunning a Relayer\nIntegrating Across into your application\nComposable Bridging\nDeveloper notes\nMigration from V2 to V3",
-            "Mainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)",
-            "Support Links\nBug Bounty\nAudits",
             "About\nManual Dispute Procedure\nAutomated Dispute Procedure"
         ],
         "tables": [],
@@ -268,8 +196,7 @@
                 "id": "61a5d2b170684ed5b96335bb2f2963e9",
                 "code": "$ yarn dispute\n\n# The dispute script will dump information about the Bond Token and \n# latest HubPool proposal. If necessary, it will automatically mint the \n# requisite amount of the bond token and will approve the HubPool to use \n# it. At the conclusion, the script will provide the transaction hash of\n# the most recent proposal and will request to re-run with the flag\n#\n#     --txnHash <proposal-transaction-hash>\n# \n# Re-running the script with this additional argument will automatically \n# submit a dispute.\n\n$ yarn dispute --txnHash <proposal-transaction-hash>"
             }
-        ],
-        "summaries": []
+        ]
     },
     "https://docs.across.to/developer-docs/developers/across-api": {
         "title": "Across API | Across Docs",
@@ -425,12 +352,6 @@
             "Last updated 11 months ago"
         ],
         "lists": [
-            "How Across Works\nOverview\nRoles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles\nDevelopers\nAcross API\nAcross SDK\nContract Addresses\nMainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)\nSelected Contract Functions\nRunning a Relayer\nIntegrating Across into your application\nComposable Bridging\nDeveloper notes\nMigration from V2 to V3\nADDITIONAL INFO\nSupport Links\nBug Bounty\nAudits",
-            "Overview\nRoles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles",
-            "Roles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles",
-            "Across API\nAcross SDK\nContract Addresses\nMainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)\nSelected Contract Functions\nRunning a Relayer\nIntegrating Across into your application\nComposable Bridging\nDeveloper notes\nMigration from V2 to V3",
-            "Mainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)",
-            "Support Links\nBug Bounty\nAudits",
             "Source code:\nCaching & Liveness\nCalculating Suggested Fees\nQuerying Limits\nFinding Available Routes",
             "400: invalid input.\n500: an unexpected error within the API.",
             "400: invalid input.\n500: an unexpected error within the API.",
@@ -610,8 +531,7 @@
                 ]
             ]
         ],
-        "code_blocks": [],
-        "summaries": []
+        "code_blocks": []
     },
     "https://docs.across.to/developer-docs/developers/across-sdk": {
         "title": "Across SDK | Across Docs",
@@ -637,18 +557,11 @@
             "Last updated 1 year ago"
         ],
         "lists": [
-            "How Across Works\nOverview\nRoles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles\nDevelopers\nAcross API\nAcross SDK\nContract Addresses\nMainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)\nSelected Contract Functions\nRunning a Relayer\nIntegrating Across into your application\nComposable Bridging\nDeveloper notes\nMigration from V2 to V3\nADDITIONAL INFO\nSupport Links\nBug Bounty\nAudits",
-            "Overview\nRoles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles",
-            "Roles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles",
-            "Across API\nAcross SDK\nContract Addresses\nMainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)\nSelected Contract Functions\nRunning a Relayer\nIntegrating Across into your application\nComposable Bridging\nDeveloper notes\nMigration from V2 to V3",
-            "Mainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)",
-            "Support Links\nBug Bounty\nAudits",
             "About the SDK\nHow can I use the SDK?\nIf I want to integrate Across into my dApp, should I use the SDK or the API?\nInstallation\nBasic Usage",
             "lpFeeCalculator: Get \nliquidity provider fee\n that will be charged on deposit for its \nquoteTimestamp\nrelayFeeCalculator: Get suggested \nrelayerFeePct\n for a deposit, which accounts for \nopportunity cost of capital and gas costs\n. If the depositor opts to set this fee lower than the suggested fee, then there is a chance that the deposit goes unfilled for a long time.\npool: Get HubPool statistics, such as available \nliquidReserves\n that be used to refund relayers and \nestimatedApy\n for \nliquidity providers\n."
         ],
         "tables": [],
-        "code_blocks": [],
-        "summaries": []
+        "code_blocks": []
     },
     "https://docs.across.to/developer-docs/developers/contract-addresses": {
         "title": "Contract Addresses | Across Docs",
@@ -668,17 +581,10 @@
             "Last updated 1 year ago"
         ],
         "lists": [
-            "How Across Works\nOverview\nRoles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles\nDevelopers\nAcross API\nAcross SDK\nContract Addresses\nMainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)\nSelected Contract Functions\nRunning a Relayer\nIntegrating Across into your application\nComposable Bridging\nDeveloper notes\nMigration from V2 to V3\nADDITIONAL INFO\nSupport Links\nBug Bounty\nAudits",
-            "Overview\nRoles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles",
-            "Roles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles",
-            "Across API\nAcross SDK\nContract Addresses\nMainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)\nSelected Contract Functions\nRunning a Relayer\nIntegrating Across into your application\nComposable Bridging\nDeveloper notes\nMigration from V2 to V3",
-            "Mainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)",
-            "Support Links\nBug Bounty\nAudits",
             "Mainnet\nArbitrum\nOptimism\nBase\nzkSync\nPolygon\nBoba"
         ],
         "tables": [],
-        "code_blocks": [],
-        "summaries": []
+        "code_blocks": []
     },
     "https://docs.across.to/developer-docs/developers/contract-addresses/mainnet-chain-id-1": {
         "title": "Mainnet (Chain ID: 1) | Across Docs",
@@ -724,14 +630,7 @@
             "",
             "Last updated 1 year ago"
         ],
-        "lists": [
-            "How Across Works\nOverview\nRoles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles\nDevelopers\nAcross API\nAcross SDK\nContract Addresses\nMainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)\nSelected Contract Functions\nRunning a Relayer\nIntegrating Across into your application\nComposable Bridging\nDeveloper notes\nMigration from V2 to V3\nADDITIONAL INFO\nSupport Links\nBug Bounty\nAudits",
-            "Overview\nRoles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles",
-            "Roles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles",
-            "Across API\nAcross SDK\nContract Addresses\nMainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)\nSelected Contract Functions\nRunning a Relayer\nIntegrating Across into your application\nComposable Bridging\nDeveloper notes\nMigration from V2 to V3",
-            "Mainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)",
-            "Support Links\nBug Bounty\nAudits"
-        ],
+        "lists": [],
         "tables": [
             [
                 [
@@ -808,14 +707,11 @@
                 ]
             ]
         ],
-        "code_blocks": [],
-        "summaries": []
+        "code_blocks": []
     },
     "https://docs.across.to/developer-docs/developers/contract-addresses/arbitrum-chain-id-42161": {
         "title": "Arbitrum (Chain ID: 42161) | Across Docs",
-        "headers": [
-            "Arbitrum (Chain ID: 42161)"
-        ],
+        "headers": [],
         "paragraphs": [
             "",
             "Arbitrum_SpokePool",
@@ -824,14 +720,7 @@
             "0x53691596d1BCe8CEa565b84d4915e69e03d9C99d",
             "Last updated 1 year ago"
         ],
-        "lists": [
-            "How Across Works\nOverview\nRoles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles\nDevelopers\nAcross API\nAcross SDK\nContract Addresses\nMainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)\nSelected Contract Functions\nRunning a Relayer\nIntegrating Across into your application\nComposable Bridging\nDeveloper notes\nMigration from V2 to V3\nADDITIONAL INFO\nSupport Links\nBug Bounty\nAudits",
-            "Overview\nRoles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles",
-            "Roles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles",
-            "Across API\nAcross SDK\nContract Addresses\nMainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)\nSelected Contract Functions\nRunning a Relayer\nIntegrating Across into your application\nComposable Bridging\nDeveloper notes\nMigration from V2 to V3",
-            "Mainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)",
-            "Support Links\nBug Bounty\nAudits"
-        ],
+        "lists": [],
         "tables": [
             [
                 [
@@ -848,14 +737,11 @@
                 ]
             ]
         ],
-        "code_blocks": [],
-        "summaries": []
+        "code_blocks": []
     },
     "https://docs.across.to/developer-docs/developers/contract-addresses/optimism-chain-id-10": {
         "title": "Optimism (Chain ID: 10) | Across Docs",
-        "headers": [
-            "Optimism (Chain ID: 10)"
-        ],
+        "headers": [],
         "paragraphs": [
             "",
             "Optimism_SpokePool",
@@ -864,14 +750,7 @@
             "0xFf733b2A3557a7ed6697007ab5D11B79FdD1b76B",
             "Last updated 1 year ago"
         ],
-        "lists": [
-            "How Across Works\nOverview\nRoles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles\nDevelopers\nAcross API\nAcross SDK\nContract Addresses\nMainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)\nSelected Contract Functions\nRunning a Relayer\nIntegrating Across into your application\nComposable Bridging\nDeveloper notes\nMigration from V2 to V3\nADDITIONAL INFO\nSupport Links\nBug Bounty\nAudits",
-            "Overview\nRoles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles",
-            "Roles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles",
-            "Across API\nAcross SDK\nContract Addresses\nMainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)\nSelected Contract Functions\nRunning a Relayer\nIntegrating Across into your application\nComposable Bridging\nDeveloper notes\nMigration from V2 to V3",
-            "Mainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)",
-            "Support Links\nBug Bounty\nAudits"
-        ],
+        "lists": [],
         "tables": [
             [
                 [
@@ -888,14 +767,11 @@
                 ]
             ]
         ],
-        "code_blocks": [],
-        "summaries": []
+        "code_blocks": []
     },
     "https://docs.across.to/developer-docs/developers/contract-addresses/base-chain-id-8453": {
         "title": "Base (Chain ID: 8453) | Across Docs",
-        "headers": [
-            "Base (Chain ID: 8453)"
-        ],
+        "headers": [],
         "paragraphs": [
             "",
             "Base_SpokePool",
@@ -903,14 +779,7 @@
             "",
             "Last updated 1 year ago"
         ],
-        "lists": [
-            "How Across Works\nOverview\nRoles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles\nDevelopers\nAcross API\nAcross SDK\nContract Addresses\nMainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)\nSelected Contract Functions\nRunning a Relayer\nIntegrating Across into your application\nComposable Bridging\nDeveloper notes\nMigration from V2 to V3\nADDITIONAL INFO\nSupport Links\nBug Bounty\nAudits",
-            "Overview\nRoles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles",
-            "Roles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles",
-            "Across API\nAcross SDK\nContract Addresses\nMainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)\nSelected Contract Functions\nRunning a Relayer\nIntegrating Across into your application\nComposable Bridging\nDeveloper notes\nMigration from V2 to V3",
-            "Mainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)",
-            "Support Links\nBug Bounty\nAudits"
-        ],
+        "lists": [],
         "tables": [
             [
                 [
@@ -923,28 +792,18 @@
                 ]
             ]
         ],
-        "code_blocks": [],
-        "summaries": []
+        "code_blocks": []
     },
     "https://docs.across.to/developer-docs/developers/contract-addresses/zksync-chain-id-324": {
         "title": "zkSync (Chain ID: 324) | Across Docs",
-        "headers": [
-            "zkSync (Chain ID: 324)"
-        ],
+        "headers": [],
         "paragraphs": [
             "",
             "zkSync_SpokePool",
             "0xE0B015E54d54fc84a6cB9B666099c46adE9335FF",
             "Last updated 1 year ago"
         ],
-        "lists": [
-            "How Across Works\nOverview\nRoles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles\nDevelopers\nAcross API\nAcross SDK\nContract Addresses\nMainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)\nSelected Contract Functions\nRunning a Relayer\nIntegrating Across into your application\nComposable Bridging\nDeveloper notes\nMigration from V2 to V3\nADDITIONAL INFO\nSupport Links\nBug Bounty\nAudits",
-            "Overview\nRoles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles",
-            "Roles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles",
-            "Across API\nAcross SDK\nContract Addresses\nMainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)\nSelected Contract Functions\nRunning a Relayer\nIntegrating Across into your application\nComposable Bridging\nDeveloper notes\nMigration from V2 to V3",
-            "Mainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)",
-            "Support Links\nBug Bounty\nAudits"
-        ],
+        "lists": [],
         "tables": [
             [
                 [
@@ -957,14 +816,11 @@
                 ]
             ]
         ],
-        "code_blocks": [],
-        "summaries": []
+        "code_blocks": []
     },
     "https://docs.across.to/developer-docs/developers/contract-addresses/polygon-chain-id-137": {
         "title": "Polygon (Chain ID: 137) | Across Docs",
-        "headers": [
-            "Polygon (Chain ID: 137)"
-        ],
+        "headers": [],
         "paragraphs": [
             "",
             "PolygonTokenBridger",
@@ -975,14 +831,7 @@
             "0xF328b73B6c685831F238c30a23Fc19140CB4D8FC",
             "Last updated 1 year ago"
         ],
-        "lists": [
-            "How Across Works\nOverview\nRoles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles\nDevelopers\nAcross API\nAcross SDK\nContract Addresses\nMainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)\nSelected Contract Functions\nRunning a Relayer\nIntegrating Across into your application\nComposable Bridging\nDeveloper notes\nMigration from V2 to V3\nADDITIONAL INFO\nSupport Links\nBug Bounty\nAudits",
-            "Overview\nRoles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles",
-            "Roles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles",
-            "Across API\nAcross SDK\nContract Addresses\nMainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)\nSelected Contract Functions\nRunning a Relayer\nIntegrating Across into your application\nComposable Bridging\nDeveloper notes\nMigration from V2 to V3",
-            "Mainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)",
-            "Support Links\nBug Bounty\nAudits"
-        ],
+        "lists": [],
         "tables": [
             [
                 [
@@ -1003,13 +852,11 @@
                 ]
             ]
         ],
-        "code_blocks": [],
-        "summaries": []
+        "code_blocks": []
     },
     "https://docs.across.to/developer-docs/developers/selected-contract-functions": {
         "title": "Selected Contract Functions | Across Docs",
         "headers": [
-            "Selected Contract Functions",
             "SpokePool state-modifying functions",
             "deposit ",
             "speedUpDeposit "
@@ -1076,12 +923,6 @@
             "Last updated 9 months ago"
         ],
         "lists": [
-            "How Across Works\nOverview\nRoles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles\nDevelopers\nAcross API\nAcross SDK\nContract Addresses\nMainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)\nSelected Contract Functions\nRunning a Relayer\nIntegrating Across into your application\nComposable Bridging\nDeveloper notes\nMigration from V2 to V3\nADDITIONAL INFO\nSupport Links\nBug Bounty\nAudits",
-            "Overview\nRoles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles",
-            "Roles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles",
-            "Across API\nAcross SDK\nContract Addresses\nMainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)\nSelected Contract Functions\nRunning a Relayer\nIntegrating Across into your application\nComposable Bridging\nDeveloper notes\nMigration from V2 to V3",
-            "Mainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)",
-            "Support Links\nBug Bounty\nAudits",
             "SpokePool state-modifying functions\ndeposit \nspeedUpDeposit"
         ],
         "tables": [
@@ -1170,13 +1011,11 @@
                 ]
             ]
         ],
-        "code_blocks": [],
-        "summaries": []
+        "code_blocks": []
     },
     "https://docs.across.to/developer-docs/developers/running-a-relayer": {
         "title": "Running a Relayer | Across Docs",
         "headers": [
-            "Running a Relayer",
             "Requirements",
             "Installation",
             "Updating",
@@ -1193,7 +1032,6 @@
             "Across V2 smart contracts",
             "Across V2 UMIP",
             "Additional relayer FAQs:",
-            "How do Relayers get refunded?",
             "What is a root bundle?",
             "How often do new root bundles get published and executed?"
         ],
@@ -1277,7 +1115,6 @@
             "The smart contracts can be found at this repository. They have been audited by OpenZeppelin. A high level video overview of the contract architecture can be found here.",
             "UMIP-157 explains how \"valid\" relays are identified, which are relays that correctly filled a deposit and paid the correct fees and are due to be returned their relayed amount plus a relay fee.",
             "The relayer bot code is supposed to be one implementation of UMIP-157.",
-            "Relayers are paid back after a root bundle containing the relayer’s fulfillment is published to mainnet and passes a challenge period. Relayers can choose which chains they are paid back on. When running the example relayer code, they are by default repaid on the chain that they fulfill deposits on. The relayer can override this setting.",
             "A root bundle for a block range is a set of three Merkle roots that contains all of the information necessary to refund relayers who fulfilled a deposit during the block range. A root bundle is valid only if it contains all of the expected information for a block range. This UMIP explains at length exactly how to construct a valid root bundle.",
             "The current liveness period is 7200 seconds or 2 hours. You can always query it on the HubPool by calling the read-only method liveness(), and only one root bundle can be proposed at a time. So, the fastest cadence for root bundles being proposed is every 2 hours. Each root bundle contains approximately all of the relayer refunds up to the current time (as of the proposal) and as old as right after the preceding root bundle proposal time. A 'dataworker' is what we refer to as the agent who gathers all Fill and Deposit events from all of the chains that Across V2 supports bridging to and from in order to construct these Merkle root bundles. A dataworker could choose to propose a new root bundle right after the current one passes liveness, or it can choose to wait. Realistically, we expect that a dataworker will only submit a new root bundle after it contains a certain volume of refunds, for capital efficiency reasons. So to summarize:",
             "Relayer refunds are contained in root bundles that are optimistically published to the HubPool",
@@ -1289,13 +1126,6 @@
             "Last updated 8 months ago"
         ],
         "lists": [
-            "How Across Works\nOverview\nRoles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles\nDevelopers\nAcross API\nAcross SDK\nContract Addresses\nMainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)\nSelected Contract Functions\nRunning a Relayer\nIntegrating Across into your application\nComposable Bridging\nDeveloper notes\nMigration from V2 to V3\nADDITIONAL INFO\nSupport Links\nBug Bounty\nAudits",
-            "Overview\nRoles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles",
-            "Roles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles",
-            "Across API\nAcross SDK\nContract Addresses\nMainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)\nSelected Contract Functions\nRunning a Relayer\nIntegrating Across into your application\nComposable Bridging\nDeveloper notes\nMigration from V2 to V3",
-            "Mainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)",
-            "Support Links\nBug Bounty\nAudits",
-            "Requirements\nInstallation\nUpdating\nConfiguration\nNotes on requirements to RPC Providers\nUsing a Redis in-memory database to improve performance\nManaging cross chain inventory\nSecurity Considerations\nRunning the Relayer for the first time\nWhich account will be used to send transactions?\nWhich tokens can be relayed?\nHow can I learn more about the code behind the bot's logic?\nAuxiliary Topics:\nAcross V2 smart contracts\nAcross V2 UMIP\nAdditional relayer FAQs:\nHow do Relayers get refunded?\nWhat is a root bundle?\nHow often do new root bundles get published and executed?",
             "Flushes any existing installed dependencies.\nPulls down the latest relayer-v2 commit.\nInstalls all dependencies and builds the relayer.\nDisplays the latest commit in the relayer-v2 repository.",
             "Network services listening on public interfaces.\nInterfaces opened for remote administration, and their permitted authentication mechanisms.\nThird-party installations that may autonomously communicate (i.e. phone home) over the network.",
             "MNEMONIC (when run with --wallet mnemonic)\nPRIVATE_KEY (when run with --wallet privateKey)",
@@ -1350,8 +1180,7 @@
                 "id": "5864bb542d9c4b92a5256c38a0f6d89c",
                 "code": "[debug]: {\n  \"at\": \"Relayer#index\",\n  \"message\": \"End of serverless execution loop - terminating process\"\n}"
             }
-        ],
-        "summaries": []
+        ]
     },
     "https://docs.across.to/developer-docs/developers/integrating-across-into-your-application": {
         "title": "Integrating Across into your application | Across Docs",
@@ -1380,19 +1209,12 @@
             "Last updated 10 months ago"
         ],
         "lists": [
-            "How Across Works\nOverview\nRoles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles\nDevelopers\nAcross API\nAcross SDK\nContract Addresses\nMainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)\nSelected Contract Functions\nRunning a Relayer\nIntegrating Across into your application\nComposable Bridging\nDeveloper notes\nMigration from V2 to V3\nADDITIONAL INFO\nSupport Links\nBug Bounty\nAudits",
-            "Overview\nRoles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles",
-            "Roles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles",
-            "Across API\nAcross SDK\nContract Addresses\nMainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)\nSelected Contract Functions\nRunning a Relayer\nIntegrating Across into your application\nComposable Bridging\nDeveloper notes\nMigration from V2 to V3",
-            "Mainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)",
-            "Support Links\nBug Bounty\nAudits",
             "How to initiate a deposit\nHow to track a deposit\nHow to speed up a deposit that is taking a long time to be picked up by a relayer\nUsing the API versus SDK to construct deposit parameters\nCommonly asked questions",
             "Can I use the \nAcross SDK\n to submit contract transactions?\nNot yet, working on it!",
             "Not yet, working on it!"
         ],
         "tables": [],
-        "code_blocks": [],
-        "summaries": []
+        "code_blocks": []
     },
     "https://docs.across.to/developer-docs/developers/composable-bridging": {
         "title": "Composable Bridging | Across Docs",
@@ -1424,12 +1246,6 @@
             "Last updated 10 months ago"
         ],
         "lists": [
-            "How Across Works\nOverview\nRoles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles\nDevelopers\nAcross API\nAcross SDK\nContract Addresses\nMainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)\nSelected Contract Functions\nRunning a Relayer\nIntegrating Across into your application\nComposable Bridging\nDeveloper notes\nMigration from V2 to V3\nADDITIONAL INFO\nSupport Links\nBug Bounty\nAudits",
-            "Overview\nRoles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles",
-            "Roles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles",
-            "Across API\nAcross SDK\nContract Addresses\nMainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)\nSelected Contract Functions\nRunning a Relayer\nIntegrating Across into your application\nComposable Bridging\nDeveloper notes\nMigration from V2 to V3",
-            "Mainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)",
-            "Support Links\nBug Bounty\nAudits",
             "What is Composable Bridging:?\nHow does it work? \nRequirements \nDetailed instructions\nExample: Implementing a Bridge and Unwrap",
             "handleAcrossMessage(address tokenSent, uint256 amount, bool fillCompleted, address relayer, bytes memory message)",
             "The deposit \nmessage\n is not empty\nThe \nrecipient\n address is a contract on the destinationChainId that implements a public \nhandleAcrossMessage(address,uint256,bool,address,bytes) \nfunction, and this function must be non-reverting \nThe additional gas cost to execute the above function is compensated for in the deposit's \nrelayerFeePct",
@@ -1443,8 +1259,7 @@
                 "id": "f8d5fd41629345d08d789926234ecc93",
                 "code": "contract MyUnwrapper {\n    WETHInterface weth;\n    addess payable owner;\n    constructor() public {\n        owner = msg.sender;\n    }\n    function handleAcrossMessage(\n        address tokenSent, \n        uint256 amount, \n        bool, // fillCompleted unused\n        address, // relayer is unused \n        bytes memory // message is unused\n    ) external { \n        require(tokenSent == address(weth), \"received token not WETH\");\n        weth.withdraw(amount);\n        (bool sent, bytes memory data) = owner.call{value: amount}(\"\");\n        require(sent, \"Failed to send Ether\");\n    } \n}"
             }
-        ],
-        "summaries": []
+        ]
     },
     "https://docs.across.to/developer-docs/developers/developer-notes": {
         "title": "Developer notes | Across Docs",
@@ -1463,32 +1278,21 @@
             "Last updated 1 year ago"
         ],
         "lists": [
-            "How Across Works\nOverview\nRoles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles\nDevelopers\nAcross API\nAcross SDK\nContract Addresses\nMainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)\nSelected Contract Functions\nRunning a Relayer\nIntegrating Across into your application\nComposable Bridging\nDeveloper notes\nMigration from V2 to V3\nADDITIONAL INFO\nSupport Links\nBug Bounty\nAudits",
-            "Overview\nRoles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles",
-            "Roles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles",
-            "Across API\nAcross SDK\nContract Addresses\nMainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)\nSelected Contract Functions\nRunning a Relayer\nIntegrating Across into your application\nComposable Bridging\nDeveloper notes\nMigration from V2 to V3",
-            "Mainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)",
-            "Support Links\nBug Bounty\nAudits",
             "ETH/WETH Behavior\nMore questions?",
             "If a bridge transfer is being sent to an EOA, \nthe EOA will receive ETH\n (not WETH)\nIf a bridge transfer is being sent to a contract, \nthe contract will receive WETH\n (not ETH)"
         ],
         "tables": [],
-        "code_blocks": [],
-        "summaries": []
+        "code_blocks": []
     },
     "https://docs.across.to/developer-docs/developers/migration-from-v2-to-v3": {
         "title": "Migration from V2 to V3 | Across Docs",
         "headers": [
-            "Migration from V2 to V3",
-            "Introduction",
             "Across API migration guide",
             "Overview",
             "Non-breaking changes",
             "Breaking changes (mid- to long-term)",
-            "Changes to Across Smart Contracts",
             "Breaking Change: Across+ (Composable Bridging) ",
             "Events",
-            "Important changes for Relayers",
             "Important changes for dApp Developers"
         ],
         "paragraphs": [
@@ -1519,7 +1323,6 @@
             "Across V3 bridge transfers consist of a V3FundsDeposited event emitted on the origin chain and a FilledV3Relay event emitted on the destination chain.",
             "V3FundsDeposited and FilledV3Relay must match on all common parameters except for outputToken. This can be set to 0x0 (the zero address) at deposit time to signal to relayers that they should use the \"equivalent\" token on the destinationChainId to fill the deposit, therefore if V3FundsDeposited#outputToken == 0x0 then FilledV3Relay#outputToken must be equal to the \"equivalent\" token on the destination chain. The Across UMIP should be updated to explain what it means to be \"equivalent\" but this essentially means the output and input token map to the same token on Ethereum, for example they could be the different USDC addresses on different L2s.",
             "Note that the amount transferred to the recipient is relayExecutionInfo.updatedOutputAmount",
-            "This is an abridged summary of important breaking changes for Relayers to be aware of. ",
             "All deposits emitted in V3 contracts will be V3FundsDeposited events which can only be filled via SpokePool#filledV3Relay.",
             "The important changes here are:",
             "realizedLpFeePct The relayer no longer needs to set the realizedLpFeePct as a parameter when calling the fill function. LP fees will still be charged to relayers at refund time (i.e. they will receive the inputAmount minus the LP fees) and these fees will still be computed using the formula in the UMIP based on the deposit.quoteTimestamp. This is a nice quality of life improvement for relayers who will still need to compute the LP fee for a deposit but can use a much wider margin of error, as this fee will only be important for computing their profitability and they will not be at risk of sending an invalid fill if this fee is off by a small amount.",
@@ -1531,13 +1334,6 @@
             "Last updated 8 months ago"
         ],
         "lists": [
-            "How Across Works\nOverview\nRoles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles\nDevelopers\nAcross API\nAcross SDK\nContract Addresses\nMainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)\nSelected Contract Functions\nRunning a Relayer\nIntegrating Across into your application\nComposable Bridging\nDeveloper notes\nMigration from V2 to V3\nADDITIONAL INFO\nSupport Links\nBug Bounty\nAudits",
-            "Overview\nRoles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles",
-            "Roles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles",
-            "Across API\nAcross SDK\nContract Addresses\nMainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)\nSelected Contract Functions\nRunning a Relayer\nIntegrating Across into your application\nComposable Bridging\nDeveloper notes\nMigration from V2 to V3",
-            "Mainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)",
-            "Support Links\nBug Bounty\nAudits",
-            "Introduction\nAcross API migration guide\nOverview\nNon-breaking changes\nBreaking changes (mid- to long-term)\nChanges to Across Smart Contracts\nBreaking Change: Across+ (Composable Bridging) \nEvents\nImportant changes for Relayers\nImportant changes for dApp Developers",
             "handleAcrossMessage() -> handleV3AcrossMessage\nFunction parameter `bool fillCompleted` has been removed.",
             "realizedLpFeePct\n The relayer no longer needs to set the \nrealizedLpFeePct\n as a parameter when calling the fill function. LP fees will still be charged to relayers at refund time (i.e. they will receive the inputAmount minus the LP fees) and these fees will still be computed using the formula in the UMIP based on the \ndeposit.quoteTimestamp.\n This is a nice quality of life improvement for relayers who will still need to compute the LP fee for a deposit but can use a much wider margin of error, as this fee will only be important for computing their profitability and they will not be at risk of sending an invalid fill if this fee is off by a small amount.\noutputToken:\n See the section above about how \noutputToken\n must be set if FundsDeposited#outputToken == 0x0. This should be set to the \"equivalent\" token for the destination chain in this case.\nNo partial fills: it is not possible to send partial fills in V3.\nSlow fills: Slow fills will be requested via a new function \nrequestSlowFill\n. Slow fills can only be requested on deposits where the \ninputToken\n and \noutputToken\n are \"equivalent\". Slow fills will pay out the \ninputAmount * realizedLpFeePct\n, which will be set as the slow fill's \nupdatedOutputAmount"
         ],
@@ -1603,8 +1399,7 @@
                 "id": "rRaA1FkpIQp7",
                 "code": "function speedUpV3Deposit(\n    address depositor,\n    uint32 depositId,\n    uint256 updatedOutputAmount,\n    address updatedRecipient,\n    bytes calldata updatedMessage,\n    bytes calldata depositorSignature\n) external;\n\n// Old function:\nfunction speedUpDeposit(\n    address depositor,\n    int64 updatedRelayerFeePct,\n    uint32 depositId,\n    address updatedRecipient,\n    bytes memory updatedMessage,\n    bytes memory depositorSignature\n) external;"
             }
-        ],
-        "summaries": []
+        ]
     },
     "https://docs.across.to/developer-docs/additional-info/support-links": {
         "title": "Support Links | Across Docs",
@@ -1621,22 +1416,14 @@
             "Last updated 5 months ago"
         ],
         "lists": [
-            "How Across Works\nOverview\nRoles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles\nDevelopers\nAcross API\nAcross SDK\nContract Addresses\nMainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)\nSelected Contract Functions\nRunning a Relayer\nIntegrating Across into your application\nComposable Bridging\nDeveloper notes\nMigration from V2 to V3\nADDITIONAL INFO\nSupport Links\nBug Bounty\nAudits",
-            "Overview\nRoles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles",
-            "Roles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles",
-            "Across API\nAcross SDK\nContract Addresses\nMainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)\nSelected Contract Functions\nRunning a Relayer\nIntegrating Across into your application\nComposable Bridging\nDeveloper notes\nMigration from V2 to V3",
-            "Mainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)",
-            "Support Links\nBug Bounty\nAudits",
             "Across\nTwitter\nDiscord\nMedium\nGithub\nAudit report"
         ],
         "tables": [],
-        "code_blocks": [],
-        "summaries": []
+        "code_blocks": []
     },
     "https://docs.across.to/developer-docs/additional-info/bug-bounty": {
         "title": "Bug Bounty | Across Docs",
         "headers": [
-            "Bug Bounty",
             "Bounty Program",
             "Submissions",
             "Terms & Conditions"
@@ -1666,12 +1453,6 @@
             "The same terms and conditions from the UMA bug bounty program apply here."
         ],
         "lists": [
-            "How Across Works\nOverview\nRoles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles\nDevelopers\nAcross API\nAcross SDK\nContract Addresses\nMainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)\nSelected Contract Functions\nRunning a Relayer\nIntegrating Across into your application\nComposable Bridging\nDeveloper notes\nMigration from V2 to V3\nADDITIONAL INFO\nSupport Links\nBug Bounty\nAudits",
-            "Overview\nRoles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles",
-            "Roles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles",
-            "Across API\nAcross SDK\nContract Addresses\nMainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)\nSelected Contract Functions\nRunning a Relayer\nIntegrating Across into your application\nComposable Bridging\nDeveloper notes\nMigration from V2 to V3",
-            "Mainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)",
-            "Support Links\nBug Bounty\nAudits",
             "Bounty Program\nSubmissions\nTerms & Conditions",
             "Description: Describe at a high level the bug with links to problematic code\nAttack: Detailed instructions for exploiting the bug\nMitigation: How to resolve the bug\nSuggested risk rating: The recommended severity of this bug"
         ],
@@ -1699,14 +1480,11 @@
                 ]
             ]
         ],
-        "code_blocks": [],
-        "summaries": []
+        "code_blocks": []
     },
     "https://docs.across.to/developer-docs/additional-info/audits": {
         "title": "Audits | Across Docs",
-        "headers": [
-            "Audits"
-        ],
+        "headers": [],
         "paragraphs": [
             "Across Token and Token Distributor Audit",
             "Across V2 Audit",
@@ -1717,17 +1495,10 @@
             "Last updated 1 year ago"
         ],
         "lists": [
-            "How Across Works\nOverview\nRoles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles\nDevelopers\nAcross API\nAcross SDK\nContract Addresses\nMainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)\nSelected Contract Functions\nRunning a Relayer\nIntegrating Across into your application\nComposable Bridging\nDeveloper notes\nMigration from V2 to V3\nADDITIONAL INFO\nSupport Links\nBug Bounty\nAudits",
-            "Overview\nRoles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles",
-            "Roles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles",
-            "Across API\nAcross SDK\nContract Addresses\nMainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)\nSelected Contract Functions\nRunning a Relayer\nIntegrating Across into your application\nComposable Bridging\nDeveloper notes\nMigration from V2 to V3",
-            "Mainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)",
-            "Support Links\nBug Bounty\nAudits",
             "Across Token and Token Distributor Audit\nAcross V2 Audit\nUMA's Continuous Audit (Optimistic Oracle)\nUMA Audit – L2 Bridges\nUMA Audit – Phase 4\nUMA Audit – Phase 6"
         ],
         "tables": [],
-        "code_blocks": [],
-        "summaries": []
+        "code_blocks": []
     },
     "https://www.gitbook.com/?utm_source=content&utm_medium=trademark&utm_campaign=hBVFLntFXCM0TMmhxIGU": {
         "title": "GitBook",
@@ -1752,7 +1523,6 @@
             "",
             "Product",
             "Features",
-            "Resources",
             "Pricing",
             "",
             "",
@@ -2247,7 +2017,6 @@
             ""
         ],
         "tables": [],
-        "code_blocks": [],
-        "summaries": []
+        "code_blocks": []
     }
 }

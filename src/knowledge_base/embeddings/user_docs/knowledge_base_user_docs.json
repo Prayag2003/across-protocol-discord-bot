@@ -14,17 +14,14 @@
             "Last updated 6 months ago"
         ],
         "lists": [
-            "How to Use Across\nAbout\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History\nHow across works\nOverview\nSecurity\nFees\nSpeed\nSupported Chains and Tokens\n🪙\n$ACX Token\nToken Overview\nInitial Allocations\nACX Emissions Committee\nGovernance\nGovernance Model\nProposals and Voting\nAdditional Info\nFAQ\nSupport Links\nMigrating from V1\nAcross Brand Assets",
             "About\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History",
             "Reward Locking",
-            "Overview\nSecurity\nFees\nSpeed\nSupported Chains and Tokens",
             "Token Overview\nInitial Allocations\nACX Emissions Committee",
             "Governance Model\nProposals and Voting",
             "FAQ\nSupport Links\nMigrating from V1\nAcross Brand Assets"
         ],
         "tables": [],
-        "code_blocks": [],
-        "summaries": []
+        "code_blocks": []
     },
     "https://docs.across.to/user-docs": {
         "title": "About | Across Docs",
@@ -41,22 +38,18 @@
             "Last updated 6 months ago"
         ],
         "lists": [
-            "How to Use Across\nAbout\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History\nHow across works\nOverview\nSecurity\nFees\nSpeed\nSupported Chains and Tokens\n🪙\n$ACX Token\nToken Overview\nInitial Allocations\nACX Emissions Committee\nGovernance\nGovernance Model\nProposals and Voting\nAdditional Info\nFAQ\nSupport Links\nMigrating from V1\nAcross Brand Assets",
             "About\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History",
             "Reward Locking",
-            "Overview\nSecurity\nFees\nSpeed\nSupported Chains and Tokens",
             "Token Overview\nInitial Allocations\nACX Emissions Committee",
             "Governance Model\nProposals and Voting",
             "FAQ\nSupport Links\nMigrating from V1\nAcross Brand Assets"
         ],
         "tables": [],
-        "code_blocks": [],
-        "summaries": []
+        "code_blocks": []
     },
     "https://docs.across.to/?fallback=true": {
         "title": "Getting Started | Across Docs",
         "headers": [
-            "Getting Started",
             "Looking for something else? Get in touch"
         ],
         "paragraphs": [
@@ -68,37 +61,19 @@
             "",
             "Last updated 2 months ago"
         ],
-        "lists": [
-            "👋\nIntroduction\nGetting Started\nWhat is Across?\nTechnical FAQ\nMigration Guides\nMigration from V2 to V3\nMigration to CCTP\nMigration Guide for Relayers\nMigration Guide for API Users\n🔗\nUse Cases\nInstant Bridging in your Application\nBridge Integration Guide\nMulti Chain Bridge UI Guide\nSingle Chain Bridge UI Guide\nEmbedded Cross-chain Actions\nCross-chain Actions Integration Guide\nUsing the Generic Multicaller Handler Contract\nUsing a Custom Handler Contract\nCross-chain Actions UI Guide\nSettle Cross-chain Intents\n🧠\nConcepts\nWhat are Cross-chain Intents?\nIntents Architecture in Across\nIntent Lifecycle in Across\nCanonical Asset Maximalism\n🛠️\nReference\nAPI Reference\nSDK Reference\nContracts\nArbitrum (Chain ID: 42161)\nBase (Chain ID: 8453)\nBlast (Chain ID: 81457)\nEthereum Mainnet (Chain ID: 1)\nLinea (Chain ID: 59144)\nLisk (Chain ID: 1135)\nMode (Chain ID: 34443)\nOptimism (Chain ID: 10)\nPolygon (Chain ID: 137)\nRedstone (Chain ID: 690)\nScroll (Chain ID: 534352)\nWorld Chain (Chain ID: 480)\nzkSync (Chain ID: 324)\nZora (Chain ID: 7777777)\nSepolia Testnet\nSelected Contract Functions\nSupported Chains\nFees in the System\nActors in the System\nSecurity Model and Verification\nDisputing Root Bundles\nValidating Root Bundles\nTracking Events\n🔁\nRelayers\nRunning a Relayer\nRelayer Exclusivity\n📚\nResources\nRelease Notes\nDeveloper Support\nBug Bounty\nAudits\nNew Chain Requests",
-            "Getting Started\nWhat is Across?\nTechnical FAQ\nMigration Guides\nMigration from V2 to V3\nMigration to CCTP\nMigration Guide for Relayers\nMigration Guide for API Users",
-            "Migration from V2 to V3\nMigration to CCTP\nMigration Guide for Relayers\nMigration Guide for API Users",
-            "Migration Guide for Relayers\nMigration Guide for API Users",
-            "Instant Bridging in your Application\nBridge Integration Guide\nMulti Chain Bridge UI Guide\nSingle Chain Bridge UI Guide\nEmbedded Cross-chain Actions\nCross-chain Actions Integration Guide\nUsing the Generic Multicaller Handler Contract\nUsing a Custom Handler Contract\nCross-chain Actions UI Guide\nSettle Cross-chain Intents",
-            "Bridge Integration Guide\nMulti Chain Bridge UI Guide\nSingle Chain Bridge UI Guide",
-            "Cross-chain Actions Integration Guide\nUsing the Generic Multicaller Handler Contract\nUsing a Custom Handler Contract\nCross-chain Actions UI Guide",
-            "Using the Generic Multicaller Handler Contract\nUsing a Custom Handler Contract",
-            "What are Cross-chain Intents?\nIntents Architecture in Across\nIntent Lifecycle in Across\nCanonical Asset Maximalism",
-            "API Reference\nSDK Reference\nContracts\nArbitrum (Chain ID: 42161)\nBase (Chain ID: 8453)\nBlast (Chain ID: 81457)\nEthereum Mainnet (Chain ID: 1)\nLinea (Chain ID: 59144)\nLisk (Chain ID: 1135)\nMode (Chain ID: 34443)\nOptimism (Chain ID: 10)\nPolygon (Chain ID: 137)\nRedstone (Chain ID: 690)\nScroll (Chain ID: 534352)\nWorld Chain (Chain ID: 480)\nzkSync (Chain ID: 324)\nZora (Chain ID: 7777777)\nSepolia Testnet\nSelected Contract Functions\nSupported Chains\nFees in the System\nActors in the System\nSecurity Model and Verification\nDisputing Root Bundles\nValidating Root Bundles\nTracking Events",
-            "Arbitrum (Chain ID: 42161)\nBase (Chain ID: 8453)\nBlast (Chain ID: 81457)\nEthereum Mainnet (Chain ID: 1)\nLinea (Chain ID: 59144)\nLisk (Chain ID: 1135)\nMode (Chain ID: 34443)\nOptimism (Chain ID: 10)\nPolygon (Chain ID: 137)\nRedstone (Chain ID: 690)\nScroll (Chain ID: 534352)\nWorld Chain (Chain ID: 480)\nzkSync (Chain ID: 324)\nZora (Chain ID: 7777777)\nSepolia Testnet",
-            "Disputing Root Bundles\nValidating Root Bundles",
-            "Running a Relayer\nRelayer Exclusivity",
-            "Release Notes\nDeveloper Support\nBug Bounty\nAudits\nNew Chain Requests"
-        ],
+        "lists": [],
         "tables": [],
-        "code_blocks": [],
-        "summaries": []
+        "code_blocks": []
     },
     "https://docs.across.to/developer-docs?fallback=true": {
         "title": "Overview | Across Docs",
         "headers": [
-            "Overview",
-            "Resources to learn more"
+            "Overview"
         ],
         "paragraphs": [
             "Below is an overview of how a bridge transfer on Across works from start to finish.",
             "Last updated 8 months ago",
             "A user that would like to move funds from chain A to chain B deposits funds into a Spoke Pool on chain A with instructions about where they would like their funds to wind up and the fee that they are willing to pay.",
-            "Relayers view these deposits and, once they have verified that the details of the deposit are correct, immediately provide funds to the user on chain B. The user is now satisfied, having received their funds minus any fees and no longer needs to interact with Across.",
             "After the relayer has performed the relay, a proof of that relay and the validity of the original deposit is submitted to the optimistic oracle (OO) and the relayer is reimbursed once this information has been verified by the OO.",
             "The relayer's reimbursement is taken out of a single liquidity pool on Ethereum Mainnet escrowed in a contract called the Hub Pool. Liquidity providers (\"LP's\") to this pool also earn a fee per transfer that is assessed on the user's deposited amount.",
             "The rules for how funds are moved between the L2 Spoke Pools and the L1 Hub Pool to reimburse relayers are explained in UMIP-157. Anyone who wants to move funds between the pools must submit a valid proof to the OO that abides by the rules explained in the UMIP.",
@@ -107,17 +82,9 @@
             "The smart contracts were audited by OpenZeppelin. The audit report contains a high-level summary of how the smart contract architecture works.",
             "Moreover, here is a 60-minute explainer video of the smart contract architecture. Slides for the explainer video can be found here."
         ],
-        "lists": [
-            "How Across Works\nOverview\nRoles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles\nDevelopers\nAcross API\nAcross SDK\nContract Addresses\nMainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)\nSelected Contract Functions\nRunning a Relayer\nIntegrating Across into your application\nComposable Bridging\nDeveloper notes\nMigration from V2 to V3\nADDITIONAL INFO\nSupport Links\nBug Bounty\nAudits",
-            "Overview\nRoles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles",
-            "Roles within Across\nFee Model\nValidating Root Bundles\nDisputing Root Bundles",
-            "Across API\nAcross SDK\nContract Addresses\nMainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)\nSelected Contract Functions\nRunning a Relayer\nIntegrating Across into your application\nComposable Bridging\nDeveloper notes\nMigration from V2 to V3",
-            "Mainnet (Chain ID: 1)\nArbitrum (Chain ID: 42161)\nOptimism (Chain ID: 10)\nBase (Chain ID: 8453)\nzkSync (Chain ID: 324)\nPolygon (Chain ID: 137)",
-            "Support Links\nBug Bounty\nAudits"
-        ],
+        "lists": [],
         "tables": [],
-        "code_blocks": [],
-        "summaries": []
+        "code_blocks": []
     },
     "https://docs.across.to/user-docs?fallback=true": {
         "title": "About | Across Docs",
@@ -134,17 +101,14 @@
             "Last updated 6 months ago"
         ],
         "lists": [
-            "How to Use Across\nAbout\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History\nHow across works\nOverview\nSecurity\nFees\nSpeed\nSupported Chains and Tokens\n🪙\n$ACX Token\nToken Overview\nInitial Allocations\nACX Emissions Committee\nGovernance\nGovernance Model\nProposals and Voting\nAdditional Info\nFAQ\nSupport Links\nMigrating from V1\nAcross Brand Assets",
             "About\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History",
             "Reward Locking",
-            "Overview\nSecurity\nFees\nSpeed\nSupported Chains and Tokens",
             "Token Overview\nInitial Allocations\nACX Emissions Committee",
             "Governance Model\nProposals and Voting",
             "FAQ\nSupport Links\nMigrating from V1\nAcross Brand Assets"
         ],
         "tables": [],
-        "code_blocks": [],
-        "summaries": []
+        "code_blocks": []
     },
     "https://docs.across.to/user-docs/how-to-use-across/bridging": {
         "title": "Bridging | Across Docs",
@@ -165,17 +129,14 @@
             "Last updated 6 months ago"
         ],
         "lists": [
-            "How to Use Across\nAbout\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History\nHow across works\nOverview\nSecurity\nFees\nSpeed\nSupported Chains and Tokens\n🪙\n$ACX Token\nToken Overview\nInitial Allocations\nACX Emissions Committee\nGovernance\nGovernance Model\nProposals and Voting\nAdditional Info\nFAQ\nSupport Links\nMigrating from V1\nAcross Brand Assets",
             "About\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History",
             "Reward Locking",
-            "Overview\nSecurity\nFees\nSpeed\nSupported Chains and Tokens",
             "Token Overview\nInitial Allocations\nACX Emissions Committee",
             "Governance Model\nProposals and Voting",
             "FAQ\nSupport Links\nMigrating from V1\nAcross Brand Assets"
         ],
         "tables": [],
-        "code_blocks": [],
-        "summaries": []
+        "code_blocks": []
     },
     "https://docs.across.to/user-docs/how-to-use-across/providing-bridge-liquidity": {
         "title": "Providing Bridge Liquidity | Across Docs",
@@ -233,18 +194,15 @@
             "Last updated 6 months ago"
         ],
         "lists": [
-            "How to Use Across\nAbout\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History\nHow across works\nOverview\nSecurity\nFees\nSpeed\nSupported Chains and Tokens\n🪙\n$ACX Token\nToken Overview\nInitial Allocations\nACX Emissions Committee\nGovernance\nGovernance Model\nProposals and Voting\nAdditional Info\nFAQ\nSupport Links\nMigrating from V1\nAcross Brand Assets",
             "About\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History",
             "Reward Locking",
-            "Overview\nSecurity\nFees\nSpeed\nSupported Chains and Tokens",
             "Token Overview\nInitial Allocations\nACX Emissions Committee",
             "Governance Model\nProposals and Voting",
             "FAQ\nSupport Links\nMigrating from V1\nAcross Brand Assets",
             "How to Provide Liquidity to Across\nHow to Stake Your Liquidity on Across\nHow to Remove Liquidity from Across\nHow to Unstake Liquidity from Across"
         ],
         "tables": [],
-        "code_blocks": [],
-        "summaries": []
+        "code_blocks": []
     },
     "https://docs.across.to/user-docs/how-to-use-across/protocol-rewards": {
         "title": "Protocol Rewards | Across Docs",
@@ -260,17 +218,14 @@
             "Last updated 6 months ago"
         ],
         "lists": [
-            "How to Use Across\nAbout\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History\nHow across works\nOverview\nSecurity\nFees\nSpeed\nSupported Chains and Tokens\n🪙\n$ACX Token\nToken Overview\nInitial Allocations\nACX Emissions Committee\nGovernance\nGovernance Model\nProposals and Voting\nAdditional Info\nFAQ\nSupport Links\nMigrating from V1\nAcross Brand Assets",
             "About\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History",
             "Reward Locking",
-            "Overview\nSecurity\nFees\nSpeed\nSupported Chains and Tokens",
             "Token Overview\nInitial Allocations\nACX Emissions Committee",
             "Governance Model\nProposals and Voting",
             "FAQ\nSupport Links\nMigrating from V1\nAcross Brand Assets"
         ],
         "tables": [],
-        "code_blocks": [],
-        "summaries": []
+        "code_blocks": []
     },
     "https://docs.across.to/user-docs/how-to-use-across/protocol-rewards/reward-locking": {
         "title": "Reward Locking | Across Docs",
@@ -334,10 +289,8 @@
             "Last updated 3 months ago"
         ],
         "lists": [
-            "How to Use Across\nAbout\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History\nHow across works\nOverview\nSecurity\nFees\nSpeed\nSupported Chains and Tokens\n🪙\n$ACX Token\nToken Overview\nInitial Allocations\nACX Emissions Committee\nGovernance\nGovernance Model\nProposals and Voting\nAdditional Info\nFAQ\nSupport Links\nMigrating from V1\nAcross Brand Assets",
             "About\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History",
             "Reward Locking",
-            "Overview\nSecurity\nFees\nSpeed\nSupported Chains and Tokens",
             "Token Overview\nInitial Allocations\nACX Emissions Committee",
             "Governance Model\nProposals and Voting",
             "FAQ\nSupport Links\nMigrating from V1\nAcross Brand Assets",
@@ -345,8 +298,7 @@
             "50,000\n → ~75,000 ACX per day for Across ETH LP tokens\n50,000\n → ~75,000 ACX per day for Across USDC LP tokens\n5,000\n → ~7,500 ACX per day for Across USDT LP tokens\n5,000\n → ~7,500 ACX per day for Across DAI LP tokens\n5,000\n → ~7,500 ACX per day for Across WBTC LP tokens\n20,000\n → ~30,000 ACX per day for Across ACX LP tokens"
         ],
         "tables": [],
-        "code_blocks": [],
-        "summaries": []
+        "code_blocks": []
     },
     "https://docs.across.to/user-docs/how-to-use-across/transaction-history": {
         "title": "Transaction History | Across Docs",
@@ -360,24 +312,20 @@
             "Last updated 6 months ago"
         ],
         "lists": [
-            "How to Use Across\nAbout\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History\nHow across works\nOverview\nSecurity\nFees\nSpeed\nSupported Chains and Tokens\n🪙\n$ACX Token\nToken Overview\nInitial Allocations\nACX Emissions Committee\nGovernance\nGovernance Model\nProposals and Voting\nAdditional Info\nFAQ\nSupport Links\nMigrating from V1\nAcross Brand Assets",
             "About\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History",
             "Reward Locking",
-            "Overview\nSecurity\nFees\nSpeed\nSupported Chains and Tokens",
             "Token Overview\nInitial Allocations\nACX Emissions Committee",
             "Governance Model\nProposals and Voting",
             "FAQ\nSupport Links\nMigrating from V1\nAcross Brand Assets"
         ],
         "tables": [],
-        "code_blocks": [],
-        "summaries": []
+        "code_blocks": []
     },
     "https://docs.across.to/user-docs/how-across-works/overview": {
         "title": "Overview | Across Docs",
         "headers": [
             "Overview",
             "How Across Works",
-            "Resources",
             "Ecosystem Roles",
             "User",
             "Relayer ",
@@ -387,7 +335,6 @@
         "paragraphs": [
             "Last updated 6 months ago",
             "When a user submits an order to Across, for example to move assets from chain A to chain B, they deposit funds into a Spoke Pool on chain A, with instructions about where they would like their funds to wind up and the fee that they are willing to pay.",
-            "Relayers view these deposits and, once they have verified that the details of the deposit are correct, immediately provide funds to the user on chain B. The user is now satisfied, having received their funds minus any fees and no longer needs to interact with Across.",
             "After the relayer has performed the relay, a proof of that relay and the validity of the original deposit is submitted to the optimistic oracle (OO) and the relayer is reimbursed once this information has been verified by the OO.",
             "The relayer's reimbursement is taken out of a single liquidity pool on Ethereum Mainnet escrowed in a contract called the Hub Pool. Liquidity providers (\"LP's\") to this pool also earn a fee per transfer that is assessed on the user's deposited amount.",
             "The rules for how funds are moved between the L2 Spoke Pools and the L1 Hub Pool to reimburse relayers are explained in UMIP-157. Anyone who wants to move funds between the pools must submit a valid proof to the OO that abides by the rules explained in the UMIP.",
@@ -397,9 +344,6 @@
             "Moreover, here is a 60-minute explainer video of the smart contract architecture. Slides for the explainer video can be found here.",
             "",
             "A user is someone who bridges assets between L2s and L1 with Across. Users pay relayers and liquidity providers in order to send their tokens instantly across networks that support their token. You can find a step-by-step explainer on bridging here. ",
-            "Relayers give out short-term token loans to Users in exchange for fees. Relayers fulfill deposit requests by sending the depositor their desired token on their requested “destination chain”. Relayers will send the recipient the full deposit amount minus a relayer fee, meaning that they will keep the relayer fee as an incentive for crediting the depositor funds. ",
-            "Relayers also assume the risk of finality and take a chance that a deposit request submitted by a user can disappear in a chain reorganization and get paid for taking on this risk by the user.",
-            "Relayers have the option to request repayment on any chain, which is a feature uniquely possible to Across because of the LP pool. ",
             "Generally, relayers take on the following risks when fulfilling a deposit and are compensated accordingly by users:",
             "cost of capital: relayers send tokens to a user in order to fulfill a deposit and are reimbursed when their valid fill is included in a bundle (see \"Dataworker\" to learnmore about bundles)",
             "gas costs: relayers pay gas on destination chains to fulfill deposits",
@@ -424,22 +368,18 @@
             "The dataworker's responsibility is described in this UMIP and a reference implementation can be found here. An example proposal transaction can be seen here."
         ],
         "lists": [
-            "How to Use Across\nAbout\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History\nHow across works\nOverview\nSecurity\nFees\nSpeed\nSupported Chains and Tokens\n🪙\n$ACX Token\nToken Overview\nInitial Allocations\nACX Emissions Committee\nGovernance\nGovernance Model\nProposals and Voting\nAdditional Info\nFAQ\nSupport Links\nMigrating from V1\nAcross Brand Assets",
             "About\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History",
             "Reward Locking",
-            "Overview\nSecurity\nFees\nSpeed\nSupported Chains and Tokens",
             "Token Overview\nInitial Allocations\nACX Emissions Committee",
             "Governance Model\nProposals and Voting",
             "FAQ\nSupport Links\nMigrating from V1\nAcross Brand Assets",
-            "How Across Works\nResources\nEcosystem Roles\nUser\nRelayer \nLiquidity Provider\nDataworker",
             "cost of capital: relayers send tokens to a user in order to fulfill a deposit and are reimbursed when their valid fill is included in a bundle (see \"Dataworker\" to learnmore about bundles)\ngas costs: relayers pay gas on destination chains to fulfill deposits\nsoftware risk: an honest relayer might have a bug in its software that sends an invalid fill\nfinality risk: a deposit on the origin chain might disappear if the origin chain reorganizes",
             "cost of capital: LP's must deposit their tokens into an Across contract on mainnet\nliquidity risk: If Across is experiencing a lot of volume, then there is a chance that so much of the LP capital is reallocated to repaying relayers and fulfilling deposits that not all LP's who want to withdraw can withdraw at the current moment",
             "Refunding relayers for valid fills\nSending tokens to SpokePools that can be used to pay such refunds\nSending tokens to SpokePools that can be used to execute \nslow fills\nWithdrawing funds originating from deposits on SpokePools back to the HubPool",
             "bundle end blocks\npool rebalance merkle root: instructions for net inflows/outflows to each spoke pool\nrelayer refund merkle root: all relayers that need to be refunded and their aggregate refund\nslow relay merkle root: which deposits need to be slow filled because a relayer hasn't fully filled it"
         ],
         "tables": [],
-        "code_blocks": [],
-        "summaries": []
+        "code_blocks": []
     },
     "https://docs.across.to/user-docs/how-across-works/security": {
         "title": "Security | Across Docs",
@@ -456,17 +396,14 @@
             "Last updated 6 months ago"
         ],
         "lists": [
-            "How to Use Across\nAbout\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History\nHow across works\nOverview\nSecurity\nFees\nSpeed\nSupported Chains and Tokens\n🪙\n$ACX Token\nToken Overview\nInitial Allocations\nACX Emissions Committee\nGovernance\nGovernance Model\nProposals and Voting\nAdditional Info\nFAQ\nSupport Links\nMigrating from V1\nAcross Brand Assets",
             "About\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History",
             "Reward Locking",
-            "Overview\nSecurity\nFees\nSpeed\nSupported Chains and Tokens",
             "Token Overview\nInitial Allocations\nACX Emissions Committee",
             "Governance Model\nProposals and Voting",
             "FAQ\nSupport Links\nMigrating from V1\nAcross Brand Assets"
         ],
         "tables": [],
-        "code_blocks": [],
-        "summaries": []
+        "code_blocks": []
     },
     "https://docs.across.to/user-docs/how-across-works/fees": {
         "title": "Fees | Across Docs",
@@ -475,25 +412,20 @@
             "User fees are lowered by relayer competition"
         ],
         "paragraphs": [
-            "Relayers and liquidity providers earn fees at Across for taking on various risks included in any bridge event. Bridge users pay the \"Bridge fee\" to relayers and to liquidity providers when using the bridge.",
             "Across V3 introduced a fee optimization that will further cut costs, by encouraging relayers to accept repayment on a chain other than the destination chain. ",
-            "Relayers can tune how much finality risk they're willing to take on in order to win the most profitable deposits. We imagine that relayers will eventually specialize in which tokens and destination chains they cover, allowing them to dominate their niche of the relayer market.",
             "You can think of the relayer competition as functioning like an auction. If the auction expires without a clearing price, then the Across system falls back to the LP capital to fulfill the deposit. This process ensures that depositors have the best chance to bridge their funds cheaply and quickly without sacrificing guaranteed execution.",
             "In Across V3, these prices will become more competitive when RFQ front end systems are in place.",
             "Last updated 6 months ago"
         ],
         "lists": [
-            "How to Use Across\nAbout\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History\nHow across works\nOverview\nSecurity\nFees\nSpeed\nSupported Chains and Tokens\n🪙\n$ACX Token\nToken Overview\nInitial Allocations\nACX Emissions Committee\nGovernance\nGovernance Model\nProposals and Voting\nAdditional Info\nFAQ\nSupport Links\nMigrating from V1\nAcross Brand Assets",
             "About\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History",
             "Reward Locking",
-            "Overview\nSecurity\nFees\nSpeed\nSupported Chains and Tokens",
             "Token Overview\nInitial Allocations\nACX Emissions Committee",
             "Governance Model\nProposals and Voting",
             "FAQ\nSupport Links\nMigrating from V1\nAcross Brand Assets"
         ],
         "tables": [],
-        "code_blocks": [],
-        "summaries": []
+        "code_blocks": []
     },
     "https://docs.across.to/user-docs/how-across-works/speed": {
         "title": "Speed | Across Docs",
@@ -510,16 +442,13 @@
         "paragraphs": [
             "How a user's bridge request gets fulfilled and how quickly users can expect to receive funds",
             "Across Protocol essentially provides an open market for profit-maximizing relayers to compete to fulfill bridge requests using their proprietary capital. Any bridge requests or \"deposits\" that are not fulfilled in a timely manner by relayers will eventually be fulfilled using the Across \"system capital\" supplied by liquidity providers (\"LP's\").",
-            "A bridge request contains a \"relayer fee\" percentage that can be used to incentivize relayers to fill their request on the destination chain quickly. Naturally, the higher the fee percentage, the faster a user would expect to have their deposit fulfilled. Relayers assume finality risk, so there is a fundamental cap on how quickly a deposit will be fulfilled. ",
             "Typically, users can expect to receive their funds in 1–4 minutes due to the speed of relayers funding users' transfer requests upfront. Deposits that originate on chains with more frequent chain reorganizations (like Polygon) or longer block times (like Ethereum) will take longer to fulfill due to finality risk. ",
             "Any deposit fulfilled by a relayer will be referred to as a \"Fast\" fill. If relayers collectively don't have enough capital to fulfill a deposit, or the deposit has set too low of a relayer fee, then Across will use LP funds to \"Slow\" fill the deposit.",
-            "Relayers wait through the challenge period, taking on 2 hours worth of liveness (instead of the user) before receiving their refund from the liquidity pool.",
             "In the event that relayers do not fill a deposit, it can be \"slow filled\" using LP capital. This means that an Across Dataworker has flagged the deposit as being unfilled and wants the system to use its funds to fill the depositor. The depositor gets refunded the relayer fee in this case because the fill will take a longer time to complete.",
             "Since the slow fill is included in a Dataworker's bundle, the fill will take as long as the optimistic challenge window takes to complete.",
             "A Dataworker is made aware of these unfilled deposits by relayers who send partial fills for these deposits. These partial fills might look strange to users because they are \"1 wei\" fills: fills for 1 wei of the full deposited amount. This partial fill is important because it lets the dataworker know whether a deposit already has a slow fill payment enqueued for it.",
             "The speed of the relayers is mostly dependent on the relay code and bespoke deployment settings, which can be heavily optimized. People are economically incentivized to create exceptionally fast bots, as they want to earn fees paid by users when using across. These fees are set by the user and are a percentage of the deposited amount (to relay from origin to destination chain).",
             "Finality risk is also a big factor when running a relayer, as mentioned above.",
-            "Across is able to provide low cross-chain transfer fees because it elegantly enables third parties, who are willing to lend capital for medium and long term time horizons (Relayers, LPs), to match with users who are willing to pay for a short term loan (Depositors). ",
             "Depositors signal their desire to have funds on a destination chain instantaneously; relayers lend their funds to the depositor on the destination chain for a medium term (e.g. two hours), and LP's are willing to lend their funds as a fallback to \"slow fill\" any deposit or to refund a relayer. LP capital is essentially the \"capital of last resort\" for the Across protocol.",
             "In order to act as the capital of last resort, LP capital is allocated throughout the system (i.e. across its HubPool and SpokePools deployed on each chain) to fulfill these slow fills and refund relayers. LP capital therefore can get stuck in the canonical bridges connecting chains when the system wants to reallocate the LP capital. These canonical bridges can freeze funds for a long time (up to seven days for optimistic rollup canonical bridges), so LP's intrinsically must have the longest time horizon within the Across system.",
             "Across is able to do near-instantaneous transfers because we operate optimistically. ",
@@ -529,23 +458,19 @@
             "Last updated 6 months ago"
         ],
         "lists": [
-            "How to Use Across\nAbout\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History\nHow across works\nOverview\nSecurity\nFees\nSpeed\nSupported Chains and Tokens\n🪙\n$ACX Token\nToken Overview\nInitial Allocations\nACX Emissions Committee\nGovernance\nGovernance Model\nProposals and Voting\nAdditional Info\nFAQ\nSupport Links\nMigrating from V1\nAcross Brand Assets",
             "About\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History",
             "Reward Locking",
-            "Overview\nSecurity\nFees\nSpeed\nSupported Chains and Tokens",
             "Token Overview\nInitial Allocations\nACX Emissions Committee",
             "Governance Model\nProposals and Voting",
             "FAQ\nSupport Links\nMigrating from V1\nAcross Brand Assets",
             "Fast Fills\nSlow Fills\nWhat affects the speed of the relayers? \nA marketplace for exchanging investment time horizons\nAn optimistic approach to bridging"
         ],
         "tables": [],
-        "code_blocks": [],
-        "summaries": []
+        "code_blocks": []
     },
     "https://docs.across.to/user-docs/how-across-works/supported-chains-and-tokens": {
         "title": "Supported Chains and Tokens | Across Docs",
         "headers": [
-            "Supported Chains and Tokens",
             "Ethereum",
             "Arbitrum",
             "Optimism",
@@ -641,10 +566,8 @@
             "Last updated 9 days ago"
         ],
         "lists": [
-            "How to Use Across\nAbout\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History\nHow across works\nOverview\nSecurity\nFees\nSpeed\nSupported Chains and Tokens\n🪙\n$ACX Token\nToken Overview\nInitial Allocations\nACX Emissions Committee\nGovernance\nGovernance Model\nProposals and Voting\nAdditional Info\nFAQ\nSupport Links\nMigrating from V1\nAcross Brand Assets",
             "About\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History",
             "Reward Locking",
-            "Overview\nSecurity\nFees\nSpeed\nSupported Chains and Tokens",
             "Token Overview\nInitial Allocations\nACX Emissions Committee",
             "Governance Model\nProposals and Voting",
             "FAQ\nSupport Links\nMigrating from V1\nAcross Brand Assets",
@@ -665,8 +588,7 @@
             "ETH/WETH\nUSDzC"
         ],
         "tables": [],
-        "code_blocks": [],
-        "summaries": []
+        "code_blocks": []
     },
     "https://docs.across.to/user-docs/usdacx-token/token-overview": {
         "title": "Token Overview | Across Docs",
@@ -681,17 +603,14 @@
             "Last updated 2 days ago"
         ],
         "lists": [
-            "How to Use Across\nAbout\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History\nHow across works\nOverview\nSecurity\nFees\nSpeed\nSupported Chains and Tokens\n🪙\n$ACX Token\nToken Overview\nInitial Allocations\nACX Emissions Committee\nGovernance\nGovernance Model\nProposals and Voting\nAdditional Info\nFAQ\nSupport Links\nMigrating from V1\nAcross Brand Assets",
             "About\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History",
             "Reward Locking",
-            "Overview\nSecurity\nFees\nSpeed\nSupported Chains and Tokens",
             "Token Overview\nInitial Allocations\nACX Emissions Committee",
             "Governance Model\nProposals and Voting",
             "FAQ\nSupport Links\nMigrating from V1\nAcross Brand Assets"
         ],
         "tables": [],
-        "code_blocks": [],
-        "summaries": []
+        "code_blocks": []
     },
     "https://docs.across.to/user-docs/usdacx-token/initial-allocations": {
         "title": "Initial Allocations | Across Docs",
@@ -725,10 +644,8 @@
             "Last updated 6 months ago"
         ],
         "lists": [
-            "How to Use Across\nAbout\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History\nHow across works\nOverview\nSecurity\nFees\nSpeed\nSupported Chains and Tokens\n🪙\n$ACX Token\nToken Overview\nInitial Allocations\nACX Emissions Committee\nGovernance\nGovernance Model\nProposals and Voting\nAdditional Info\nFAQ\nSupport Links\nMigrating from V1\nAcross Brand Assets",
             "About\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History",
             "Reward Locking",
-            "Overview\nSecurity\nFees\nSpeed\nSupported Chains and Tokens",
             "Token Overview\nInitial Allocations\nACX Emissions Committee",
             "Governance Model\nProposals and Voting",
             "FAQ\nSupport Links\nMigrating from V1\nAcross Brand Assets",
@@ -737,8 +654,7 @@
             "~50,000 ACX per day for Across ETH LP tokens\n~50,000 ACX per day for Across USDC LP tokens\n~5,000 ACX per day for Across DAI LP tokens\n~5,000 ACX per day for Across WBTC LP tokens\n~20,000 ACX per day for Across ACX LP tokens"
         ],
         "tables": [],
-        "code_blocks": [],
-        "summaries": []
+        "code_blocks": []
     },
     "https://docs.across.to/user-docs/usdacx-token/acx-emissions-committee": {
         "title": "ACX Emissions Committee | Across Docs",
@@ -746,7 +662,6 @@
             "ACX Emissions Committee",
             "Committee Design",
             "Adjustment Framework",
-            "Resources",
             "Long-term Objective"
         ],
         "paragraphs": [
@@ -773,14 +688,11 @@
             "Last updated 6 months ago"
         ],
         "lists": [
-            "How to Use Across\nAbout\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History\nHow across works\nOverview\nSecurity\nFees\nSpeed\nSupported Chains and Tokens\n🪙\n$ACX Token\nToken Overview\nInitial Allocations\nACX Emissions Committee\nGovernance\nGovernance Model\nProposals and Voting\nAdditional Info\nFAQ\nSupport Links\nMigrating from V1\nAcross Brand Assets",
             "About\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History",
             "Reward Locking",
-            "Overview\nSecurity\nFees\nSpeed\nSupported Chains and Tokens",
             "Token Overview\nInitial Allocations\nACX Emissions Committee",
             "Governance Model\nProposals and Voting",
             "FAQ\nSupport Links\nMigrating from V1\nAcross Brand Assets",
-            "Committee Design\nAdjustment Framework\nResources\nLong-term Objective",
             "Across pool utilization - LPs should be rewarded for how much demand there is for an asset for transfers. The AEC will track the 7-day average pool utilization of each asset. \nCompeting yield - LPs should be rewarded a fair yield in comparison to yields paid by competing protocols. The AEC can track a Yield Index for each asset that is computed as a 7-day average of the TVL weighted yield of pools on Stargate, Hop, and Synapse.",
             "Change log\n - History of AEC emissions adjustments\nMonitoring Dashboard\n - Every necessary metric the AEC uses to make adjustments"
         ],
@@ -808,8 +720,7 @@
                 ]
             ]
         ],
-        "code_blocks": [],
-        "summaries": []
+        "code_blocks": []
     },
     "https://docs.across.to/user-docs/governance/governance-model": {
         "title": "Governance Model | Across Docs",
@@ -863,10 +774,8 @@
             "Last updated 6 months ago"
         ],
         "lists": [
-            "How to Use Across\nAbout\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History\nHow across works\nOverview\nSecurity\nFees\nSpeed\nSupported Chains and Tokens\n🪙\n$ACX Token\nToken Overview\nInitial Allocations\nACX Emissions Committee\nGovernance\nGovernance Model\nProposals and Voting\nAdditional Info\nFAQ\nSupport Links\nMigrating from V1\nAcross Brand Assets",
             "About\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History",
             "Reward Locking",
-            "Overview\nSecurity\nFees\nSpeed\nSupported Chains and Tokens",
             "Token Overview\nInitial Allocations\nACX Emissions Committee",
             "Governance Model\nProposals and Voting",
             "FAQ\nSupport Links\nMigrating from V1\nAcross Brand Assets",
@@ -885,8 +794,7 @@
             "Unclaimed rewards accrued for all staked LP tokens within Across\nCustom strategy for staked voting can be seen \nhere"
         ],
         "tables": [],
-        "code_blocks": [],
-        "summaries": []
+        "code_blocks": []
     },
     "https://docs.across.to/user-docs/governance/proposals-and-voting": {
         "title": "Proposals and Voting | Across Docs",
@@ -911,10 +819,8 @@
             "If a proposal passes Snapshot, it will be executed by the Across DAO Safe.\n"
         ],
         "lists": [
-            "How to Use Across\nAbout\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History\nHow across works\nOverview\nSecurity\nFees\nSpeed\nSupported Chains and Tokens\n🪙\n$ACX Token\nToken Overview\nInitial Allocations\nACX Emissions Committee\nGovernance\nGovernance Model\nProposals and Voting\nAdditional Info\nFAQ\nSupport Links\nMigrating from V1\nAcross Brand Assets",
             "About\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History",
             "Reward Locking",
-            "Overview\nSecurity\nFees\nSpeed\nSupported Chains and Tokens",
             "Token Overview\nInitial Allocations\nACX Emissions Committee",
             "Governance Model\nProposals and Voting",
             "FAQ\nSupport Links\nMigrating from V1\nAcross Brand Assets",
@@ -922,14 +828,12 @@
             "Treasury Funding\nGovernance Updates\nCommittee implementation or replacement\nProtocol upgrades"
         ],
         "tables": [],
-        "code_blocks": [],
-        "summaries": []
+        "code_blocks": []
     },
     "https://docs.across.to/user-docs/additional-info/faq": {
         "title": "FAQ | Across Docs",
         "headers": [
             "FAQ",
-            "What is Across?",
             "How long does it take to receive my funds?",
             "Where can I use Across?",
             "What tokens can I bridge with Across?",
@@ -947,14 +851,11 @@
             "Across' bridging speed depends on the number of relayers and the speed at which they are relaying.",
             "The typical transfer occurs within 1-4 minutes. This occurs when relayers have sufficient assets on the destination chain.  If relayers have insufficient assets on the destination chain, but have excess assets on Mainnet, they will be sent to destination to complete the relay.  This process can take 10-30 minutes for the user transaction to complete.  If there are not enough assets on the destination chain plus Mainnet, the transfer will be slow relayed which can take 2-4 hours.  All of this will be communicated upfront for users in the 'time to destination' field.  If you have not received your funds within the quoted 'time to destination' value, please reach out to Dev Support in the Across Discord. ",
             "Across currently supports Ethereum mainnet, Arbitrum, Boba, Optimism, and Polygon.",
-            "You can find this list on the Supported Chains and Tokens page.",
             "Across currently supports bridging ACX, ETH, WETH, WBTC, USDC, DAI, BAL, POOL, SNX, and UMA.",
-            "You can find this list on the Supported Chains and Tokens page.",
             "A liquidity provider (LP) is someone that provides liquidity to one of the Across pools. This liquidity is used to reimburse relayers after the relay has been verified by the optimistic oracle. ",
             "In return for providing this liquidity, LPs receive fees. These fees are described on the Fees page.",
             "Provided there is enough liquidity in the pool, a liquidity provider can withdraw their position at any time.",
             "A relayer enables users to make instantaneous transfers between chains by providing the capital upfront. In return for providing this service, they are able to collect fees from the users.",
-            "To learn about how to run a relayer, visit the Running a Relayer page in our developer docs. ",
             "The snapshot for early users was taken on July 19th, 2022 at midnight UTC (i.e. no transfers on the 19th are included).",
             "The snapshot for the Bridge Traveler program was taken on September 1st, 2022 at midnight UTC (i.e. no transfers in September are included.)",
             "The snapshot for liquidity provider airdrop eligibility was taken on November 22nd, 2022 at midnight UTC. LPs could earn ACX for the airdrop by being an LP up to this date. ",
@@ -966,18 +867,14 @@
             "Last updated 2 days ago"
         ],
         "lists": [
-            "How to Use Across\nAbout\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History\nHow across works\nOverview\nSecurity\nFees\nSpeed\nSupported Chains and Tokens\n🪙\n$ACX Token\nToken Overview\nInitial Allocations\nACX Emissions Committee\nGovernance\nGovernance Model\nProposals and Voting\nAdditional Info\nFAQ\nSupport Links\nMigrating from V1\nAcross Brand Assets",
             "About\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History",
             "Reward Locking",
-            "Overview\nSecurity\nFees\nSpeed\nSupported Chains and Tokens",
             "Token Overview\nInitial Allocations\nACX Emissions Committee",
             "Governance Model\nProposals and Voting",
-            "FAQ\nSupport Links\nMigrating from V1\nAcross Brand Assets",
-            "What is Across?\nHow long does it take to receive my funds?\nWhere can I use Across?\nWhat tokens can I bridge with Across?\nWhat is a liquidity provider?\nWhat does a relayer do?\nWhen were the snapshots taken for users and LPs?\nWho is Risk Labs and what role do they play as a foundation?\nHow can I help Across win?\nHow do I make contact?"
+            "FAQ\nSupport Links\nMigrating from V1\nAcross Brand Assets"
         ],
         "tables": [],
-        "code_blocks": [],
-        "summaries": []
+        "code_blocks": []
     },
     "https://docs.across.to/user-docs/additional-info/support-links": {
         "title": "Support Links | Across Docs",
@@ -999,10 +896,8 @@
             "Last updated 6 months ago"
         ],
         "lists": [
-            "How to Use Across\nAbout\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History\nHow across works\nOverview\nSecurity\nFees\nSpeed\nSupported Chains and Tokens\n🪙\n$ACX Token\nToken Overview\nInitial Allocations\nACX Emissions Committee\nGovernance\nGovernance Model\nProposals and Voting\nAdditional Info\nFAQ\nSupport Links\nMigrating from V1\nAcross Brand Assets",
             "About\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History",
             "Reward Locking",
-            "Overview\nSecurity\nFees\nSpeed\nSupported Chains and Tokens",
             "Token Overview\nInitial Allocations\nACX Emissions Committee",
             "Governance Model\nProposals and Voting",
             "FAQ\nSupport Links\nMigrating from V1\nAcross Brand Assets",
@@ -1010,8 +905,7 @@
             "Across V3 audit report"
         ],
         "tables": [],
-        "code_blocks": [],
-        "summaries": []
+        "code_blocks": []
     },
     "https://docs.across.to/user-docs/additional-info/migrating-from-v1": {
         "title": "Migrating from V1 | Across Docs",
@@ -1041,26 +935,22 @@
             "Once your liquidity has been removed, it can be added to the v2 pool by following the instructions in Providing Liquidity"
         ],
         "lists": [
-            "How to Use Across\nAbout\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History\nHow across works\nOverview\nSecurity\nFees\nSpeed\nSupported Chains and Tokens\n🪙\n$ACX Token\nToken Overview\nInitial Allocations\nACX Emissions Committee\nGovernance\nGovernance Model\nProposals and Voting\nAdditional Info\nFAQ\nSupport Links\nMigrating from V1\nAcross Brand Assets",
             "About\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History",
             "Reward Locking",
-            "Overview\nSecurity\nFees\nSpeed\nSupported Chains and Tokens",
             "Token Overview\nInitial Allocations\nACX Emissions Committee",
             "Governance Model\nProposals and Voting",
             "FAQ\nSupport Links\nMigrating from V1\nAcross Brand Assets",
             "Remove v1 liquidity\nStep 1: View the v1 pool\nStep 2: Connect wallet\nStep 3: Switch to the remove liquidity tab\nStep 4: Select the asset to remove liquidity for\nStep 5: Remove liquidity\nStep 6: Wait for confirmation\nAdd v2 liquidity"
         ],
         "tables": [],
-        "code_blocks": [],
-        "summaries": []
+        "code_blocks": []
     },
     "https://docs.across.to/user-docs/additional-info/across-brand-assets": {
         "title": "Across Brand Assets | Across Docs",
         "headers": [
             "Across Brand Assets",
             "Across Logotypes",
-            "Across Logomarks / Token Symbol",
-            "Integration Resources"
+            "Across Logomarks / Token Symbol"
         ],
         "paragraphs": [
             "View and download different versions of the Across logo. The full Across Logotype and the Across Symbol are available in both SVG and PNG formats.",
@@ -1068,18 +958,14 @@
             ""
         ],
         "lists": [
-            "How to Use Across\nAbout\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History\nHow across works\nOverview\nSecurity\nFees\nSpeed\nSupported Chains and Tokens\n🪙\n$ACX Token\nToken Overview\nInitial Allocations\nACX Emissions Committee\nGovernance\nGovernance Model\nProposals and Voting\nAdditional Info\nFAQ\nSupport Links\nMigrating from V1\nAcross Brand Assets",
             "About\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History",
             "Reward Locking",
-            "Overview\nSecurity\nFees\nSpeed\nSupported Chains and Tokens",
             "Token Overview\nInitial Allocations\nACX Emissions Committee",
             "Governance Model\nProposals and Voting",
-            "FAQ\nSupport Links\nMigrating from V1\nAcross Brand Assets",
-            "Across Logotypes\nAcross Logomarks / Token Symbol\nIntegration Resources"
+            "FAQ\nSupport Links\nMigrating from V1\nAcross Brand Assets"
         ],
         "tables": [],
-        "code_blocks": [],
-        "summaries": []
+        "code_blocks": []
     },
     "https://www.gitbook.com/?utm_source=content&utm_medium=trademark&utm_campaign=o33kX1T6RRp4inOcEH1d": {
         "title": "GitBook",
@@ -1104,7 +990,6 @@
             "",
             "Product",
             "Features",
-            "Resources",
             "Pricing",
             "",
             "",
@@ -1599,7 +1484,6 @@
             ""
         ],
         "tables": [],
-        "code_blocks": [],
-        "summaries": []
+        "code_blocks": []
     }
 }
