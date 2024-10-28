@@ -21,7 +21,7 @@ class ExplainCog(commands.Cog):
 
             if isinstance(ctx.channel, (discord.TextChannel, discord.ForumChannel)):
                 thread = await ctx.message.create_thread(
-                    name=f"Explanation for: {user_query}",
+                    name=f"{user_query[:80]}...",
                     auto_archive_duration=60
                 )
 

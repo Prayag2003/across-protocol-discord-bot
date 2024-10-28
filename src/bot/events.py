@@ -24,7 +24,7 @@ async def setup_events(bot):
         if isinstance(message.channel, discord.Thread):
             try:
                 if not message.reference:
-                    response = await asyncio.to_thread(generate_response_with_context, message.content)
+                    response = await asyncio.to_thread(generate_response_with_context, message.content, message.author.name)
                     await log_manager.stream_log(message, response)
                     
                     chunks = chunk_message(response)
