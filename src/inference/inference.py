@@ -32,6 +32,17 @@ def load_embeddings(file_path):
         except Exception as db_e:
             raise Exception(f"Error loading embeddings from MongoDB: {str(db_e)}")
 
+def generate_embedding_for_query(client, text):
+    """Generate embedding with error handling"""
+    try:
+        response = client.embeddings.create(
+            input=text,
+            model="text-embedding-ada-002"
+        )
+        return response.data[0].embedding
+    except Exception as e:
+        raise Exception(f"Error generating embedding: {str(e)}")
+
 def compute_similarity(query_embedding, embeddings_list, query):
     """Enhanced similarity computation"""
     similarities = []
@@ -42,34 +53,18 @@ def compute_similarity(query_embedding, embeddings_list, query):
         try:
             url = entry['url']
             embedding = entry['embedding']
+            content = entry.get('content', '') 
             
             embedding_array = np.array(embedding)
             query_embedding_array = np.array(query_embedding)
             similarity = cosine_similarity([query_embedding_array], [embedding_array])[0][0]
-            
-            similarities.append((url, similarity, url))  
+            similarities.append((url, similarity, content))  
                 
         except Exception as e:
             logger.error(f"Error processing document {entry.get('url', 'unknown')}: {str(e)}")
             continue
 
     return similarities
-
-def generate_context_from_documents(similar_docs, max_length=2000):
-    """Generate optimized context from similar documents"""
-    logger.info("Generating context from similar documents...")
-    context_parts = []
-    current_length = 0
-    
-    for url, similarity, _ in similar_docs:
-        if current_length >= max_length:
-            break
-            
-        formatted_content = f"Source ({similarity:.2f}): {url}"
-        context_parts.append(formatted_content)
-        current_length += len(formatted_content)
-    
-    return "\n\n".join(context_parts)
 
 def find_most_similar_documents(query_embedding, embeddings_list, query, top_n=3):
     """Find most similar documents with improved filtering"""
@@ -89,16 +84,25 @@ def find_most_similar_documents(query_embedding, embeddings_list, query, top_n=3
     
     return sorted_similarities[:top_n]
 
-def generate_embedding_for_query(client, text):
-    """Generate embedding with error handling"""
-    try:
-        response = client.embeddings.create(
-            input=text,
-            model="text-embedding-ada-002"
+def generate_context_from_documents(similar_docs, max_length=2000):
+    """Generate optimized context from similar documents including embedding content"""
+    logger.info("Generating context from similar documents with embedding content...")
+    context_parts = []
+    current_length = 0
+    
+    for url, similarity, content in similar_docs:
+        if current_length >= max_length:
+            break
+            
+        formatted_content = (
+            f"**Source**: [{url}]({url})  \n"
+            f"**Similarity**: {similarity:.2f}  \n"
+            f"**Content**: {content}\n"
         )
-        return response.data[0].embedding
-    except Exception as e:
-        raise Exception(f"Error generating embedding: {str(e)}")
+        context_parts.append(formatted_content)
+        current_length += len(formatted_content)
+    
+    return "\n\n".join(context_parts)
 
 def generate_response_with_context(user_query: str, username: str):
     logger.info("Starting Across Protocol Bot")
@@ -127,9 +131,9 @@ def generate_response_with_context(user_query: str, username: str):
 
     try:
         response = client.chat.completions.create(
-            model="gpt-3.5-turbo",
+            model="gpt-4-turbo",
             messages=messages,
-            max_tokens=700,
+            max_tokens=600,
             temperature=0.15,
         )
         response_text = response.choices[0].message.content.strip()
