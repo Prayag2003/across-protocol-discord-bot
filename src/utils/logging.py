@@ -2,6 +2,7 @@ import discord
 from datetime import datetime
 from loguru import logger as logging
 import os
+import re
 
 class LogManager:
     def __init__(self):
@@ -16,6 +17,7 @@ class LogManager:
     async def setup_log_channel(self, guild):
         """Set up or find the logging channel."""
         self.log_channel = discord.utils.get(guild.channels, name="ross-bot-logs")
+        
         if not self.log_channel:
             # Setting up channel permissions
             overwrites = {
@@ -33,11 +35,18 @@ class LogManager:
                     overwrites=overwrites,
                     topic="Bot logging channel - Admin and Owner access only"
                 )
+                logging.info(f"Logging channel created: {self.log_channel.name}")
             except Exception as e:
                 logging.error(f"Failed to create logging channel: {str(e)}")
                 return None
         
         return self.log_channel
+
+    def clean_markdown_for_logs(self, response_text):
+        cleaned_text = re.sub(r"(\*\*|###|##|#)", "", response_text)
+        cleaned_text = re.sub(r"^\s*-\s*", "    - ", cleaned_text, flags=re.MULTILINE)
+        cleaned_text = re.sub(r"\s{2,}", " ", cleaned_text)
+        return cleaned_text.strip()
 
     async def stream_log(self, message, response):
         """Log the full response to a file and send it to the log channel."""
@@ -56,9 +65,9 @@ class LogManager:
             )
 
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            file_path = f"bot_log_{message.author.name}_{timestamp}.txt"
+            file_path = f"{message.author.name}_{timestamp}.txt"
 
-            cleaned_response = clean_markdown_for_logs(log_content)
+            cleaned_response = self.clean_markdown_for_logs(log_content)
 
             with open(file_path, 'w', encoding='utf-8') as file:
                 file.write(cleaned_response)
@@ -69,12 +78,6 @@ class LogManager:
         except Exception as e:
             logging.error(f"Failed to stream log: {str(e)}")
             await self.log_system_message(f"⚠️ Error logging message: {str(e)}", 'error')
-
-    def clean_markdown_for_logs(response_text):
-        cleaned_text = re.sub(r"(\*\*|###|##|#)", "", response_text)
-        cleaned_text = re.sub(r"^\s*-\s*", "    - ", cleaned_text, flags=re.MULTILINE)
-        cleaned_text = re.sub(r"\s{2,}", " ", cleaned_text)
-        return cleaned_text.strip()
     
     async def log_system_message(self, content, log_type='default'):
         """Send a system message to the log channel."""
@@ -93,5 +96,4 @@ class LogManager:
         
         await self.log_channel.send(embed=embed)
 
-# Global instance
 log_manager = LogManager()
