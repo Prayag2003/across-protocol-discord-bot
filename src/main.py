@@ -4,6 +4,7 @@ from bot.bot import create_bot
 from dotenv import load_dotenv
 from loguru import logger
 from bot.events import setup_events
+from reinforcement_learning_via_human_feedback.setup import setup_rlhf
 
 load_dotenv()
 TOKEN = os.getenv('TOKEN')
@@ -32,6 +33,9 @@ async def main():
     await bot.load_extension('cogs.reaction_listener')
     await bot.load_extension('cogs.update_pipeline')
     await bot.load_extension('cogs.delete_messages')
+
+    # Reinforcement learning pipeline
+    await setup_rlhf()
     
     # Run bot
     try:
