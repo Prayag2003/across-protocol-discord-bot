@@ -35,7 +35,7 @@ async def main():
     await bot.load_extension('cogs.delete_messages')
 
     # Reinforcement learning pipeline
-    await setup_rlhf()
+    asyncio.create_task(setup_rlhf())
     
     # Run bot
     try:
