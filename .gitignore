@@ -4,3 +4,4 @@ __pycache__/
 .venv/
 query_response_log.json
 *.log
+*.jsonl

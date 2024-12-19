@@ -10,7 +10,7 @@ class FeedbackManager:
         self.client = MongoClient(mongo_uri)
         self.collection: Collection = self.client[database][collection]
 
-    async def get_recent_feedback(self, days: int = 30) -> List[FeedbackEntry]:
+    async def get_recent_feedback(self, days: int = 7) -> List[FeedbackEntry]:
         cutoff_date = datetime.utcnow() - timedelta(days=days)
         
         cursor = self.collection.find({

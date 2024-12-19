@@ -31,11 +31,11 @@ async def main():
     # Load cogs
     await bot.load_extension('cogs.explain')
     await bot.load_extension('cogs.reaction_listener')
-    await bot.load_extension('cogs.update_pipeline')
-    await bot.load_extension('cogs.delete_messages')
+    # await bot.load_extension('cogs.update_pipeline')
+    # await bot.load_extension('cogs.delete_messages')
 
     # Reinforcement learning pipeline
-    asyncio.create_task(setup_rlhf())
+    # asyncio.create_task(setup_rlhf())
     
     # Run bot
     try:

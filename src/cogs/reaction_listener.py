@@ -13,7 +13,7 @@ class RLHFListener(commands.Cog):
         self.mongo_client = pymongo.MongoClient(os.getenv("MONGO_URI"))
         self.db = self.mongo_client["ross"]
         self.feedback_collection = self.db["feedback"]
-        self.cached_messages = {}  # Changed to dictionary to store full message objects
+        self.cached_messages = {} 
         self.is_ready = False
 
     @commands.Cog.listener()
@@ -48,7 +48,6 @@ class RLHFListener(commands.Cog):
                         'attachments': [att for att in message.attachments if att.filename.endswith('.txt')]
                     }
                     message_count += 1
-                    print(f"Cached message ID: {message.id}")
             
             print(f"Successfully cached {message_count} messages with .txt attachments")
             
