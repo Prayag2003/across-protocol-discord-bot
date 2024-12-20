@@ -3,6 +3,7 @@ from discord.ext import commands
 from datetime import datetime
 import pymongo
 import os
+from loguru import logger
 from discord.utils import get
 import re
 
@@ -20,11 +21,11 @@ class RLHFListener(commands.Cog):
     async def on_ready(self):
         self.channel = self.get_logging_channel()
         if self.channel:
-            print(f"Listening for reactions in channel: {self.channel.name}")
+            logger.info(f"Listening for reactions in channel: {self.channel.name}")
             await self.cache_existing_messages()
             self.is_ready = True
         else:
-            print("Channel 'ross-bot-logs' not found.")
+            logger.error("Channel 'ross-bot-logs' not found.")
 
     def get_logging_channel(self):
         """Fetch the logging channel by name."""
@@ -37,7 +38,7 @@ class RLHFListener(commands.Cog):
     async def cache_existing_messages(self):
         """Cache existing messages from the logging channel."""
         try:
-            print("Starting to cache existing messages...")
+            logger.info("Starting to cache existing messages...")
             message_count = 0
             
             # Fetch all messages in the channel
@@ -49,13 +50,13 @@ class RLHFListener(commands.Cog):
                     }
                     message_count += 1
             
-            print(f"Successfully cached {message_count} messages with .txt attachments")
+            logger.info(f"Successfully cached {message_count} messages with .txt attachments")
             
             # Verify cache contents
-            print("Cached message IDs:", list(self.cached_messages.keys()))
+            logger.info("Cached message IDs:", list(self.cached_messages.keys()))
             
         except Exception as e:
-            print(f"Error caching messages: {str(e)}")
+            logger.error(f"Error caching messages: {str(e)}")
             import traceback
             traceback.print_exc()
 
@@ -99,11 +100,11 @@ class RLHFListener(commands.Cog):
                         self.message = message
                 reaction = PartialReaction(payload.emoji.name, message)
 
-            print(f"Raw reaction detected: {payload.emoji} from {user.name} on message {payload.message_id}")
+            logger.info(f"Raw reaction detected: {payload.emoji} from {user.name} on message {payload.message_id}")
             await self.process_reaction(reaction, user)
 
         except Exception as e:
-            print(f"Error in on_raw_reaction_add: {str(e)}")
+            logger.error(f"Error in on_raw_reaction_add: {str(e)}")
             import traceback
             traceback.print_exc()
 
@@ -118,17 +119,17 @@ class RLHFListener(commands.Cog):
             guild = self.bot.get_guild(payload.guild_id)
             user = await guild.fetch_member(payload.user_id)
 
-            print(f"Reaction removed: {payload.emoji} by {user.name} from message {payload.message_id}")
+            logger.info(f"Reaction removed: {payload.emoji} by {user.name} from message {payload.message_id}")
 
             # Update the feedback in database to reflect the removal
             self.feedback_collection.delete_one({
                 "interaction.message_id": str(payload.message_id),
                 "reviewer.id": str(user.id)
             })
-            print(f"Feedback removed for message {payload.message_id}")
+            logger.info(f"Feedback removed for message {payload.message_id}")
 
         except Exception as e:
-            print(f"Error in on_raw_reaction_remove: {str(e)}")
+            logger.error(f"Error in on_raw_reaction_remove: {str(e)}")
             import traceback
             traceback.print_exc()
 
@@ -144,12 +145,12 @@ class RLHFListener(commands.Cog):
                     'message': message,
                     'attachments': [att for att in message.attachments if att.filename.endswith('.txt')]
                 }
-                print(f"New message cached: {message.id}")
+                logger.info(f"New message cached: {message.id}")
 
     async def process_reaction(self, reaction, user):
         """Process a reaction and log feedback if valid."""
         if not await self.is_valid_reaction(reaction, user):
-            print(f"Invalid reaction from {user.name}")
+            logger.error(f"Invalid reaction from {user.name}")
             return
 
         message = reaction.message
@@ -162,17 +163,17 @@ class RLHFListener(commands.Cog):
             txt_attachment = next((att for att in message.attachments if att.filename.endswith('.txt')), None)
 
         if not txt_attachment:
-            print("No .txt attachment found")
+            logger.error("No .txt attachment found")
             return
 
-        print(f"Processing reaction on message {message.id}")
+        logger.info(f"Processing reaction on message {message.id}")
         feedback_type = "positive" if str(reaction.emoji) == "👍" else "negative"
         
         log_data = await self.process_log_file(txt_attachment)
         if log_data:
             await self.log_feedback(reaction, user, feedback_type, log_data)
         else:
-            print("Failed to process log file")
+            logger.error("Failed to process log file")
 
     async def process_log_file(self, attachment):
         """Download and extract information from the log file."""
@@ -181,7 +182,7 @@ class RLHFListener(commands.Cog):
             content = content.decode('utf-8')
 
             # Debug print to check content
-            print("Processing log file content...")
+            logger.info("Processing log file content...")
 
             user_pattern = r"👤 User: ([^(]+)\s*\((\d+)\)"
             query_pattern = r"💭 Query: ([^\n]+)"
@@ -192,7 +193,7 @@ class RLHFListener(commands.Cog):
             response_match = re.search(response_pattern, content)
 
             if not all([user_match, query_match, response_match]):
-                print("Failed to extract all required information from log file")
+                logger.error("Failed to extract all required information from log file")
                 return None
 
             data = {
@@ -201,23 +202,23 @@ class RLHFListener(commands.Cog):
                 "query": query_match.group(1).strip(),
                 "response": response_match.group(1).strip()
             }
-            print(f"Successfully extracted data for user: {data['username']}")
+            logger.info(f"Successfully extracted data for user: {data['username']}")
             return data
 
         except Exception as e:
-            print(f"Error processing log file: {str(e)}")
+            logger.error(f"Error processing log file: {str(e)}")
             return None
 
     async def is_valid_reaction(self, reaction, user):
         """Check if the reaction is valid for processing."""
         if user.bot:
-            print(f"Ignoring bot reaction from {user.name}")
+            logger.info(f"Ignoring bot reaction from {user.name}")
             return False
         if not user.guild_permissions.administrator:
-            print(f"User {user.name} lacks administrator permissions")
+            logger.info(f"User {user.name} lacks administrator permissions")
             return False
         if str(reaction.emoji) not in ["👍", "👎"]:
-            print(f"Invalid reaction emoji: {reaction.emoji}")
+            logger.info(f"Invalid reaction emoji: {reaction.emoji}")
             return False
         return True
 
@@ -248,7 +249,7 @@ class RLHFListener(commands.Cog):
             existing_feedback = await self.update_existing_feedback(reaction, user)
             if not existing_feedback:
                 self.feedback_collection.insert_one(feedback_entry)
-                print(f"RLHF Feedback logged: {feedback_type} by {user.name} for message ID {reaction.message.id}")
+                logger.info(f"RLHF Feedback logged: {feedback_type} by {user.name} for message ID {reaction.message.id}")
                 
                 embed = discord.Embed(
                     title="RLHF Feedback Recorded",
@@ -261,7 +262,7 @@ class RLHFListener(commands.Cog):
                 await reaction.message.channel.send(embed=embed)
 
         except Exception as e:
-            print(f"Error logging feedback: {str(e)}")
+            logger.error(f"Error logging feedback: {str(e)}")
 
     async def update_existing_feedback(self, reaction, user):
         """Update the feedback if it already exists."""
@@ -279,13 +280,13 @@ class RLHFListener(commands.Cog):
                         "feedback.timestamp": datetime.utcnow()
                     }}
                 )
-                print(f"Updated existing feedback for message {reaction.message.id}")
+                logger.info(f"Updated existing feedback for message {reaction.message.id}")
                 return True
             
             return False
 
         except Exception as e:
-            print(f"Error updating existing feedback: {str(e)}")
+            logger.error(f"Error updating existing feedback: {str(e)}")
             return False
 
 async def setup(bot):

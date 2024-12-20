@@ -60,7 +60,7 @@ def generate_prompt_template(context, query, role="user", detail_level="standard
     """
     
     # For debugging or review purposes, this can be printed.
-    print(user_message)
+    logger.info(user_message)
     
     return [
         {"role": "system", "content": system_message},
