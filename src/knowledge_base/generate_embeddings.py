@@ -10,26 +10,51 @@ def load_knowledge_base(file_path):
     with open(file_path, 'r', encoding='utf-8') as file:
         return json.load(file)
 
+import logging
+
+import logging
+
 def extract_content_for_embedding(content):
     """Extract and format content for embedding generation with descriptive labels."""
     parts = []
-    
+    used_titles = set()
+
+    # Check if all fields are empty
+    if not any(content.values()):
+        logging.info("No relevant content fields found.")
+        return ""
+
     # Add the title once with a label
-    if content.get('title'):
+    if content.get('title') and content['title'] not in used_titles:
         parts.append(f"Title: {content['title']}")
+        used_titles.add(content['title'])
     
     # Add headers with labels, no repetition
     if content.get('headers'):
-        parts.extend([f"Section: {header}" for header in content['headers'] if isinstance(header, str)])
+        for header in content['headers']:
+            if header not in used_titles:
+                parts.append(f"Section: {header}")
+                used_titles.add(header)
     
     # Add paragraphs directly
     if content.get('paragraphs'):
-        parts.extend([para for para in content['paragraphs'] if isinstance(para, str)])
+        for para in content['paragraphs']:
+            parts.append(para)
     
     # Add code blocks
     if content.get('code_blocks'):
-        parts.extend([code for code in content['code_blocks'] if isinstance(code, str)])
-
+        for block in content['code_blocks']:
+            parts.append(f"Code Block ID: {block['id']}")
+            parts.append(block['code'])
+    
+    # Process tables to ensure items are strings
+    if content.get('tables'):
+        for table in content['tables']:
+            parts.append("Table:")
+            for row in table:
+                parts.append(f"Field: {row[0]}")
+                parts.append(f"Description: {row[1]}")
+    
     # Process lists to ensure items are strings
     if content.get('lists'):
         formatted_lists = []
@@ -40,14 +65,10 @@ def extract_content_for_embedding(content):
             elif isinstance(list_item, list):  # Handle nested lists
                 formatted_lists.extend([str(sub_item) for sub_item in list_item if isinstance(sub_item, str)])
         parts.extend(formatted_lists)
-
-    # Process tables to ensure items are strings
-    if content.get('tables'):
-        for table in content['tables']:
-            if isinstance(table, list):
-                parts.extend([str(cell) for row in table for cell in row if isinstance(cell, str)])
-            elif isinstance(table, str):
-                parts.append(table)
+    
+    # Add delimiter after each section or at the end
+    if parts:
+        parts.append('---')
 
     # Join all parts into a single content string
     combined_content = " ".join(parts)
@@ -56,8 +77,59 @@ def extract_content_for_embedding(content):
     max_chars = 30000
     if len(combined_content) > max_chars:
         combined_content = combined_content[:max_chars]
-    
+
+    logging.info(combined_content)
     return combined_content
+
+
+# def extract_content_for_embedding(content):
+#     """Extract and format content for embedding generation with descriptive labels."""
+#     parts = []
+    
+#     # Add the title once with a label
+#     if content.get('title'):
+#         parts.append(f"Title: {content['title']}")
+    
+#     # Add headers with labels, no repetition
+#     if content.get('headers'):
+#         parts.extend([f"Section: {header}" for header in content['headers'] if isinstance(header, str)])
+    
+#     # Add paragraphs directly
+#     if content.get('paragraphs'):
+#         parts.extend([para for para in content['paragraphs'] if isinstance(para, str)])
+    
+#     # Add code blocks
+#     if content.get('code_blocks'):
+#         parts.extend([code for code in content['code_blocks'] if isinstance(code, dict)])
+
+#     # Process lists to ensure items are strings
+#     if content.get('lists'):
+#         formatted_lists = []
+#         for list_item in content['lists']:
+#             if isinstance(list_item, str):
+#                 items = [item.strip() for item in list_item.split('\n') if item.strip()]
+#                 formatted_lists.extend(items)
+#             elif isinstance(list_item, list):  # Handle nested lists
+#                 formatted_lists.extend([str(sub_item) for sub_item in list_item if isinstance(sub_item, str)])
+#         parts.extend(formatted_lists)
+
+#     # Process tables to ensure items are strings
+#     if content.get('tables'):
+#         for table in content['tables']:
+#             if isinstance(table, list):
+#                 parts.extend([str(cell) for row in table for cell in row if isinstance(cell, str)])
+#             elif isinstance(table, str):
+#                 parts.append(table)
+
+#     # Join all parts into a single content string
+#     combined_content = " ".join(parts)
+    
+#     # Limit to a max of 30,000 characters if necessary
+#     max_chars = 30000
+#     if len(combined_content) > max_chars:
+#         combined_content = combined_content[:max_chars]
+    
+#     return combined_content
 
 def create_embeddings_for_kb(knowledge_base):
     """Generate embeddings with improved content processing"""
