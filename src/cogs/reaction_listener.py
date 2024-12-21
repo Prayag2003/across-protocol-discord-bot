@@ -3,6 +3,7 @@ from discord.ext import commands
 from datetime import datetime
 import pymongo
 import os
+from loguru import logger
 from discord.utils import get
 import re
 from loguru import logger
@@ -22,6 +23,7 @@ class RLHFListener(commands.Cog):
         self.channel = self.get_logging_channel()
         if self.channel:
             logger.info(f"Listening for reactions in channel: {self.channel.name}")
+            logger.info(f"Listening for reactions in channel: {self.channel.name}")
             await self.cache_existing_messages()
             self.is_ready = True
         else:
@@ -38,6 +40,7 @@ class RLHFListener(commands.Cog):
     async def cache_existing_messages(self):
         """Cache existing messages from the logging channel."""
         try:
+            logger.info("Starting to cache existing messages...")
             logger.info("Starting to cache existing messages...")
             message_count = 0
 
@@ -88,11 +91,13 @@ class RLHFListener(commands.Cog):
             user = await guild.fetch_member(payload.user_id)
 
             logger.info(f"Reaction removed: {payload.emoji} by {user.name} from message {payload.message_id}")
+            logger.info(f"Reaction removed: {payload.emoji} by {user.name} from message {payload.message_id}")
 
             self.feedback_collection.delete_one({
                 "interaction.message_id": str(payload.message_id),
                 "reviewer.id": str(user.id)
             })
+            logger.info(f"Feedback removed for message {payload.message_id}")
             logger.info(f"Feedback removed for message {payload.message_id}")
 
         except Exception as e:
@@ -153,6 +158,7 @@ class RLHFListener(commands.Cog):
             return
 
         logger.info(f"Processing reaction on message {message.id}")
+        logger.info(f"Processing reaction on message {message.id}")
         feedback_type = "positive" if str(reaction.emoji) == "👍" else "negative"
 
         log_data = await self.process_log_file(txt_attachment)
@@ -184,6 +190,7 @@ class RLHFListener(commands.Cog):
 
             if not all([user_match, query_match, response_match]):
                 logger.error("Failed to extract all required information from log file")
+                logger.error("Failed to extract all required information from log file")
                 return None
 
             data = {
@@ -192,6 +199,7 @@ class RLHFListener(commands.Cog):
                 "query": query_match.group(1).strip(),
                 "response": response_match.group(1).strip()
             }
+            logger.info(f"Successfully extracted data for user: {data['username']}")
             logger.info(f"Successfully extracted data for user: {data['username']}")
             return data
 
@@ -202,6 +210,7 @@ class RLHFListener(commands.Cog):
     async def is_valid_reaction(self, reaction, user):
         """Check if the reaction is valid for processing."""
         if user.bot:
+            logger.info(f"Ignoring bot reaction from {user.name}")
             logger.info(f"Ignoring bot reaction from {user.name}")
             return False
         if not user.guild_permissions.administrator:
@@ -272,6 +281,7 @@ class RLHFListener(commands.Cog):
                         "feedback.timestamp": datetime.utcnow()
                     }}
                 )
+                logger.info(f"Updated existing feedback for message {reaction.message.id}")
                 logger.info(f"Updated existing feedback for message {reaction.message.id}")
                 return True
 
