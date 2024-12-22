@@ -56,7 +56,7 @@ def extract_content_for_embedding(content):
     combined_content = " ".join(parts)
     return combined_content[:30000]  # Limit to 30,000 characters
 
-# Function to generate embeddings for all announcements
+
 def generate_embeddings_for_announcements(announcements):
     """Generate embeddings for all announcements."""
     embeddings_list = []
@@ -87,12 +87,12 @@ def generate_embeddings_for_announcements(announcements):
     logger.info(f"Generated embeddings for {len(embeddings_list)} announcements.")
     return embeddings_list
 
-# Function to append to or create simple JSON file
+
 def save_simple_json(announcements, output_file):
     """Save simple announcements JSON (append to file if exists)."""
     for announcement in announcements:
         if '_id' in announcement:
-            announcement['_id'] = str(announcement['_id'])  # Convert ObjectId to string
+            announcement['_id'] = str(announcement['_id'])  
 
     if os.path.exists(output_file):
         try:
@@ -150,8 +150,8 @@ def generate_embeddings_announcement(data):
     embeddings = generate_embeddings_for_announcements(data)
 
     # Define file paths
-    simple_json_path = os.path.join(announcements_folder, 'simple_announcements.json')
-    embeddings_json_path = os.path.join(announcements_folder, 'embeddings_announcements.json')
+    simple_json_path = os.path.join(announcements_folder, 'announcements.json')
+    embeddings_json_path = os.path.join(announcements_folder, 'announcements_embeddings.json')
 
     # Save simple announcements JSON locally
     save_simple_json(data, simple_json_path)

@@ -1,5 +1,4 @@
 import os
-import re
 import json
 import numpy as np
 from openai import OpenAI
@@ -85,105 +84,25 @@ def find_most_similar_documents(query_embedding, embeddings_list, query, top_n=3
     
     return sorted_similarities[:top_n]
 
-
-def extract_references(context):
-    """Extract unique references from the context."""
-    references = []
-    # Use regex to find all URLs in markdown link format
-    url_pattern = r'\[([^\]]+)\]\(([^)]+)\)'
-    matches = re.finditer(url_pattern, context)
+def generate_context_from_documents(similar_docs, max_length=2000):
+    """Generate optimized context from similar documents including embedding content"""
+    logger.info("Generating context from similar documents with embedding content...")
+    context_parts = []
+    current_length = 0
     
-    # Create a set of tuples (title, url) to ensure uniqueness
-    unique_refs = set()
-    for match in matches:
-        title = match.group(1)
-        url = match.group(2)
-        unique_refs.add((title, url))
-    
-    # Convert set back to list and format references
-    references = [f"- [{title}]({url})" for title, url in unique_refs]
-    return references
-
-
-def extract_references(context):
-    """Extract unique references from the context."""
-    references = []
-    url_pattern = r'\[([^\]]+)\]\(([^)]+)\)'
-    matches = re.finditer(url_pattern, context)
-    
-    unique_refs = set()
-    for match in matches:
-        title = match.group(1)
-        url = match.group(2)
-        unique_refs.add((title, url))
-    
-    references = [f"- [{title}]({url})" for title, url in unique_refs]
-    return references
-
-def format_response_with_references(response_text, references):
-    """Format the final response with references section."""
-    if not references:
-        return response_text
-        
-    formatted_response = response_text.strip()
-    
-    # Only add references section if it doesn't already exist
-    if "## References" not in formatted_response and references:
-        formatted_response += "\n\n## References\n"
-        formatted_response += "\n".join(references)
-    
-    return formatted_response
-
-    
-def generate_response_with_context(user_query: str, username: str):
-    logger.info("Starting Across Protocol Bot with README format")
-    logger.info(f"Processing query: {user_query}")
-    client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
-
-    embeddings_path = os.path.join('knowledge_base', 'embeddings', 'merged_knowledge_base_embeddings.json')
-    logger.info(f"Loading embeddings from: {embeddings_path}")
-
-    try:
-        embeddings_list = load_embeddings(embeddings_path)
-        logger.info("Successfully loaded embeddings.")
-    except Exception as e:
-        logger.error(f"Failed to load embeddings: {str(e)}")
-        return "# Error\n\nFailed to retrieve embeddings from file and MongoDB."
-
-    try:
-        query_embedding = generate_embedding_for_query(client, user_query)
-        most_similar_docs = find_most_similar_documents(query_embedding, embeddings_list, user_query, top_n=3)
-        logger.info(f"Found {len(most_similar_docs)} most similar documents.")
-
-        context = generate_context_from_documents(most_similar_docs)
-        logger.info(f"Generated context with {len(context)} characters.")
-
-        references = extract_references(context)
-        logger.info(f"Extracted {len(references)} unique references.")
-
-        # Use README-specific template
-        messages = format_query_for_readme(context, user_query)
-
-        response = client.chat.completions.create(
-            model="gpt-4-turbo",
-            messages=messages,
-            max_tokens=1000,  # Increased for README format
-            temperature=0.15,
+    for url, similarity, content in similar_docs:
+        if current_length >= max_length:
+            break
+            
+        formatted_content = (
+            f"**Source**: [{url}]({url})  \n"
+            f"**Similarity**: {similarity:.2f}  \n"
+            f"**Content**: {content}\n"
         )
-        
-        response_text = response.choices[0].message.content.strip()
-        
-        # Format the response with references if they're not already included
-        final_response = format_response_with_references(response_text, references)
-        
-        log_query_and_response(user_query, final_response, username)
-        
-        return final_response
-
-    except Exception as e:
-        logger.error(f"Error generating response: {str(e)}")
-        return "# Error\n\nSorry, there was an error generating the response."
-
+        context_parts.append(formatted_content)
+        current_length += len(formatted_content)
+    
+    return "\n\n".join(context_parts)
 
 def generate_response_with_context(user_query: str, username: str):
     logger.info("Starting Across Protocol Bot")
@@ -200,7 +119,6 @@ def generate_response_with_context(user_query: str, username: str):
         logger.error(f"Failed to load embeddings: {str(e)}")
         return "Failed to retrieve embeddings from file and MongoDB."
 
-
     query_embedding = generate_embedding_for_query(client, user_query)
 
     most_similar_docs = find_most_similar_documents(query_embedding, embeddings_list, user_query, top_n=3)
@@ -215,7 +133,7 @@ def generate_response_with_context(user_query: str, username: str):
         response = client.chat.completions.create(
             model="gpt-4-turbo",
             messages=messages,
-            max_tokens=800,
+            max_tokens=600,
             temperature=0.15,
         )
         response_text = response.choices[0].message.content.strip()
@@ -225,4 +143,3 @@ def generate_response_with_context(user_query: str, username: str):
     except Exception as e:
         logger.error(f"Error generating response: {str(e)}")
         return "Sorry, there was an error generating the response."
-
