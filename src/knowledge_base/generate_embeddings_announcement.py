@@ -3,19 +3,12 @@ import json
 from openai import OpenAI
 from dotenv import load_dotenv
 import logging
+from loguru import logger
 from pymongo import MongoClient
 
-# Load environment variables
 load_dotenv()
 
-# Initialize OpenAI client
 client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
-
-# Setup logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
-
-# MongoDB Setup
 client_mongo = MongoClient(os.getenv('MONGO_URI'))
 db = client_mongo.get_database('knowledge_base')
 collection = db.get_collection('announcements')
@@ -28,7 +21,6 @@ def load_announcements():
     logger.info(f"Loaded {len(announcements)} announcements from MongoDB.")
     return announcements
 
-# Function to generate embedding
 def generate_embedding(content):
     """Generate embedding using OpenAI API."""
     try:
@@ -41,11 +33,10 @@ def generate_embedding(content):
         logger.error(f"Error generating embedding: {str(e)}")
         return None
 
-# Function to format content for embedding
 def extract_content_for_embedding(content):
     """Format content for embedding generation."""
     if isinstance(content, str):
-        return content[:30000]  # Limit to 30,000 characters
+        return content[:30000] 
 
     parts = []
     if isinstance(content, dict):
@@ -61,6 +52,7 @@ def extract_content_for_embedding(content):
             for list_item in content['lists']:
                 parts.append(list_item)
 
+    logger.info("Parts: ", parts)
     combined_content = " ".join(parts)
     return combined_content[:30000]  # Limit to 30,000 characters
 
@@ -68,6 +60,8 @@ def extract_content_for_embedding(content):
 def generate_embeddings_for_announcements(announcements):
     """Generate embeddings for all announcements."""
     embeddings_list = []
+
+    logger.info('Announcements: ', announcements)
 
     for announcement in announcements:
         try:

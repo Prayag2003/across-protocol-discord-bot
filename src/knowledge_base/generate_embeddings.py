@@ -32,21 +32,22 @@ def extract_content_for_embedding(content):
     # Add headers with labels, no repetition
     if content.get('headers'):
         for header in content['headers']:
-            if header not in used_titles:
-                parts.append(f"Section: {header}")
-                used_titles.add(header)
+            parts.append(f"Section: {header}")
+            parts.append('---')
     
     # Add paragraphs directly
     if content.get('paragraphs'):
         for para in content['paragraphs']:
             parts.append(para)
+        parts.append('---')
     
     # Add code blocks
     if content.get('code_blocks'):
         for block in content['code_blocks']:
             parts.append(f"Code Block ID: {block['id']}")
             parts.append(block['code'])
-    
+        parts.append('---')
+
     # Process tables to ensure items are strings
     if content.get('tables'):
         for table in content['tables']:
@@ -54,7 +55,8 @@ def extract_content_for_embedding(content):
             for row in table:
                 parts.append(f"Field: {row[0]}")
                 parts.append(f"Description: {row[1]}")
-    
+        parts.append('---')
+
     # Process lists to ensure items are strings
     if content.get('lists'):
         formatted_lists = []
@@ -65,10 +67,7 @@ def extract_content_for_embedding(content):
             elif isinstance(list_item, list):  # Handle nested lists
                 formatted_lists.extend([str(sub_item) for sub_item in list_item if isinstance(sub_item, str)])
         parts.extend(formatted_lists)
-    
-    # Add delimiter after each section or at the end
-    if parts:
-        parts.append('---')
+        parts.append('---')    
 
     # Join all parts into a single content string
     combined_content = " ".join(parts)
