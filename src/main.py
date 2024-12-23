@@ -31,6 +31,8 @@ async def main():
     # Load cogs
     await bot.load_extension('cogs.explain')
     await bot.load_extension('cogs.reaction_listener')
+    await bot.load_extension('cogs.delete')
+    
     # await bot.load_extension('cogs.update_pipeline')
     # await bot.load_extension('cogs.delete_messages')
 

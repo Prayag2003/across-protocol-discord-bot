@@ -6,3 +6,4 @@ scikit-learn
 loguru
 beautifulsoup4
 pymongo
+pinecone

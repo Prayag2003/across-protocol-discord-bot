@@ -1,8 +1,7 @@
-import logging
+from loguru import logger
 from typing import Optional
 from .rlhf_trainer import RLHFTrainer
 from .feedback_manager import FeedbackManager
-from loguru import logger
 
 class RLHFPipeline:
     def __init__(self, openai_api_key: str, mongo_uri: str):
