@@ -1,6 +1,6 @@
 import discord
 from datetime import datetime
-from loguru import logger as logging
+from loguru import logger
 import os
 import re
 
@@ -15,7 +15,7 @@ class LogManager:
         }
 
     async def setup_log_channel(self, guild):
-        """Set up or find the logging channel."""
+        """Set up or find the logger channel."""
         self.log_channel = discord.utils.get(guild.channels, name="ross-bot-logs")
         
         if not self.log_channel:
@@ -33,11 +33,11 @@ class LogManager:
                 self.log_channel = await guild.create_text_channel(
                     'ross-bot-logs',
                     overwrites=overwrites,
-                    topic="Bot logging channel - Admin and Owner access only"
+                    topic="Bot logger channel - Admin and Owner access only"
                 )
-                logging.info(f"Logging channel created: {self.log_channel.name}")
+                logger.info(f"Logging channel created: {self.log_channel.name}")
             except Exception as e:
-                logging.error(f"Failed to create logging channel: {str(e)}")
+                logger.error(f"Failed to create logger channel: {str(e)}")
                 return None
         
         return self.log_channel
@@ -76,8 +76,8 @@ class LogManager:
             os.remove(file_path)
 
         except Exception as e:
-            logging.error(f"Failed to stream log: {str(e)}")
-            await self.log_system_message(f"⚠️ Error logging message: {str(e)}", 'error')
+            logger.error(f"Failed to stream log: {str(e)}")
+            await self.log_system_message(f"⚠️ Error logger message: {str(e)}", 'error')
     
     async def log_system_message(self, content, log_type='default'):
         """Send a system message to the log channel."""
