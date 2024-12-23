@@ -1,21 +1,18 @@
-import discord
-from discord.ext import commands
-from loguru import logger as logging
-import asyncio
 import os
 import re
+import asyncio
+import discord
+from discord.ext import commands
+from loguru import logger 
 from typing import List, Optional
 from dotenv import load_dotenv
 from pymongo import MongoClient
 from utils.message import chunk_message_by_paragraphs
 from utils.logging import log_manager
 from inference.inference import generate_response_with_context
-from knowledge_base.generate_embeddings_announcement import generate_embeddings_announcement
-
-# Load environment variables
+from services.pinecone import PineconeService
 load_dotenv()
 
-# MongoDB setup
 MONGO_URI = os.getenv("MONGO_URI")
 MONGO_DB_NAME = os.getenv("MONGO_DB_NAME")
 client = MongoClient(MONGO_URI)
@@ -46,25 +43,30 @@ class DiscordResponseHandler:
                 await thread.send(chunk.strip())
             return thread
         except discord.errors.HTTPException as e:
-            logging.error(f"Thread creation error: {e}")
+            logger.error(f"Thread creation error: {e}")
             return None
 
 class ExplainCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.announcement_channels: List[discord.TextChannel] = []
+        self.pinecone_service = PineconeService(
+            pinecone_api_key=os.getenv("PINECONE_API_KEY"),
+            index_name=os.getenv("PINECONE_INDEX_NAME"),
+            openai_api_key=os.getenv("OPENAI_API_KEY")
+        )
 
     async def update_announcement_channels(self, guild: discord.Guild):
         """Update cached announcement channels for a given guild."""
         self.announcement_channels = await AnnouncementChannelManager.get_announcement_channels(guild)
-        logging.info(f"Updated announcement channels: {[c.name for c in self.announcement_channels]}")
+        logger.info(f"Updated announcement channels: {[c.name for c in self.announcement_channels]}")
 
     @commands.Cog.listener()
     async def on_ready(self):
         """Populate announcement channels cache when the bot is ready."""
         for guild in self.bot.guilds:
             await self.update_announcement_channels(guild)
-        logging.info("Announcement channels cache initialized.")
+        logger.info("Announcement channels cache initialized.")
 
     @commands.Cog.listener()
     async def on_guild_channel_create(self, channel):
@@ -74,10 +76,12 @@ class ExplainCog(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
+        logger.debug(f"Received message in channel: {message.channel.name}")
         """Process new announcements and add them to MongoDB."""
         if message.author.bot:
             return
-        if message.channel in self.announcement_channels:
+
+        if message.channel.name in [channel.name for channel in self.announcement_channels]:
             try:
                 content = (
                     message.content or 
@@ -86,8 +90,11 @@ class ExplainCog(commands.Cog):
                 )
 
                 if not content.strip():
-                    logging.info(f"No processable content in {message.channel.name} by {message.author.name}.")
+                    logger.info(f"No processable content in {message.channel.name} by {message.author.name}.")
                     return
+
+                # Debug log to confirm processing
+                logger.info(f"Processing message in {message.channel.name}: {content}")
 
                 metadata = {
                     "content": content.strip(),
@@ -96,14 +103,37 @@ class ExplainCog(commands.Cog):
                     "timestamp": message.created_at.isoformat(),
                     "url": f"https://discord.com/channels/{message.guild.id}/{message.channel.id}/{message.id}"
                 }
-                # Save announcement to MongoDB
-                announcement_collection.insert_one(metadata)
-                logging.info(f"Announcement stored in MongoDB. Channel: {message.channel.name}, Author: {message.author.name}")
 
-                # Generate and save embeddings locally and in MongoDB
-                generate_embeddings_announcement([metadata])
+                logger.info(f"Metadata: {metadata}")
+
+                # Save to Pinecone (implement upsert_announcement if not done)
+                success = self.pinecone_service.upsert_announcement(metadata)
+                if success:
+                    logger.info(f"Announcement vectorized and stored in Pinecone. Channel: {message.channel.name}")
+                else:
+                    logger.error("Failed to store announcement in Pinecone.")
+
+                # Save to MongoDB
+                announcement_collection.insert_one(metadata)
+                logger.info(f"Announcement stored in MongoDB. Channel: {message.channel.name}, Author: {message.author.name}")
+
             except Exception as e:
-                logging.error(f"Failed to process announcement: {e}")
+                logger.error(f"Failed to process announcement: {e}")
+
+    @commands.command(name='event')
+    async def event(self, ctx, *, user_query: str):
+        """Handle user query and generate response from Pinecone."""
+        try:
+            response = self.pinecone_service.generate_response_from_pinecone(user_query)
+            await log_manager.stream_log(ctx.message, response=response)
+
+            if response.get("response"):
+                await ctx.channel.send(response["response"])
+            else:
+                await ctx.channel.send("No response generated from Pinecone.")
+        except Exception as e:
+            logger.error(f"Error generating response: {e}")
+            await ctx.channel.send(f"An error occurred: {e}")
 
     @commands.command(name='explain')
     async def explain(self, ctx, *, user_query: str):
@@ -112,7 +142,7 @@ class ExplainCog(commands.Cog):
             username = ctx.author.name
             explanation = await asyncio.to_thread(generate_response_with_context, user_query, username)
             explanation = explanation.strip()
-            logging.info(f"Full explanation length: {len(explanation)}")
+            logger.info(f"Full explanation length: {len(explanation)}")
             await log_manager.stream_log(ctx.message, explanation)
 
             if isinstance(ctx.channel, (discord.TextChannel, discord.ForumChannel)):
@@ -120,13 +150,14 @@ class ExplainCog(commands.Cog):
             else:
                 error_msg = "Threads are not supported in this channel. Please use this command in a text channel."
                 await ctx.channel.send(error_msg)
-                logging.warning(error_msg)
+                logger.warning(error_msg)
         except discord.errors.HTTPException as http_ex:
-            logging.error(f"Error sending the explanation: {str(http_ex)}")
+            logger.error(f"Error sending the explanation: {str(http_ex)}")
             await ctx.channel.send(f"Error: {http_ex}")
         except Exception as e:
-            logging.error(f"Error: {e}")
+            logger.error(f"Error: {e}")
             await ctx.channel.send(f"An error occurred: {e}")
+
 
 async def setup(bot):
     """Setup function to add the Explain Cog to the bot."""
