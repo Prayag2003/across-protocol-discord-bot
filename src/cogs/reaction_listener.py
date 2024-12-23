@@ -23,7 +23,6 @@ class RLHFListener(commands.Cog):
         self.channel = self.get_logging_channel()
         if self.channel:
             logger.info(f"Listening for reactions in channel: {self.channel.name}")
-            logger.info(f"Listening for reactions in channel: {self.channel.name}")
             await self.cache_existing_messages()
             self.is_ready = True
         else:
@@ -40,7 +39,6 @@ class RLHFListener(commands.Cog):
     async def cache_existing_messages(self):
         """Cache existing messages from the logging channel."""
         try:
-            logger.info("Starting to cache existing messages...")
             logger.info("Starting to cache existing messages...")
             message_count = 0
 

@@ -3,16 +3,13 @@ import json
 from openai import OpenAI   
 from loguru import logger
 from dotenv import load_dotenv
+from loguru import logger
 load_dotenv()
 
 def load_knowledge_base(file_path):
     """Load and validate knowledge base content"""
     with open(file_path, 'r', encoding='utf-8') as file:
         return json.load(file)
-
-import logging
-
-import logging
 
 def extract_content_for_embedding(content):
     """Extract and format content for embedding generation with descriptive labels."""
@@ -21,7 +18,7 @@ def extract_content_for_embedding(content):
 
     # Check if all fields are empty
     if not any(content.values()):
-        logging.info("No relevant content fields found.")
+        logger.info("No relevant content fields found.")
         return ""
 
     # Add the title once with a label
@@ -77,7 +74,7 @@ def extract_content_for_embedding(content):
     if len(combined_content) > max_chars:
         combined_content = combined_content[:max_chars]
 
-    logging.info(combined_content)
+    logger.info(combined_content)
     return combined_content
 
 

@@ -1,5 +1,5 @@
 import discord
-from loguru import logger as logging
+from loguru import logger
 import asyncio
 from utils.message import chunk_message
 from utils.logging import log_manager
@@ -8,12 +8,12 @@ from inference.inference import generate_response_with_context
 async def setup_events(bot):
     @bot.event
     async def on_ready():
-        logging.info(f'Logged in as {bot.user}!')
+        logger.info(f'Logged in as {bot.user}!')
         
         for guild in bot.guilds:
             log_channel = await log_manager.setup_log_channel(guild)
             if log_channel:
-                logging.info(f"Logging channel setup complete for {guild.name}")
+                logger.info(f"Logging channel setup complete for {guild.name}")
 
     @bot.event
     async def on_message(message):
@@ -33,7 +33,7 @@ async def setup_events(bot):
 
             except Exception as e:
                 error_msg = f"Error processing thread message: {str(e)}"
-                logging.error(error_msg)
+                logger.error(error_msg)
                 await message.channel.send(f"An error occurred: {str(e)}")
                 await log_manager.stream_log(message, f"ERROR: {error_msg}")
 
