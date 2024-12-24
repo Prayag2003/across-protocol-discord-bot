@@ -133,7 +133,7 @@ def generate_response_with_context(user_query: str, username: str):
         response = client.chat.completions.create(
             model="gpt-4-turbo",
             messages=messages,
-            max_tokens=600,
+            max_tokens=1000,
             temperature=0.15,
         )
         response_text = response.choices[0].message.content.strip()

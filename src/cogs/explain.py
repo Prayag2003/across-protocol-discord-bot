@@ -1,13 +1,14 @@
 import os
 import re
+import io
 import asyncio
 import discord
 from discord.ext import commands
 from loguru import logger 
-from typing import List, Optional
+from typing import List, Optional, Dict
 from dotenv import load_dotenv
 from pymongo import MongoClient
-from utils.message import chunk_message_by_paragraphs
+from utils.message import chunk_message_by_paragraphs, extract_code_blocks, get_file_extension
 from utils.logging import log_manager
 from inference.inference import generate_response_with_context
 from services.pinecone import PineconeService
@@ -32,20 +33,67 @@ class AnnouncementChannelManager:
 class DiscordResponseHandler:
     @staticmethod
     async def send_explanation_in_thread(message: discord.Message, explanation: str) -> Optional[discord.Thread]:
-        """Send explanation in a thread attached to the original message."""
         try:
             thread = await message.create_thread(
                 name=message.content[:80] + "...",
                 auto_archive_duration=60
             )
-            explanation_chunks = chunk_message_by_paragraphs(explanation)
-            for chunk in explanation_chunks:
-                await thread.send(chunk.strip())
+
+            clean_text, code_blocks = extract_code_blocks(explanation)
+
+            for idx, code_block in enumerate(code_blocks, 1):
+                language = code_block["language"]
+                extension = get_file_extension(language)
+                file = discord.File(
+                    io.StringIO(code_block["code"]),
+                    filename=f"code_snippet_{idx}.{extension}"
+                )
+                await thread.send(f"```{language}\n{code_block['code']}```")
+                await thread.send(file=file)
+
+            if clean_text:
+                text_chunks = chunk_message_by_paragraphs(clean_text)
+                for chunk in text_chunks:
+                    if chunk.strip():
+                        await thread.send(chunk.strip())
+
             return thread
+            
         except discord.errors.HTTPException as e:
             logger.error(f"Thread creation error: {e}")
             return None
 
+# class DiscordResponseHandler:
+#     @staticmethod
+#     async def send_explanation_in_thread(message: discord.Message, explanation: str) -> Optional[discord.Thread]:
+#         try:
+#             thread = await message.create_thread(
+#                 name=message.content[:80] + "...",
+#                 auto_archive_duration=60
+#             )
+
+#             # Extract code blocks and clean text
+#             clean_text, code_blocks = extract_code_blocks(explanation)
+
+#             # Send code blocks as files
+#             for idx, code in enumerate(code_blocks, 1):
+#                 file = discord.File(
+#                     io.StringIO(code),
+#                     filename=f"code_snippet_{idx}.txt"
+#                 )
+#                 await thread.send(file=file)
+
+#             # Send remaining text in chunks
+#             if clean_text:
+#                 text_chunks = chunk_message_by_paragraphs(clean_text)
+#                 for chunk in text_chunks:
+#                     await thread.send(chunk.strip())
+
+#             return thread
+            
+#         except discord.errors.HTTPException as e:
+#             logger.error(f"Thread creation error: {e}")
+#             return None
 class ExplainCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot

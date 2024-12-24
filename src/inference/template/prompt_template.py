@@ -65,9 +65,7 @@ def generate_prompt_template(context, query, role="user", detail_level="standard
 
 User Query:
 {query}
-
 {role_instruction}
-
 {output_instruction}
 """
     

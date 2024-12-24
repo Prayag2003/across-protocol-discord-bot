@@ -1,7 +1,8 @@
 import os
 import json
+import time
 from loguru import logger
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Dict, List, Optional
 
 from openai import OpenAI
@@ -9,7 +10,6 @@ from pinecone import Pinecone, ServerlessSpec
 
 class PineconeService:
     def __init__(self, pinecone_api_key: str, index_name: str, openai_api_key: str):
-
         self.pinecone_client = Pinecone(api_key=pinecone_api_key)
         if index_name not in self.pinecone_client.list_indexes().names():
             self.pinecone_client.create_index(
@@ -28,6 +28,11 @@ class PineconeService:
         self.index = self.pinecone_client.Index(index_name)        
         self.client = OpenAI(api_key=openai_api_key)
 
+    def preprocess_text(self, text: str) -> str:
+        """Basic text preprocessing to improve embedding quality."""
+        # Remove extra whitespace and normalize
+        return ' '.join(text.split()).strip()
+
     def generate_embedding(self, text: str) -> List[float]:
         """Generate embedding for the given text using OpenAI's embedding model."""
         try:
@@ -39,73 +44,69 @@ class PineconeService:
         except Exception as e:
             logger.error(f"Error generating embedding: {str(e)}")
             raise
-    
+
     def generate_response_from_pinecone(self, user_query: str) -> Dict:
         """
         Search Pinecone index and generate a response based on the user query.
-        
-        Args:
-            user_query (str): The user's query string.
-
-        Returns:
-            Dict: A dictionary containing the response and relevant announcements.
+        Focuses on semantic relevance rather than exact matching.
         """
         try:
-            # Generate embedding for the user query
-            query_embedding = self.generate_embedding(user_query)
+            # Preprocess and generate embedding for user query
+            processed_query = self.preprocess_text(user_query)
+            query_embedding = self.generate_embedding(processed_query)
             
-            # Query the Pinecone index
             search_response = self.index.query(
                 vector=query_embedding,
-                top_k=5,
+                top_k=3,  
                 include_metadata=True
             )
             
-            # Parse the search results
+            # Process search results
             contexts = []
-            print("Search responses: \n", search_response.matches)
             for match in search_response.matches:
-                if match.score < 0.7:  
-                    continue
-
-                # Ensure metadata is a dictionary
-                if not isinstance(match.metadata, dict):
-                    logger.error(f"Metadata is not a dictionary: {match.metadata}")
+                if match.score < 0.6:  
                     continue
                 
-                contexts.append({
-                    "content": match.metadata.get("content"),
-                    "channel": match.metadata.get("channel"),
-                    "author": match.metadata.get("author"),
-                    "timestamp": match.metadata.get("timestamp"),
-                    "url": match.metadata.get("url"),
-                    "similarity": match.score
-                })
+                if isinstance(match.metadata, dict):
+                    contexts.append({
+                        "content": match.metadata.get("content", ""),
+                        "channel": match.metadata.get("channel", ""),
+                        "timestamp": match.metadata.get("timestamp", ""),
+                        "similarity": match.score
+                    })
 
-            logger.info("Contexts: ", contexts)
-            # Generate a prompt for the OpenAI model
-            prompt = self._create_prompt(user_query, contexts)
-            logger.info(f"Generated prompt: {prompt}")
+            print("Search responses:\n", search_response)
+            print("contexts:", contexts)
+
+            # Generate prompt for OpenAI
+            system_prompt = """You are a helpful assistant that provides information about announcements. 
+            Your task is to:
+            1. Answer questions about announcements, events, and updates
+            2. If a query is about dates or upcoming events, focus on temporal aspects
+            3. Provide specific details from the announcements when available
+            4. If multiple announcements are relevant, combine the information coherently
+            5. If no announcements match the query, clearly state that
             
-            # Generate response using OpenAI's GPT model
+            Always maintain a helpful and informative tone."""
+
+            user_prompt = self._create_prompt(user_query, contexts)
+
+            print("Prompt: \n", user_prompt)
+
+            # Generate response using OpenAI
             completion = self.client.chat.completions.create(
                 model="gpt-4-turbo",
                 messages=[
-                    {"role": "system", "content": """You are a helpful assistant that provides information about Discord announcements. 
-                    Your responses should be clear, concise, and directly related to the user's query. 
-                    If multiple announcements are relevant, summarize them chronologically."""},
-                    {"role": "user", "content": prompt}
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": user_prompt}
                 ],
                 temperature=0.7,
                 max_tokens=500
             )
             
-            response = completion.choices[0].message.content
-            logger.info(f"Generated response: {response}")
-            
             return {
-                "response": response,
-                "announcements": contexts,
+                "response": completion.choices[0].message.content,
+                "contexts": contexts,
                 "query": user_query
             }
             
@@ -118,28 +119,35 @@ class PineconeService:
 
     def _create_prompt(self, query: str, contexts: List[Dict]) -> str:
         """Create a prompt for OpenAI based on the query and retrieved contexts."""
-        prompt = f"User Query: {query}\n\nRelevant Announcements:\n"
+        prompt = f"User Query: {query}\n\nRelevant Announcements:\n\n"
         
-        for idx, context in enumerate(contexts, 1):
-            prompt += f"\n{idx}. Content: {context['content']}"
-            prompt += f"\nChannel: {context['channel']}"
-            prompt += f"\nAuthor: {context['author']}"
-            prompt += f"\nTimestamp: {context['timestamp']}"
-            prompt += f"\nURL: {context['url']}\n"
-        
-        prompt += "\nPlease provide a response that addresses the user's query based on these announcements. " \
-                 "If the announcements don't contain relevant information, please indicate that."
+        if not contexts:
+            prompt += "No relevant announcements found.\n"
+        else:
+            for idx, context in enumerate(contexts, 1):
+                prompt += f"Announcement {idx}:\n{context['content']}\n\n"
+
+        prompt += "\nBased on these announcements, please provide a relevant response to the user's query. "
+        prompt += "Include specific details when available. "
+        prompt += "If the announcements don't contain relevant information, please indicate that."
         
         return prompt
 
+
     def upsert_announcement(self, metadata: Dict) -> bool:
+        """Store announcement in Pinecone with its embedding."""
         try:
-            # Generate embedding for the announcement content
-            embedding = self.generate_embedding(metadata["content"])
+            # Preprocess the content
+            content = metadata.get("content", "")
+            processed_content = self.preprocess_text(content)
             
-            # Create a unique ID for the announcement
+            # Generate embedding
+            embedding = self.generate_embedding(processed_content)
+            
+            # Create unique ID
             announcement_id = f"{metadata['channel']}_{metadata['timestamp']}"
             
+            # Store in Pinecone
             self.index.upsert(
                 vectors=[(announcement_id, embedding, metadata)]
             )            
