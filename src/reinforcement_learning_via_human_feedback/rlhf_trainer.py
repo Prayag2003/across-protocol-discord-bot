@@ -8,9 +8,9 @@ import json
 
 class OpenAIModel(Enum):
     """Available models for fine-tuning"""
-    GPT35_TURBO = "gpt-3.5-turbo"
-    GPT35_TURBO_0613 = "gpt-3.5-turbo-0613"
-    GPT35_TURBO_1106 = "gpt-3.5-turbo-1106"
+    GPT35_TURBO = "gpt-4-turbo"
+    GPT35_TURBO_0613 = "gpt-4-turbo-0613"
+    GPT35_TURBO_1106 = "gpt-4-turbo-1106"
     BABBAGE_002 = "babbage-002"
     DAVINCI_002 = "davinci-002"
 

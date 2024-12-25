@@ -7,7 +7,9 @@ from discord.ext import commands
 from loguru import logger 
 from typing import List, Optional, Dict
 from dotenv import load_dotenv
-from pymongo import MongoClient
+from datetime import datetime, timedelta
+from pymongo import MongoClient, ASCENDING
+from pymongo.collection import Collection
 from utils.message import chunk_message_by_paragraphs, extract_code_blocks, get_file_extension
 from utils.logging import log_manager
 from inference.inference import generate_response_with_context
@@ -63,41 +65,18 @@ class DiscordResponseHandler:
             logger.error(f"Thread creation error: {e}")
             return None
 
-# class DiscordResponseHandler:
-#     @staticmethod
-#     async def send_explanation_in_thread(message: discord.Message, explanation: str) -> Optional[discord.Thread]:
-#         try:
-#             thread = await message.create_thread(
-#                 name=message.content[:80] + "...",
-#                 auto_archive_duration=60
-#             )
-
-#             # Extract code blocks and clean text
-#             clean_text, code_blocks = extract_code_blocks(explanation)
-
-#             # Send code blocks as files
-#             for idx, code in enumerate(code_blocks, 1):
-#                 file = discord.File(
-#                     io.StringIO(code),
-#                     filename=f"code_snippet_{idx}.txt"
-#                 )
-#                 await thread.send(file=file)
-
-#             # Send remaining text in chunks
-#             if clean_text:
-#                 text_chunks = chunk_message_by_paragraphs(clean_text)
-#                 for chunk in text_chunks:
-#                     await thread.send(chunk.strip())
-
-#             return thread
-            
-#         except discord.errors.HTTPException as e:
-#             logger.error(f"Thread creation error: {e}")
-#             return None
 class ExplainCog(commands.Cog):
     def __init__(self, bot):
+        
+        mongo_uri=os.getenv("MONGO_URI")
+        database = os.getenv("MONGO_DB_NAME")
+        collection = os.getenv("FEEDBACK_COLLECTION")
+
         self.bot = bot
         self.announcement_channels: List[discord.TextChannel] = []
+        self.client = MongoClient(mongo_uri)
+        self.collection: Collection = self.client[database][collection]
+        
         self.pinecone_service = PineconeService(
             pinecone_api_key=os.getenv("PINECONE_API_KEY"),
             index_name=os.getenv("PINECONE_INDEX_NAME"),
@@ -206,7 +185,84 @@ class ExplainCog(commands.Cog):
             logger.error(f"Error: {e}")
             await ctx.channel.send(f"An error occurred: {e}")
 
+    @commands.command(name="learn")
+    @commands.has_permissions(administrator=True)
+    async def learn(self, ctx):
+        """Trigger the RLHF learning pipeline."""
+        try:
+            print("Running learning pipeline...")
+            print("Context: ", ctx)
+            # Calculate the timestamp for 30 days ago
+            thirty_days_ago = datetime.utcnow() - timedelta(days=30)
 
+            # Fetch feedback entries from the database using the collection attribute
+            feedback_entries_cursor = self.collection.find(
+                {"timestamp": {"$gte": thirty_days_ago}}
+            ).sort("timestamp", ASCENDING)
+
+            feedback_entries = list(feedback_entries_cursor)
+            print("Feedback entries found: ", len(feedback_entries))
+
+            # Segment feedback into positive and negative
+            positive_feedback = [
+                entry for entry in feedback_entries if entry.get("feedback", {}).get("type") == "positive"
+            ]
+            negative_feedback = [
+                entry for entry in feedback_entries if entry.get("feedback", {}).get("type") == "negative"
+            ]
+
+            logger.info(f"Collected {len(positive_feedback)} positive and {len(negative_feedback)} negative feedback entries")
+
+            if positive_feedback or negative_feedback:
+                improvement_result = await self.run_learning_pipeline(positive_feedback, negative_feedback)
+                await ctx.send(f"Learning completed. Result: {improvement_result}")
+            else:
+                await ctx.send("No feedback entries found in the last 30 days to process.")
+
+        except Exception as e:
+            logger.exception("Error in learning pipeline")
+            await ctx.send(f"An error occurred during learning: {e}")
+
+    async def run_learning_pipeline(self, positive_feedback: List[Dict], negative_feedback: List[Dict]) -> str:
+        """Run the RLHF learning pipeline on collected feedback."""
+
+        print("Running learning pipeline...")
+        try:
+            from rl.trainer import RLTrainer
+            
+            trainer = RLTrainer(
+                model_name="gpt-4-turbo",
+                api_key=os.getenv("OPENAI_API_KEY")
+            )
+            
+            training_data = []
+            for entry in positive_feedback:
+                training_data.append({
+                    "query": entry.get("query", ""),
+                    "response": entry.get("response", ""),
+                    "reward": 1.0,
+                    "feedback": entry.get("feedback", {}).get("content", "")
+                })
+                
+            for entry in negative_feedback:
+                training_data.append({
+                    "query": entry.get("query", ""),
+                    "response": entry.get("response", ""),
+                    "reward": -1.0,
+                    "feedback": entry.get("feedback", {}).get("content", "")
+                })
+            
+            metrics = await trainer.train(training_data)
+            
+            logger.info(f"Training completed with metrics: {metrics}")
+            
+            return f"Training completed successfully. Processed {len(training_data)} feedback entries. " \
+                f"Average reward: {metrics['avg_reward']:.2f}, Loss: {metrics['final_loss']:.4f}"
+                
+        except Exception as e:
+            logger.error(f"Training pipeline failed: {e}")
+            raise
+    
 async def setup(bot):
     """Setup function to add the Explain Cog to the bot."""
     await bot.add_cog(ExplainCog(bot))
