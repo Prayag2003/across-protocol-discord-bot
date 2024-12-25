@@ -12,10 +12,7 @@ from utils.message import chunk_message_by_paragraphs, extract_code_blocks, get_
 from inference.inference import generate_response_with_context
 from services.mongo import MongoService
 import sys
-
-# logger.remove()  # Remove default logger configuration
-# logger.add(sys.stderr, format="{time} {level} {message}", level="DEBUG")
-
+import json
 load_dotenv()
 
 MONGO_URI = os.getenv("MONGO_URI")
@@ -78,12 +75,6 @@ class ExplainCog(commands.Cog):
         self.announcement_channels = await AnnouncementChannelManager.get_announcement_channels(guild)
         logger.info(f"Updated announcement channels: {[c.name for c in self.announcement_channels]}")
 
-    # @commands.Cog.listener()
-    # async def on_ready(self):
-        # logger.info("Bot is ready!")
-        # print("Bot is ready!")
-
-
     @commands.Cog.listener()
     async def on_ready(self):
         """Populate announcement channels cache when the bot is ready."""
@@ -105,7 +96,7 @@ class ExplainCog(commands.Cog):
         """Process new announcements and add them to MongoDB."""
         if message.author.bot:
             return
-
+        logger.debug("oky1")
         if message.channel.name in [channel.name for channel in self.announcement_channels]:
             try:
                 content = (
@@ -113,7 +104,7 @@ class ExplainCog(commands.Cog):
                     " ".join(embed.description or embed.title or '' for embed in message.embeds) or 
                     " ".join(attachment.url for attachment in message.attachments)
                 )
-
+                # content = str(content)
                 if not content.strip():
                     logger.info(f"No processable content in {message.channel.name} by {message.author.name}.")
                     return
@@ -138,7 +129,16 @@ class ExplainCog(commands.Cog):
                     logger.error("Failed to store announcement in MongoDB Vector Search.")
 
                 # Save to MongoDB (for raw content)
-                announcement_collection.insert_one(metadata)
+                # announcement_collection.insert_one(metadata)
+                try:
+                    announcement_collection.insert_one(metadata)
+                    print("METADATA: ")
+                    print(metadata)
+                    # print("METADATA: " + json.dumps(metadata, indent=4))
+                    logger.info("Metadata successfully inserted into MongoDB.")
+                except Exception as e:
+                    logger.error(f"Failed to insert metadata into MongoDB: {e}")
+
                 logger.info(f"Announcement stored in MongoDB. Channel: {message.channel.name}, Author: {message.author.name}")
 
             except Exception as e:
@@ -169,54 +169,55 @@ class ExplainCog(commands.Cog):
         except Exception as e:
             logger.error(f"Search failed: {e}")
             await ctx.send("An error occurred while searching for announcements.")
-            
-            
-@commands.command(name='event')
-async def event(self, ctx, *, user_query: str):
-    """Handle user query and generate response from MongoDB."""
-    try:
-        # Generate response from MongoDB vector search
-        print("User Query:"+user_query)
-        logger.debug(f"Event command triggered. Query: {user_query}")
-        response = self.mongo_service.generate_response_from_mongo(user_query)
-        print("response: "+response)
-        logger.debug(f"Generated response: {response}")
-        # Log the response
-        if response.get("response"):
-            await ctx.channel.send(response["response"])
-        else:
-            await ctx.channel.send("No relevant announcements found.")
-    except Exception as e:
-        logger.error(f"Error generating response: {e}")
-        await ctx.channel.send(f"An error occurred while processing your query: {e}")
+                
+    @commands.command(name='event')
+    async def event(self, ctx, *, user_query: str):
+        """Handle user query and generate response from MongoDB."""
+        try:
+            # Generate response from MongoDB vector search
+            logger.debug(f"Event command triggered. Query: {user_query}")
+            response = self.mongo_service.generate_response_from_mongo(user_query)
+            logger.info(f"User query: {user_query}, Response: {response}")
 
 
-@commands.command(name='explain')
-async def explain(self, ctx, *, user_query: str):
-    """Generate an explanation for the user query."""
-    try:
-        # Retrieve explanations from MongoDB vector search
-        response = self.mongo_service.generate_response_from_mongo(user_query)
-
-        if response.get("response"):
-            explanation = response["response"].strip()
-
-            # Log the explanation
-            logger.info(f"Explanation generated for user query: {user_query}")
-
-            # If explanation is long, send it in a thread
-            if isinstance(ctx.channel, (discord.TextChannel, discord.ForumChannel)):
-                await DiscordResponseHandler.send_explanation_in_thread(ctx.message, explanation)
+            if response.get("response"):
+                await ctx.channel.send(response["response"])
             else:
-                await ctx.channel.send(explanation)
-        else:
-            await ctx.channel.send("No explanation could be generated for your query.")
-    except discord.errors.HTTPException as http_ex:
-        logger.error(f"Error sending explanation: {str(http_ex)}")
-        await ctx.channel.send(f"Error: {http_ex}")
-    except Exception as e:
-        logger.error(f"Error generating explanation: {e}")
-        await ctx.channel.send(f"An error occurred while processing your query: {e}")
+                await ctx.channel.send("No relevant announcements found.")
+        except Exception as e:
+            logger.error(f"Error generating response: {e}")
+            await ctx.channel.send(f"An error occurred while processing your query: {e}")
+
+    @commands.command(name='explain')
+    async def explain(self, ctx, *, user_query: str):
+        """Generate an explanation for the user query."""
+        try:
+            username = ctx.author.name
+            # Retrieve explanations from MongoDB vector search
+            response = self.mongo_service.generate_response_from_mongo(user_query)
+
+            if response.get("response"):
+                explanation = response["response"].strip()
+
+                # Log the explanation
+                logger.info(f"Explanation generated for user query: {user_query}")
+                logger.info(f"User query: {user_query}, Response: {response}")
+
+                # If explanation is long, send it in a thread
+                if isinstance(ctx.channel, (discord.TextChannel, discord.ForumChannel)):
+                    await DiscordResponseHandler.send_explanation_in_thread(ctx.message, explanation)
+                else:
+                    error_msg = "Threads are not supported in this channel. Please use this command in a text channel."
+                    await ctx.channel.send(error_msg)
+                    logger.warning(error_msg)
+            else:
+                await ctx.channel.send("No explanation could be generated for your query.")
+        except discord.errors.HTTPException as http_ex:
+            logger.error(f"Error sending explanation: {str(http_ex)}")
+            await ctx.channel.send(f"Error: {http_ex}")
+        except Exception as e:
+            logger.error(f"Error generating explanation: {e}")
+            await ctx.channel.send(f"An error occurred while processing your query: {e}")
 
 async def setup(bot):
     """Setup function to add the Explain Cog to the bot."""
