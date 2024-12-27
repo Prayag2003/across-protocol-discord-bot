@@ -89,13 +89,11 @@ class RLHFListener(commands.Cog):
             user = await guild.fetch_member(payload.user_id)
 
             logger.info(f"Reaction removed: {payload.emoji} by {user.name} from message {payload.message_id}")
-            logger.info(f"Reaction removed: {payload.emoji} by {user.name} from message {payload.message_id}")
 
             self.feedback_collection.delete_one({
                 "interaction.message_id": str(payload.message_id),
                 "reviewer.id": str(user.id)
             })
-            logger.info(f"Feedback removed for message {payload.message_id}")
             logger.info(f"Feedback removed for message {payload.message_id}")
 
         except Exception as e:
@@ -156,8 +154,11 @@ class RLHFListener(commands.Cog):
             return
 
         logger.info(f"Processing reaction on message {message.id}")
-        logger.info(f"Processing reaction on message {message.id}")
-        feedback_type = "positive" if str(reaction.emoji) == "👍" else "negative"
+
+        positive = ["👍", "👍🏻", "👍🏼", "👍🏽", "👍🏾", "👍🏿"]
+        negative = ["👎", "👎🏻", "👎🏼", "👎🏽", "👎🏾", "👎🏿"]
+        
+        feedback_type = "positive" if str(reaction.emoji) in positive else "negative" if str(reaction.emoji) in negative else None
 
         log_data = await self.process_log_file(txt_attachment)
         if log_data:
@@ -178,26 +179,31 @@ class RLHFListener(commands.Cog):
             content = await attachment.read()
             content = content.decode('utf-8')
 
-            user_pattern = r"\ud83d\udc64 User: ([^(]+)\s*\((\d+)\)"
-            query_pattern = r"\ud83d\udcad Query: ([^\n]+)"
-            response_pattern = r"\ud83e\udd16 Response:\s*([\s\S]+?)(?=\Z|\n\n(?:[^\n]+:))"
+            print("Content:\n", content)
+
+            user_pattern = r"👤 User: ([^(]+)\s*\((\d+)\)"
+            query_pattern = r"💭 Query: ([^\n]+)"
+            response_pattern = r"🤖 Response:\s*([\s\S]+)"
 
             user_match = re.search(user_pattern, content)
             query_match = re.search(query_pattern, content)
             response_match = re.search(response_pattern, content)
 
+            # print("User match:\n", user_match)
+            # print("Query match:\n", query_match)
+            # print("Response match:\n", response_match)
+
             if not all([user_match, query_match, response_match]):
-                logger.error("Failed to extract all required information from log file")
                 logger.error("Failed to extract all required information from log file")
                 return None
 
+            # Construct the extracted data
             data = {
                 "username": user_match.group(1).strip(),
-                "user_id": user_match.group(2),
+                "user_id": user_match.group(2).strip(),
                 "query": query_match.group(1).strip(),
                 "response": response_match.group(1).strip()
             }
-            logger.info(f"Successfully extracted data for user: {data['username']}")
             logger.info(f"Successfully extracted data for user: {data['username']}")
             return data
 
@@ -205,16 +211,16 @@ class RLHFListener(commands.Cog):
             logger.exception(f"Error processing log file: {e}")
             return None
 
+
     async def is_valid_reaction(self, reaction, user):
         """Check if the reaction is valid for processing."""
         if user.bot:
-            logger.info(f"Ignoring bot reaction from {user.name}")
             logger.info(f"Ignoring bot reaction from {user.name}")
             return False
         if not user.guild_permissions.administrator:
             logger.warning(f"User {user.name} lacks administrator permissions")
             return False
-        if str(reaction.emoji) not in ["\ud83d\udc4d", "\ud83d\udc4e"]:
+        if str(reaction.emoji) not in ["👍🏻","👍","👍🏼","👍🏽","👍🏾","👍🏿","👎","👎🏻","👎🏼","👎🏽","👎🏿"]:
             logger.warning(f"Invalid reaction emoji: {reaction.emoji}")
             return False
         return True
@@ -279,7 +285,6 @@ class RLHFListener(commands.Cog):
                         "feedback.timestamp": datetime.utcnow()
                     }}
                 )
-                logger.info(f"Updated existing feedback for message {reaction.message.id}")
                 logger.info(f"Updated existing feedback for message {reaction.message.id}")
                 return True
 
