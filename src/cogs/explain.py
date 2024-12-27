@@ -4,14 +4,15 @@ import io
 import asyncio
 import discord
 from discord.ext import commands
-from loguru import logger 
+from loguru import logger
 from typing import List, Optional, Dict
 from dotenv import load_dotenv
 from pymongo import MongoClient
 from utils.message import chunk_message_by_paragraphs, extract_code_blocks, get_file_extension
-from utils.logging import log_manager
 from inference.inference import generate_response_with_context
-from services.pinecone import PineconeService
+from services.mongo import MongoService
+import sys
+import json
 load_dotenv()
 
 MONGO_URI = os.getenv("MONGO_URI")
@@ -63,46 +64,11 @@ class DiscordResponseHandler:
             logger.error(f"Thread creation error: {e}")
             return None
 
-# class DiscordResponseHandler:
-#     @staticmethod
-#     async def send_explanation_in_thread(message: discord.Message, explanation: str) -> Optional[discord.Thread]:
-#         try:
-#             thread = await message.create_thread(
-#                 name=message.content[:80] + "...",
-#                 auto_archive_duration=60
-#             )
-
-#             # Extract code blocks and clean text
-#             clean_text, code_blocks = extract_code_blocks(explanation)
-
-#             # Send code blocks as files
-#             for idx, code in enumerate(code_blocks, 1):
-#                 file = discord.File(
-#                     io.StringIO(code),
-#                     filename=f"code_snippet_{idx}.txt"
-#                 )
-#                 await thread.send(file=file)
-
-#             # Send remaining text in chunks
-#             if clean_text:
-#                 text_chunks = chunk_message_by_paragraphs(clean_text)
-#                 for chunk in text_chunks:
-#                     await thread.send(chunk.strip())
-
-#             return thread
-            
-#         except discord.errors.HTTPException as e:
-#             logger.error(f"Thread creation error: {e}")
-#             return None
 class ExplainCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.announcement_channels: List[discord.TextChannel] = []
-        self.pinecone_service = PineconeService(
-            pinecone_api_key=os.getenv("PINECONE_API_KEY"),
-            index_name=os.getenv("PINECONE_INDEX_NAME"),
-            openai_api_key=os.getenv("OPENAI_API_KEY")
-        )
+        self.mongo_service = MongoService()
 
     async def update_announcement_channels(self, guild: discord.Guild):
         """Update cached announcement channels for a given guild."""
@@ -112,6 +78,8 @@ class ExplainCog(commands.Cog):
     @commands.Cog.listener()
     async def on_ready(self):
         """Populate announcement channels cache when the bot is ready."""
+        logger.info("Bot is ready!")
+        print("Bot is ready!")
         for guild in self.bot.guilds:
             await self.update_announcement_channels(guild)
         logger.info("Announcement channels cache initialized.")
@@ -128,7 +96,7 @@ class ExplainCog(commands.Cog):
         """Process new announcements and add them to MongoDB."""
         if message.author.bot:
             return
-
+        logger.debug("oky1")
         if message.channel.name in [channel.name for channel in self.announcement_channels]:
             try:
                 content = (
@@ -136,12 +104,11 @@ class ExplainCog(commands.Cog):
                     " ".join(embed.description or embed.title or '' for embed in message.embeds) or 
                     " ".join(attachment.url for attachment in message.attachments)
                 )
-
+                # content = str(content)
                 if not content.strip():
                     logger.info(f"No processable content in {message.channel.name} by {message.author.name}.")
                     return
 
-                # Debug log to confirm processing
                 logger.info(f"Processing message in {message.channel.name}: {content}")
 
                 metadata = {
@@ -154,58 +121,103 @@ class ExplainCog(commands.Cog):
 
                 logger.info(f"Metadata: {metadata}")
 
-                # Save to Pinecone (implement upsert_announcement if not done)
-                success = self.pinecone_service.upsert_announcement(metadata)
+                # Save to MongoDB with Vector Search
+                success = self.mongo_service.upsert_announcement(metadata)
                 if success:
-                    logger.info(f"Announcement vectorized and stored in Pinecone. Channel: {message.channel.name}")
+                    logger.info(f"Announcement vectorized and stored in MongoDB Vector Search. Channel: {message.channel.name}")
                 else:
-                    logger.error("Failed to store announcement in Pinecone.")
+                    logger.error("Failed to store announcement in MongoDB Vector Search.")
 
-                # Save to MongoDB
-                announcement_collection.insert_one(metadata)
+                # Save to MongoDB (for raw content)
+                # announcement_collection.insert_one(metadata)
+                try:
+                    announcement_collection.insert_one(metadata)
+                    print("METADATA: ")
+                    print(metadata)
+                    # print("METADATA: " + json.dumps(metadata, indent=4))
+                    logger.info("Metadata successfully inserted into MongoDB.")
+                except Exception as e:
+                    logger.error(f"Failed to insert metadata into MongoDB: {e}")
+
                 logger.info(f"Announcement stored in MongoDB. Channel: {message.channel.name}, Author: {message.author.name}")
 
             except Exception as e:
                 logger.error(f"Failed to process announcement: {e}")
 
+    @commands.command()
+    async def search(self, ctx, *, query: str):
+        """Search for announcements using a query."""
+        try:
+            # Generate embedding for the query
+            query_embedding = self.mongo_service.generate_embedding(query)
+
+            # Search announcements based on embedding similarity
+            results = announcement_collection.find({
+                "embedding": {"$near": {"$vector": query_embedding}}
+            }).limit(5)
+
+            if not results:
+                await ctx.send("No announcements found matching your query.")
+                return
+
+            # Send search results
+            for result in results:
+                content = result.get("content", "No content available")
+                url = result.get("url", "")
+                await ctx.send(f"**{content}**\n{url}")
+
+        except Exception as e:
+            logger.error(f"Search failed: {e}")
+            await ctx.send("An error occurred while searching for announcements.")
+                
     @commands.command(name='event')
     async def event(self, ctx, *, user_query: str):
-        """Handle user query and generate response from Pinecone."""
+        """Handle user query and generate response from MongoDB."""
         try:
-            response = self.pinecone_service.generate_response_from_pinecone(user_query)
-            await log_manager.stream_log(ctx.message, response=response)
+            # Generate response from MongoDB vector search
+            logger.debug(f"Event command triggered. Query: {user_query}")
+            response = self.mongo_service.generate_response_from_mongo(user_query)
+            logger.info(f"User query: {user_query}, Response: {response}")
+
 
             if response.get("response"):
                 await ctx.channel.send(response["response"])
             else:
-                await ctx.channel.send("No response generated from Pinecone.")
+                await ctx.channel.send("No relevant announcements found.")
         except Exception as e:
             logger.error(f"Error generating response: {e}")
-            await ctx.channel.send(f"An error occurred: {e}")
+            await ctx.channel.send(f"An error occurred while processing your query: {e}")
 
     @commands.command(name='explain')
     async def explain(self, ctx, *, user_query: str):
         """Generate an explanation for the user query."""
         try:
             username = ctx.author.name
-            explanation = await asyncio.to_thread(generate_response_with_context, user_query, username)
-            explanation = explanation.strip()
-            logger.info(f"Full explanation length: {len(explanation)}")
-            await log_manager.stream_log(ctx.message, explanation)
+            # Retrieve explanations from MongoDB vector search
+            response = self.mongo_service.generate_response_from_mongo(user_query)
 
-            if isinstance(ctx.channel, (discord.TextChannel, discord.ForumChannel)):
-                await DiscordResponseHandler.send_explanation_in_thread(ctx.message, explanation)
+            if response.get("response"):
+                explanation = response["response"].strip()
+
+                # Log the explanation
+                logger.info(f"Explanation generated for user query: {user_query}")
+                logger.info(f"User query: {user_query}, Response: {response}")
+
+                # If explanation is long, send it in a thread
+                if isinstance(ctx.channel, (discord.TextChannel, discord.ForumChannel)):
+                    await DiscordResponseHandler.send_explanation_in_thread(ctx.message, explanation)
+                else:
+                    error_msg = "Threads are not supported in this channel. Please use this command in a text channel."
+                    await ctx.channel.send(error_msg)
+                    logger.warning(error_msg)
             else:
-                error_msg = "Threads are not supported in this channel. Please use this command in a text channel."
-                await ctx.channel.send(error_msg)
-                logger.warning(error_msg)
+                await ctx.channel.send("No explanation could be generated for your query.")
         except discord.errors.HTTPException as http_ex:
-            logger.error(f"Error sending the explanation: {str(http_ex)}")
+            logger.error(f"Error sending explanation: {str(http_ex)}")
             await ctx.channel.send(f"Error: {http_ex}")
         except Exception as e:
-            logger.error(f"Error: {e}")
-            await ctx.channel.send(f"An error occurred: {e}")
-
+            logger.error(f"Error generating explanation: {e}")
+            await ctx.channel.send(f"An error occurred while processing your query: {e}")
 
 async def setup(bot):
     """Setup function to add the Explain Cog to the bot."""
