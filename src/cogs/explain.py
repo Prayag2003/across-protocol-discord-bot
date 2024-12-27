@@ -193,32 +193,42 @@ class ExplainCog(commands.Cog):
         """Generate an explanation for the user query."""
         try:
             username = ctx.author.name
-            # Retrieve explanations from MongoDB vector search
-            response = self.mongo_service.generate_response_from_mongo(user_query)
+            # Generate the explanation
+            explanation = await asyncio.to_thread(generate_response_with_context, user_query, username)
+            explanation = explanation.strip()
 
-            if response.get("response"):
-                explanation = response["response"].strip()
+            # Log the explanation length
+            logger.info(f"Full explanation length: {len(explanation)}")
+            logger.info(f"Message: {ctx.message}, Explanation: {explanation}")
 
-                # Log the explanation
-                logger.info(f"Explanation generated for user query: {user_query}")
-                logger.info(f"User query: {user_query}, Response: {response}")
-
-                # If explanation is long, send it in a thread
+            # Handle long messages
+            if len(explanation) > 2000:
+                explanation_parts = [explanation[i:i+2000] for i in range(0, len(explanation), 2000)]
+                if isinstance(ctx.channel, (discord.TextChannel, discord.ForumChannel)):
+                    thread = await ctx.channel.create_thread(
+                        name=f"Explanation: {ctx.message.content[:50]}",
+                        message=ctx.message
+                    )
+                    for part in explanation_parts:
+                        await thread.send(part)
+                else:
+                    error_msg = "Threads are not supported in this channel. Please use this command in a text channel."
+                    await ctx.channel.send(error_msg)
+                    logger.warning(error_msg)
+            else:
                 if isinstance(ctx.channel, (discord.TextChannel, discord.ForumChannel)):
                     await DiscordResponseHandler.send_explanation_in_thread(ctx.message, explanation)
                 else:
                     error_msg = "Threads are not supported in this channel. Please use this command in a text channel."
                     await ctx.channel.send(error_msg)
                     logger.warning(error_msg)
-            else:
-                await ctx.channel.send("No explanation could be generated for your query.")
         except discord.errors.HTTPException as http_ex:
-            logger.error(f"Error sending explanation: {str(http_ex)}")
+            logger.error(f"Error sending the explanation: {str(http_ex)}")
             await ctx.channel.send(f"Error: {http_ex}")
         except Exception as e:
-            logger.error(f"Error generating explanation: {e}")
-            await ctx.channel.send(f"An error occurred while processing your query: {e}")
-
+            logger.error(f"Error: {e}")
+            await ctx.channel.send(f"An error occurred: {e}")
+            
 async def setup(bot):
     """Setup function to add the Explain Cog to the bot."""
     await bot.add_cog(ExplainCog(bot))
