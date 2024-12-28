@@ -1,7 +1,7 @@
 import json
 from loguru import logger
 from bs4 import BeautifulSoup
-
+import shutil
 def load_knowledge_base(file_path):
     """Load the knowledge base from a JSON file."""
     with open(file_path, 'r', encoding='utf-8') as f:
@@ -52,8 +52,15 @@ def process_knowledge_base(knowledge_base, redundant_data):
 
 def save_processed_data(processed_data, output_file):
     """Save the processed data to a JSON file."""
-    with open(output_file, 'w', encoding='utf-8') as f:
+    temp_output_file = f"{output_file}.tmp"  # Temporary file
+    
+    # Write to temporary file first
+    with open(temp_output_file, 'w', encoding='utf-8') as f:
         json.dump(processed_data, f, ensure_ascii=False, indent=4)
+
+    # Atomically rename the temporary file to the final file
+    shutil.move(temp_output_file, output_file)
+    logger.info(f"Processed data saved to {output_file}")
 
 def process_and_save_knowledge_base(input_file, output_file, redundant_data):
     """Load, process, and save the knowledge base for a specific version."""

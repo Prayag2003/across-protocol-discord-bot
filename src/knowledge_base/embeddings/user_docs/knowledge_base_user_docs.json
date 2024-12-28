@@ -11,7 +11,7 @@
             "Across+, is a chain abstraction tool that utilizes cross-chain bridge hooks to fulfill user intents. Across+ allows developers to integrate bridge + action(s) bundles at the dapp level to promote onboarding and abstract the bridging process away from end users.",
             "Across Settlement, is a settlement layer for all cross-chain intent order flow. Its optimistic design, which defers verification, focuses on gas optimization to significantly reduce cross-chain settlement costs for protocols and, ultimately, end users.",
             "As the multichain economy continues to evolve, intents-based settlement is the key to solving interoperability and Across is at the core of its execution.",
-            "Last updated 6 months ago"
+            "Last updated 8 months ago"
         ],
         "lists": [
             "About\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History",
@@ -35,7 +35,7 @@
             "Across+, is a chain abstraction tool that utilizes cross-chain bridge hooks to fulfill user intents. Across+ allows developers to integrate bridge + action(s) bundles at the dapp level to promote onboarding and abstract the bridging process away from end users.",
             "Across Settlement, is a settlement layer for all cross-chain intent order flow. Its optimistic design, which defers verification, focuses on gas optimization to significantly reduce cross-chain settlement costs for protocols and, ultimately, end users.",
             "As the multichain economy continues to evolve, intents-based settlement is the key to solving interoperability and Across is at the core of its execution.",
-            "Last updated 6 months ago"
+            "Last updated 8 months ago"
         ],
         "lists": [
             "About\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History",
@@ -53,13 +53,13 @@
             "Looking for something else? Get in touch"
         ],
         "paragraphs": [
-            "Across is an interoperability protocol powered by intents. It is the first cross-chain intents protocol in production today, enabling the fastest and lowest-cost way to transfer value without security tradeoffs.",
+            "Across is an interoperability protocol powered by intents. It is the first cross-chain intents protocol in production today, enabling the fastest and lowest-cost way to transfer value with better security tradeoffs vs. traditional bridge designs. ",
             "Across can be easily integrated via our easy to use REST API into any application requiring instant, low cost cross-chain value transfer. Let users easily onboard assets without leaving your app. ",
             "Across can also be integrated in your application to abstract bridging completely, enabling users to directly interact with your app from any chain. ",
             "Across Settlement is the only production-ready, modular settlement layer built to facilitate cross-chain intents. Powers use cases that require customization beyond the Across Core offering, like cross-chain token swaps, new request for quote auction designs and more. ",
             "Join the growing network of independent relayers (a.k.a solvers, fillers, market makers) fulfilling intent order flow on Across. Earn up to 100% APY. ",
             "",
-            "Last updated 2 months ago"
+            "Last updated 25 days ago"
         ],
         "lists": [],
         "tables": [],
@@ -72,7 +72,7 @@
         ],
         "paragraphs": [
             "Below is an overview of how a bridge transfer on Across works from start to finish.",
-            "Last updated 8 months ago",
+            "Last updated 10 months ago",
             "A user that would like to move funds from chain A to chain B deposits funds into a Spoke Pool on chain A with instructions about where they would like their funds to wind up and the fee that they are willing to pay.",
             "After the relayer has performed the relay, a proof of that relay and the validity of the original deposit is submitted to the optimistic oracle (OO) and the relayer is reimbursed once this information has been verified by the OO.",
             "The relayer's reimbursement is taken out of a single liquidity pool on Ethereum Mainnet escrowed in a contract called the Hub Pool. Liquidity providers (\"LP's\") to this pool also earn a fee per transfer that is assessed on the user's deposited amount.",
@@ -98,7 +98,7 @@
             "Across+, is a chain abstraction tool that utilizes cross-chain bridge hooks to fulfill user intents. Across+ allows developers to integrate bridge + action(s) bundles at the dapp level to promote onboarding and abstract the bridging process away from end users.",
             "Across Settlement, is a settlement layer for all cross-chain intent order flow. Its optimistic design, which defers verification, focuses on gas optimization to significantly reduce cross-chain settlement costs for protocols and, ultimately, end users.",
             "As the multichain economy continues to evolve, intents-based settlement is the key to solving interoperability and Across is at the core of its execution.",
-            "Last updated 6 months ago"
+            "Last updated 8 months ago"
         ],
         "lists": [
             "About\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History",
@@ -118,6 +118,7 @@
         ],
         "paragraphs": [
             "Please scroll to the bottom of this page for our official bridging tutorial video or follow the written steps provided below.",
+            "Last updated 8 months ago",
             "Step 1: Go to across.to/bridge",
             "Step 2: Connect your wallet ",
             "Step 3: Enter transfer details such as: Origin chain, destination chain, token and amount",
@@ -125,8 +126,7 @@
             "Step 5: Approve the transaction in your wallet",
             "Step 6: Verify transaction details, or monitor its progress, at across.to/transactions",
             "",
-            "",
-            "Last updated 6 months ago"
+            ""
         ],
         "lists": [
             "About\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History",
@@ -191,7 +191,7 @@
             "",
             "",
             "",
-            "Last updated 6 months ago"
+            "Last updated 8 months ago"
         ],
         "lists": [
             "About\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History",
@@ -215,7 +215,7 @@
             "You may review your accumulated rewards in the Rewards Dashboard. If you see accumulated rewards that are unclaimable, please note that Across pays out rewards monthly after the 15th* of each month. Therefore, if you have accrued awards in December, for example, your $ACX rewards become claimable after January 15th.",
             "*Please note that \"after the 15th\" does not guarantee that rewards are available on the 16th. Rewards may become available any time after the 15th of each month.",
             "",
-            "Last updated 6 months ago"
+            "Last updated 8 months ago"
         ],
         "lists": [
             "About\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History",
@@ -242,6 +242,7 @@
         ],
         "paragraphs": [
             "Across Reward Locking Program is a novel DeFi mechanism to further incentivize bridge LPs. Scroll down to the bottom for instructions on how to get started.",
+            "Last updated 5 months ago",
             "Across is the first protocol to implement reward locking. It is used to further incentivize bridge liquidity positions by incrementally increasing reward APY over time for users who stake capital. For Across’ reward locking programming, an LP’s multiplier starts at 1x on day zero and can grow linearly to a maximum of 2x after capital has been staked for 100+ days.",
             "Reward multipliers reset to 1x once rewards have been claimed or liquidity is unstaked.",
             "In September 2023, a Snapshot proposal was passed to increase liquidity pool APY % by 50% and reduce the original multipler number of 3x to 2x. The following emissions changes were implemented:",
@@ -285,8 +286,7 @@
             "Step 4: At the bottom of the screen, click the \"Caim Rewards\" button",
             "Step 5: Approve the transaction in your wallet",
             "Step 6: To review your liquidity positions go to across.to/rewards",
-            "",
-            "Last updated 3 months ago"
+            ""
         ],
         "lists": [
             "About\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History",
@@ -309,7 +309,7 @@
             "On the Transactions tab, you can view the details of bridge transfers you've made on Across or via Across on aggregators.",
             "Check the status of your bridge transactions by connecting your wallet at across.to/transactions. Your personal transactions will appear under the \"Personal\" tab, while all transfers on Across appear under the \"All\" tab.",
             "",
-            "Last updated 6 months ago"
+            "Last updated 8 months ago"
         ],
         "lists": [
             "About\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History",
@@ -333,7 +333,7 @@
             "Dataworker"
         ],
         "paragraphs": [
-            "Last updated 6 months ago",
+            "Last updated 8 months ago",
             "When a user submits an order to Across, for example to move assets from chain A to chain B, they deposit funds into a Spoke Pool on chain A, with instructions about where they would like their funds to wind up and the fee that they are willing to pay.",
             "After the relayer has performed the relay, a proof of that relay and the validity of the original deposit is submitted to the optimistic oracle (OO) and the relayer is reimbursed once this information has been verified by the OO.",
             "The relayer's reimbursement is taken out of a single liquidity pool on Ethereum Mainnet escrowed in a contract called the Hub Pool. Liquidity providers (\"LP's\") to this pool also earn a fee per transfer that is assessed on the user's deposited amount.",
@@ -393,7 +393,7 @@
             "At Across, the Dataworker proposes to the optimistic oracle batches of valid refunds that Across should pay out as well as reallocations of LP capital that Across should make to optimize for LP capital efficiency.",
             "Canonical Token Maximalism ",
             "Across exclusively transfers canonical (genuine) assets, never minted representative assets, which introduce trust assumptions and can put users funds at risk. When users send funds cross-chain via Across, relayers use their own capital to front the users assets on the destination chain and wait to get repaid by the user's original funds on via the canonical (or official) bridge.",
-            "Last updated 6 months ago"
+            "Last updated 8 months ago"
         ],
         "lists": [
             "About\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History",
@@ -415,7 +415,7 @@
             "Across V3 introduced a fee optimization that will further cut costs, by encouraging relayers to accept repayment on a chain other than the destination chain. ",
             "You can think of the relayer competition as functioning like an auction. If the auction expires without a clearing price, then the Across system falls back to the LP capital to fulfill the deposit. This process ensures that depositors have the best chance to bridge their funds cheaply and quickly without sacrificing guaranteed execution.",
             "In Across V3, these prices will become more competitive when RFQ front end systems are in place.",
-            "Last updated 6 months ago"
+            "Last updated 8 months ago"
         ],
         "lists": [
             "About\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History",
@@ -455,7 +455,7 @@
             "In our optimistic approach, the relayer fulfills users' deposits, which can be thought of as providing a loan to the user in exchange for a small fee. The relayer is fronting the money to the user because it trusts UMA’s optimistic oracle. Across differs in this sense as many other chains require multiple sign-offs, blocking the relayer from quickly performing the relay. Nothing is blocking our relayer.",
             "By functioning optimistically relayers relay instantly, and are then refunded after a 2-hour challenge period. During this two-hour challenge period, the user is now out of the picture - they have already received their funds from the relayer. The relayer is trading places with the user in the sense that they’re willing to wait for the challenge window to complete in exchange for a small fee paid by the user. ",
             "If something is disputed during the challenge period, the user does not endure any penalties. The user is completely out of the picture and does not accept any risk in this sense when bridging with Across, only the relayer does.",
-            "Last updated 6 months ago"
+            "Last updated 8 months ago"
         ],
         "lists": [
             "About\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History",
@@ -563,7 +563,7 @@
             "WBTC",
             "ETH/WETH",
             "USDzC",
-            "Last updated 9 days ago"
+            "Last updated 2 months ago"
         ],
         "lists": [
             "About\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History",
@@ -600,7 +600,7 @@
             "Governance token power was “turned on” at token launch (November 2022). The lifecycle of a proposal includes ideation, discussion, proposal, feedback, voting and execution. We use Forum and Snapshot as our governance platforms, along with oSnap, a tool for making on-chain transactions based on off-chain voting decisions. oSnap uses Snapshot and Safe to execute the outcomes of DAO governance votes in a decentralized manner that requires no intervention by privileged signers.",
             "To learn more about how oSnap is used by Across Protocol, please refer to this article.",
             "Token addresses are listed here.",
-            "Last updated 2 days ago"
+            "Last updated 2 months ago"
         ],
         "lists": [
             "About\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History",
@@ -641,7 +641,7 @@
             "~20,000 ACX per day for Across ACX LP tokens",
             "These unallocated tokens will remain in the Across DAO Treasury.",
             "",
-            "Last updated 6 months ago"
+            "Last updated 8 months ago"
         ],
         "lists": [
             "About\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History",
@@ -685,7 +685,7 @@
             "Monitoring Dashboard - Every necessary metric the AEC uses to make adjustments",
             "The AEC will set and manage a long term plan for ACX emissions to ensure the Across DAO does not deplete its treasury too quickly and has assets for future growth and other initiatives. ",
             "Currently, the AEC is committed to not spending more than 400MM ACX (40% of all supply) in LP incentives and will ensure that this allocation will not be depleted before the end of 2028.",
-            "Last updated 6 months ago"
+            "Last updated 8 months ago"
         ],
         "lists": [
             "About\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History",
@@ -696,30 +696,7 @@
             "Across pool utilization - LPs should be rewarded for how much demand there is for an asset for transfers. The AEC will track the 7-day average pool utilization of each asset. \nCompeting yield - LPs should be rewarded a fair yield in comparison to yields paid by competing protocols. The AEC can track a Yield Index for each asset that is computed as a 7-day average of the TVL weighted yield of pools on Stargate, Hop, and Synapse.",
             "Change log\n - History of AEC emissions adjustments\nMonitoring Dashboard\n - Every necessary metric the AEC uses to make adjustments"
         ],
-        "tables": [
-            [
-                [
-                    "Across Pool Utilization",
-                    "Decrease emissions by 25% if total Base LP APY vs Yield Index is",
-                    "Increase emissions by 25% if total Base LP APY vs Yield Index is"
-                ],
-                [
-                    "0 - 40%",
-                    "+25%",
-                    "-75%"
-                ],
-                [
-                    "40 - 70%",
-                    "+50%",
-                    "-50%"
-                ],
-                [
-                    "70 - 100%",
-                    "+100%",
-                    "-25%"
-                ]
-            ]
-        ],
+        "tables": [],
         "code_blocks": []
     },
     "https://docs.across.to/user-docs/governance/governance-model": {
@@ -771,7 +748,7 @@
             "Staked ACX Rewards",
             "Unclaimed rewards accrued for all staked LP tokens within Across",
             "Custom strategy for staked voting can be seen here",
-            "Last updated 6 months ago"
+            "Last updated 8 months ago"
         ],
         "lists": [
             "About\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History",
@@ -808,7 +785,7 @@
             "Step 4: Results"
         ],
         "paragraphs": [
-            "Last updated 4 days ago",
+            "Last updated 2 months ago",
             "Treasury Funding",
             "Governance Updates",
             "Committee implementation or replacement",
@@ -864,7 +841,7 @@
             "The Risk Labs foundation supports a team working on Across, full-time. Risk Labs will work alongside the DAO to iterate on the design of the bridge and drive adoption.",
             "Join the Across community in Discord, bridge with Across, LP in our pools, and participate in governance!",
             "If you have questions or want to connect with the Across community, join our Discord or follow us on Twitter. Our dev support currently operates through Discord. ",
-            "Last updated 2 days ago"
+            "Last updated 2 months ago"
         ],
         "lists": [
             "About\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History",
@@ -893,7 +870,7 @@
             "Audit report",
             "Across V3 audit report",
             "Across Protocol Statistics on Dune by unionepro",
-            "Last updated 6 months ago"
+            "Last updated 8 months ago"
         ],
         "lists": [
             "About\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History",
@@ -921,7 +898,7 @@
             "Add v2 liquidity"
         ],
         "paragraphs": [
-            "Last updated 6 months ago",
+            "Last updated 8 months ago",
             "Please review these instructions to migrate your liquidity from v1->v2.",
             "To migrate from Across v1 to Across v2, you'll need to move your liquidity from the v1 pool to the v2 pool. This can be done by following the steps below:",
             "Go to v1.across.to and switch to the pool tab",
@@ -954,7 +931,7 @@
         ],
         "paragraphs": [
             "View and download different versions of the Across logo. The full Across Logotype and the Across Symbol are available in both SVG and PNG formats.",
-            "Last updated 2 months ago",
+            "Last updated 4 months ago",
             ""
         ],
         "lists": [
@@ -968,7 +945,7 @@
         "code_blocks": []
     },
     "https://www.gitbook.com/?utm_source=content&utm_medium=trademark&utm_campaign=o33kX1T6RRp4inOcEH1d": {
-        "title": "GitBook",
+        "title": "GitBook â Build product documentation your users will love",
         "headers": [
             "Product documentationyour users will love",
             "Publish unbeatable documentation",
@@ -983,8 +960,7 @@
             "Get started for free"
         ],
         "paragraphs": [
-            "New in GitBook: Revamped Documentation",
-            "Register for the webinar",
+            "Docs",
             "",
             "",
             "",
@@ -995,11 +971,6 @@
             "",
             "",
             "We're hiring!",
-            "New in GitBook: Revamped Documentation",
-            "Register for the webinar",
-            "",
-            "",
-            "",
             "Forget building your own custom docs platform. With GitBook you get beautiful documentation for your users, and a branch-based Git workflow for your team.",
             "Sign up with GitHub",
             "Home Hero GitHub CTA",
@@ -1058,7 +1029,7 @@
             "Learn More",
             "open_internal_docs_website",
             "Git Sync",
-            "Sync your docs with a GitHub or GitLab repository and everyone can contribute to your docs, wherever they prefer to work. So your technical writers can use WYSIWYG editor, while engineers add to your docs directly in Git. And everything stays in sync, with feedback and reviews to guarantee quality.",
+            "Sync your docs with a GitHub or GitLab repository and everyone can contribute to your docs, wherever they prefer to work. So your technical writers can use a WYSIWYG editor, while engineers add to your docs directly in Git. And everything stays in sync, with feedback and reviews to guarantee quality.",
             "Discover Git Sync",
             "Home GitSync Block",
             "Tell me more",
@@ -1226,6 +1197,10 @@
             "",
             "",
             "",
+            "Customer showcase",
+            "",
+            "",
+            "",
             "Product tour",
             "",
             "",
@@ -1250,7 +1225,11 @@
             "",
             "",
             "",
-            "Docs",
+            "GitBook product docs",
+            "",
+            "",
+            "",
+            "GitBook developer docs",
             "",
             "",
             "",
@@ -1287,6 +1266,14 @@
             "",
             "",
             "Contact and support",
+            "",
+            "",
+            "",
+            "Terms of service",
+            "",
+            "",
+            "",
+            "Privacy policy",
             "",
             "",
             "",
@@ -1311,6 +1298,10 @@
             "",
             "",
             "",
+            "Customer showcase",
+            "",
+            "",
+            "",
             "Product tour",
             "",
             "",
@@ -1335,7 +1326,11 @@
             "",
             "",
             "",
-            "Docs",
+            "GitBook product docs",
+            "",
+            "",
+            "",
+            "GitBook developer docs",
             "",
             "",
             "",
@@ -1372,6 +1367,14 @@
             "",
             "",
             "Contact and support",
+            "",
+            "",
+            "",
+            "Terms of service",
+            "",
+            "",
+            "",
+            "Privacy policy",
             "",
             "",
             "",
@@ -1396,6 +1399,10 @@
             "",
             "",
             "",
+            "Customer showcase",
+            "",
+            "",
+            "",
             "Product tour",
             "",
             "",
@@ -1420,7 +1427,11 @@
             "",
             "",
             "",
-            "Docs",
+            "GitBook product docs",
+            "",
+            "",
+            "",
+            "GitBook developer docs",
             "",
             "",
             "",
@@ -1460,17 +1471,15 @@
             "",
             "",
             "",
-            "Â© 2024 Copyright GitBook INC. 440 N Barranca Ave #7171, Covina, CA 91723, USA. EIN: 320502699",
-            "New in GitBook: Revamped Documentation",
-            "Register for the webinar",
+            "Terms of service",
             "",
             "",
             "",
-            "New in GitBook: Revamped Documentation",
-            "Register for the webinar",
+            "Privacy policy",
             "",
             "",
-            ""
+            "",
+            "Â© 2024 Copyright GitBook INC. 440 N Barranca Ave #7171, Covina, CA 91723, USA. EIN: 320502699"
         ],
         "lists": [
             "",
@@ -1482,6 +1491,20 @@
             "",
             "",
             ""
+        ],
+        "tables": [],
+        "code_blocks": []
+    },
+    "https://docs.across.to/user-docs/how-to-use-across": {
+        "title": "About | Across Docs",
+        "headers": [],
+        "paragraphs": [],
+        "lists": [
+            "About\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History",
+            "Reward Locking",
+            "Token Overview\nInitial Allocations\nACX Emissions Committee",
+            "Governance Model\nProposals and Voting",
+            "FAQ\nSupport Links\nMigrating from V1\nAcross Brand Assets"
         ],
         "tables": [],
         "code_blocks": []

@@ -1,5 +1,6 @@
 import os
 import json
+import shutil
 from dotenv import load_dotenv
 from loguru import logger
 from pymongo import MongoClient
@@ -22,18 +23,30 @@ for file_path in file_paths:
     if os.path.exists(file_path):
         with open(file_path, 'r', encoding='utf-8') as file:
             data = json.load(file)
-            
             if isinstance(data, list):
                 merged_data.extend(data)
             else:
                 merged_data.append(data)
 
 merged_file_path = 'knowledge_base/embeddings/merged_knowledge_base_embeddings.json'
-with open(merged_file_path, 'w', encoding='utf-8') as merged_file:
-    json.dump(merged_data, merged_file, indent=4, ensure_ascii=False)
+temp_file_path = merged_file_path + ".tmp"
 
-logger.info("Data from all files has been merged successfully into 'merged_knowledge_base_embeddings.json'")
+# Write to temporary file
+try:
+    with open(temp_file_path, 'w', encoding='utf-8') as temp_file:
+        json.dump(merged_data, temp_file, indent=4, ensure_ascii=False)
+    logger.info(f"Temporary file '{temp_file_path}' created successfully.")
+    
+    # Atomically replace the target file with the temporary file
+    shutil.move(temp_file_path, merged_file_path)
+    logger.info(f"Temporary file '{temp_file_path}' renamed to '{merged_file_path}'.")
+except Exception as e:
+    logger.error(f"Failed to write or rename file: {e}")
+    if os.path.exists(temp_file_path):
+        os.remove(temp_file_path)
+        logger.info(f"Cleaned up temporary file '{temp_file_path}'.")
 
+# Update MongoDB
 collection.delete_many({})
 
 try:
