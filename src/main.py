@@ -34,11 +34,13 @@ def run_execute_files():
         
 def schedule_execute_files():
     """
-    Schedules the execute_files.py script to run every 30 minutes.
+    Schedules the execute_files.py script to run every 30 days.
     """
-    run_execute_files()
+    # run_execute_files() // just done for the first time for t = 0 
+    # scheduler.add_job(run_execute_files, IntervalTrigger(minutes=15))
+    
     scheduler = AsyncIOScheduler()
-    scheduler.add_job(run_execute_files, IntervalTrigger(minutes=15))
+    scheduler.add_job(run_execute_files, IntervalTrigger(days=30))
     scheduler.start()
     logger.info("Scheduled execute_files.py to run every 30 minutes.")
     
@@ -57,7 +59,7 @@ async def main():
     """
 
     # Start the execute_files.py script without waiting for it
-    schedule_execute_files()
+    # schedule_execute_files()
 
     # Create bot instance
     bot = create_bot()
@@ -72,7 +74,7 @@ async def main():
     await bot.load_extension('cogs.help_cog')
 
     # Reinforcement learning pipeline
-    # asyncio.create_task(setup_rlhf())
+    asyncio.create_task(setup_rlhf())
     
     # Run bot
     try:
