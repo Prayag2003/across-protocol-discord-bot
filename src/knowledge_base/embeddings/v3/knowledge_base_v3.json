@@ -5,13 +5,13 @@
             "Looking for something else? Get in touch"
         ],
         "paragraphs": [
-            "Across is an interoperability protocol powered by intents. It is the first cross-chain intents protocol in production today, enabling the fastest and lowest-cost way to transfer value without security tradeoffs.",
+            "Across is an interoperability protocol powered by intents. It is the first cross-chain intents protocol in production today, enabling the fastest and lowest-cost way to transfer value with better security tradeoffs vs. traditional bridge designs. ",
             "Across can be easily integrated via our easy to use REST API into any application requiring instant, low cost cross-chain value transfer. Let users easily onboard assets without leaving your app. ",
             "Across can also be integrated in your application to abstract bridging completely, enabling users to directly interact with your app from any chain. ",
             "Across Settlement is the only production-ready, modular settlement layer built to facilitate cross-chain intents. Powers use cases that require customization beyond the Across Core offering, like cross-chain token swaps, new request for quote auction designs and more. ",
             "Join the growing network of independent relayers (a.k.a solvers, fillers, market makers) fulfilling intent order flow on Across. Earn up to 100% APY. ",
             "",
-            "Last updated 2 months ago"
+            "Last updated 25 days ago"
         ],
         "lists": [],
         "tables": [],
@@ -23,13 +23,13 @@
             "Looking for something else? Get in touch"
         ],
         "paragraphs": [
-            "Across is an interoperability protocol powered by intents. It is the first cross-chain intents protocol in production today, enabling the fastest and lowest-cost way to transfer value without security tradeoffs.",
+            "Across is an interoperability protocol powered by intents. It is the first cross-chain intents protocol in production today, enabling the fastest and lowest-cost way to transfer value with better security tradeoffs vs. traditional bridge designs. ",
             "Across can be easily integrated via our easy to use REST API into any application requiring instant, low cost cross-chain value transfer. Let users easily onboard assets without leaving your app. ",
             "Across can also be integrated in your application to abstract bridging completely, enabling users to directly interact with your app from any chain. ",
             "Across Settlement is the only production-ready, modular settlement layer built to facilitate cross-chain intents. Powers use cases that require customization beyond the Across Core offering, like cross-chain token swaps, new request for quote auction designs and more. ",
             "Join the growing network of independent relayers (a.k.a solvers, fillers, market makers) fulfilling intent order flow on Across. Earn up to 100% APY. ",
             "",
-            "Last updated 2 months ago"
+            "Last updated 25 days ago"
         ],
         "lists": [],
         "tables": [],
@@ -42,7 +42,7 @@
         ],
         "paragraphs": [
             "Below is an overview of how a bridge transfer on Across works from start to finish.",
-            "Last updated 8 months ago",
+            "Last updated 10 months ago",
             "A user that would like to move funds from chain A to chain B deposits funds into a Spoke Pool on chain A with instructions about where they would like their funds to wind up and the fee that they are willing to pay.",
             "After the relayer has performed the relay, a proof of that relay and the validity of the original deposit is submitted to the optimistic oracle (OO) and the relayer is reimbursed once this information has been verified by the OO.",
             "The relayer's reimbursement is taken out of a single liquidity pool on Ethereum Mainnet escrowed in a contract called the Hub Pool. Liquidity providers (\"LP's\") to this pool also earn a fee per transfer that is assessed on the user's deposited amount.",
@@ -68,7 +68,7 @@
             "Across+, is a chain abstraction tool that utilizes cross-chain bridge hooks to fulfill user intents. Across+ allows developers to integrate bridge + action(s) bundles at the dapp level to promote onboarding and abstract the bridging process away from end users.",
             "Across Settlement, is a settlement layer for all cross-chain intent order flow. Its optimistic design, which defers verification, focuses on gas optimization to significantly reduce cross-chain settlement costs for protocols and, ultimately, end users.",
             "As the multichain economy continues to evolve, intents-based settlement is the key to solving interoperability and Across is at the core of its execution.",
-            "Last updated 6 months ago"
+            "Last updated 8 months ago"
         ],
         "lists": [
             "About\nBridging\nProviding Bridge Liquidity\nProtocol Rewards\nReward Locking\nTransaction History",
@@ -90,7 +90,7 @@
             "Across' Intents Architecture"
         ],
         "paragraphs": [
-            "Last updated 2 months ago",
+            "Last updated 4 months ago",
             "Across is an interoperability protocol powered by intents. It is the only cross-chain intents protocol in production today, enabling the fastest and lowest-cost way to transfer value without security tradeoffs. Before diving into the technical details, its critical to understand why and where existing interoperability solutions fall short and why Across' intents-based architecture is needed. ",
             "The arrival of rollups and L2s scaled Ethereum but damaged end user UX in every way except price. Developers building on L2s must choose which silo they want to build on. Users must become experts in the interoperability tooling landscape simply to use dapps. This fragmentation will continue as more rollups and app-chains come online.",
             "Across' thesis is that an intents-based design paradigm is the solution to the interoperability challenges developers and users face today.",
@@ -123,8 +123,7 @@
         "title": "Technical FAQ | Across Docs",
         "headers": [],
         "paragraphs": [
-            "Not yet, working on it!",
-            "We recommend using the API for the easiest way to query suggested deposit params.",
+            "We recommend using the App SDK for the easiest way to integrate Across into your dApp. ",
             "Depending on the context, Across will sometimes send a user ETH and sometimes send a user WETH.",
             "If the input asset is ETH, and the recipient is an EOA, the EOA will receive ETH",
             "If the input asset is ETH, and the recipient is a contract, the contract will receive WETH (not ETH)",
@@ -132,7 +131,7 @@
             "If the input asset is WETH, and the recipient is a contract, the contract will receive WETH",
             "",
             "To deposit ETH, or the native token for a network, set msg.value = inputAmount. To deposit WETH, set msg.value = 0. When depositing ETH or WETH, the inputAmount should be the same and the inputToken should be the WETH address for the current chain. ",
-            "Last updated 14 days ago"
+            "Last updated 1 month ago"
         ],
         "lists": [
             "If the input asset is ETH, and the recipient is an EOA, \nthe EOA will receive ETH\nIf the input asset is ETH, and the recipient is a contract, \nthe contract will receive WETH (not ETH)\nIf the input asset is WETH, and the recipient is an EOA, \nthe EOA will receive ETH (not WETH)\nIf the input asset is WETH, and the recipient is a contract, \nthe contract will receive WETH"
@@ -201,7 +200,7 @@
             "Slow fills: Slow fills will be requested via a new function requestSlowFill. Slow fills can only be requested on deposits where the inputToken and outputToken are \"equivalent\". Slow fills will pay out the inputAmount * realizedLpFeePct, which will be set as the slow fill's updatedOutputAmount",
             "The deposit interface will not change. The function will however emit a new event V3FundsDeposited as outlined in Across V3 Events. The fillDeadline will be set to MAX_UINT, meaning that the deposit will never expire and be refunded to the origin chain. The outputToken will be set to 0x0 to signal to depositors that the \"equivalent\" output token should be replaced at fill time. The exclusivityDeadline and exclusiveRelayer will be set to 0 and 0x0 respectively suggesting that there is no exclusivity period. Finally, the outputAmount will be equal to  inputAmount * (1 - totalRelayFeePct). You can read more about setting this output amount value here.",
             "To speed up a deposit, a new function will need to be used. Previously this was named speedUpDeposit and the new function to speed up a V3FundsDeposited event will be speedUpV3Deposit.",
-            "Last updated 6 months ago"
+            "Last updated 8 months ago"
         ],
         "lists": [
             "Updated from \nacross.to/api\n to \napp.across.to/api",
@@ -295,7 +294,7 @@
             "To upgrade any chain from supporting Bridged USDC to Native USDC, USDC deposits to and from that chain will have to be paused temporarily. ",
             "Next, all Bridged USDC should be returned to the HubPool. The Across owner account will then need to upgrade the HubPool's PoolRebalanceRoutes to point from Bridged to Native USDC for the given chain. The chain's SpokePool and L1 Adapter will also need to be upgraded by the owner to send USDC over CCTP using an adapter like this.",
             "Once all contracts and pool rebalance routes are upgraded, deposits can be resumed for the selected chain. After this point, the only type of USDC to be held on the chain's SpokePool will be Native USDC.",
-            "Last updated 6 months ago"
+            "Last updated 8 months ago"
         ],
         "lists": [
             "On Ethereum, Polygon, Optimism, Arbitrum, Base:\nNative USDC to Bridged USDC cross-chain swaps\nNative USDC to Native USDC cross-chain transfers",
@@ -313,7 +312,7 @@
             "This is a feature highlighted in the Across V3's depositV3 function but it is currently not supported in the example Relayer implementation. Upon the CCTP migration, deposits will begin to be sent with inputToken = USDC and outputToken = Bridged USDC. ",
             "Eventually, Across will encourage depositors to take advantage of this feature and send other types of cross chain token swaps, for example setting input to USDC and output to WETH. Therefore, relayers should update their code to handle the case when the input USDC (Native) is not the same as the output USDC (Bridged) with an eye towards generalizing the code to handle arbitrary output tokens. But, relayer implementations can choose to temporarily hardcode this specific USDC to Bridged USDC deposit route.",
             "Note, the inputToken must always be a token that Across natively supports. This is why Bridged USDC cannot be an inputToken. However, outputToken can technically be any ERC20 that exists on the destination chain.",
-            "Last updated 6 months ago"
+            "Last updated 8 months ago"
         ],
         "lists": [],
         "tables": [],
@@ -333,7 +332,7 @@
             "For the forseeable future, the fees returned for routes with Native USDC as the output token and Bridged USDC as the output token will be equivalent. However, this can change so we encourage all API users to migrate as soon as possible to using the new input and output parameters instead of just setting token.",
             "Most API users today query limits and fees before submitting a deposit() function transaction directly to the Across contracts. This function only allows the caller to specify a single originToken address, which means that this function will not support Native USDC to Bridged USDC deposits. Users who want access to the new Native USDC to Bridged USDC routes should instead call depositV3() which allows the caller to specify inputToken and outputToken parameters. We encourage all direct smart contract users to eventually migrate to this new deposit function to get access to cross chain token swaps when they go live. You can think of Native USDC to Bridged USDC as the first cross chain token swap supported by Across. Note that token swaps are currently allowed at the smart contract level but most relayers will not support swaps yet. However, relayers will begin to support the Native USDC to Bridged USDC route upon CCTP migration.",
             "Deposit routes with Bridged USDC as the origin token will no longer be supported at the API and SpokePool contract level. We acknowledge that this might remove a popular route for some partners. We are making this change because we believe that most volume will eventually migrate to Native USDC bridging and some partners already implement origin token swapping before submitting an Across Bridge. For example, some partners already swap Native USDC to Bridged USDC before submitting an Across bridge. We hope that this infrastructure can be reused to swap Bridged USDC into Native USDC before submitting an Across Bridge, but we also acknowledge that this won't always be possible. Therefore, we are deploying the following SwapAndBridge contract to assist with swapping Bridged USDC to Native USDC before submitting an Across deposit. These contracts will be used by our own frontend dApp to continue to support routes with Bridged USDC as the origin token and they have been audited already. We understood that most partners will have to upgrade smart contracts to take advantage of this new flow but we anticipate most partners already either implement origin chain swapping or will be happy to replace Bridged USDC volume with Native USDC volume. If you have any issues or questions about this migration please reach out directly and will work with you to come up with a solution.",
-            "Last updated 6 months ago"
+            "Last updated 8 months ago"
         ],
         "lists": [
             "Following migration to CCTP on Polygon, the above route will replace the \noriginToken\n Bridged USDC address with the Native USDC address on Polygon.",
@@ -365,7 +364,7 @@
             "Initiate a deposit by using data returned from Across API to call functions on Across smart contracts",
             "If you have further questions or suggestions for this guide, please send a message to the #developer-questions channel in the Across Discord.",
             "",
-            "Last updated 2 months ago"
+            "Last updated 4 months ago"
         ],
         "lists": [],
         "tables": [],
@@ -418,7 +417,7 @@
             "originChainId: chain Id where the deposit originated from",
             "depositId: The deposit id that is emitted from the DepositV3 function call as a V3FundsDeposited event",
             "The recommended solution for tracking all Across deposits originating from your integration, for a single user, is to store the user's  depositId and originChainId from each transaction originating from your app, and then get the status of each via the above endpoint. ",
-            "Last updated 1 month ago"
+            "Last updated 4 months ago"
         ],
         "lists": [
             "Request a Quote\nInitiating a Deposit (User Intent)\nUpdating Deposits\nTracking Deposits",
@@ -458,7 +457,7 @@
             "Example Flow"
         ],
         "paragraphs": [
-            "Last updated 2 months ago",
+            "Last updated 4 months ago",
             "Provide a full bridge (or \"onboarding\") experience in your application, for example on a \"Bridge\" tab.",
             "Default the source chain selector to the currently connected network. ",
             "Don't require users to go to wallet, switch network, then return to app to perform an action. For example, if the user selects a source chain that is not the network they are currently connected to:",
@@ -481,7 +480,7 @@
             "Example Flow"
         ],
         "paragraphs": [
-            "Last updated 2 months ago",
+            "Last updated 4 months ago",
             "Provide a full bridge or \"onboarding\" experience in your application, for example on a \"Bridge\" tab.",
             "Default the source chain selector to the balance where the user has the most funds of the input asset. The destination chain is the network where the user is interacting with your protocol. ",
             "Don't require users to go to wallet, switch network, then return to app to perform an action. For example, if the user selects a source chain that is not the network they are currently connected to:",
@@ -506,7 +505,7 @@
             "Craft the message that is the set of transactions to execute on the destination",
             "Request quotes from Across GET /suggested-fees API, passing in the message parameter defined above",
             "Initiate a deposit by using data returned from Across API to call functions on Across smart contracts, specifying a message (set of transactions to execute on the destination)",
-            "Last updated 2 months ago"
+            "Last updated 4 months ago"
         ],
         "lists": [],
         "tables": [],
@@ -520,7 +519,6 @@
             "UI Guide"
         ],
         "paragraphs": [
-            "Last updated 1 month ago",
             "This guide provides technical instructions for bundling a bridge with user actions. The integration process is simple and consists of three steps:",
             "Craft the message that is the set of transactions to execute on the destination",
             "Request quotes from Across GET /suggested-fees API, passing in the message parameter defined above",
@@ -534,8 +532,12 @@
             "(recommended) Use our already-deployed and audited generic \"multicall\" handler contract",
             "Build and implement your own custom handler contract",
             "Each of the below guides provide instruction and examples for the 3 integration steps above. ",
-            "The recommended way is to use our already-deployed and audited generic \"multicall\" handler contract. When this contract is set as the recipient address, this contract will atomically execute all contract calls specified in the deposit's message. ",
-            "If your use case requires additional customization or complexity, you can build your own custom handler contract to execute the contents provided in the deposit's message. ",
+            "The recommended way is to use our already-deployed and audited generic \"multicall\" handler contract. When this contract is set as the recipient address, this contract will atomically execute all contract calls specified in the deposit's message. This guide walks through four examples:",
+            "Creating a Transaction for an Aave Deposit (Example #1)",
+            "Creating a Transaction for WrapChoice (Example #2)",
+            "Charging Protocol Fees (Example #3)",
+            "Creating a Transaction for a Uniswap Swap (Example #4)",
+            "If your use case requires additional customization or complexity, you can build your own custom handler contract to execute the contents provided in the deposit's message. This guide walks through two examples:",
             "The tradeoff of using the generic multicall handler contract is that the complexity is encountered when crafting the message, which must be a correctly-encoded Instructions object. Once the message is formed correctly, you don't need to write any more code. ",
             "On the other hand, when using a custom handler contract, you'll need to implement a custom handleV3AcrossMessage function and deploy a new contract, but creating the deposit message is trivial.",
             "If you have further questions or suggestions for this guide, please send a message to the #developer-questions channel in the Across Discord.",
@@ -545,6 +547,9 @@
             "",
             "Do NOT use f001 identifier in your implementation, see below on how to request your unique ID. ",
             "Request your unique identifier in our shared communication channel (TG, Slack, etc), if already set up, or reach out to [email protected]. Please do not use any other identifier other than the one provided to you.",
+            "",
+            "Last updated 1 month ago",
+            "",
             ""
         ],
         "lists": [
@@ -564,6 +569,8 @@
         "headers": [
             "Creating a Transaction for an Aave Deposit (Example #1)",
             "Creating a Transaction for WrapChoice (Example #2)",
+            "Charging Protocol Fees (Example #3)",
+            "Creating a Transaction for a Uniswap Swap (Example #4)",
             "Reverting Transactions",
             "Summarized Requirements",
             "Security & Safety Considerations "
@@ -583,7 +590,7 @@
             "The message field should be set to the message you generated above instead of 0x. Make sure that you re-generate the message setting inputAmount = depositAmount and outputAmount equal to the suggested output amount.",
             "In the Aave example, the inputAmount  should be set equal to the depositAmount  and the outputAmount should be set equal to the suggested-fees' suggested output amount. This suggested output amount will be received on the destination chain by the handler contract and be equal to the amount to be deposited into Aave on behalf of the user.",
             "This contract, as mentioned above, is audited and works as a generic handler where you can submit a list of transactions to be executed on the destination chain after receiving the deposit. This contract's deployed addresses can be found here. All you need to do to get started using this contract to execute a destination action is to set the deployed address on the deposit's destination chain as the recipient address and construct the message appropriately.",
-            "The multicall handler implements a handleV3AcrossMessage that expects the message to be an encoded set of Instructions, which contains a list of transactions to execute. In the Aave exmaple, the transactions to execute are (1) approve the Aave pool to transfer tokens from the handler contract and (2) submit a deposit to the Aave pool using the received tokens.  In the example above, the function generateMessageForMulticallHandler can be used to create a message in the correct format.",
+            "The multicall handler implements a handleV3AcrossMessage that expects the message to be an encoded set of Instructions, which contains a list of transactions to execute. In the Aave example, the transactions to execute are (1) approve the Aave pool to transfer tokens from the handler contract and (2) submit a deposit to the Aave pool using the received tokens.  In the example above, the function generateMessageForMulticallHandler can be used to create a message in the correct format.",
             "As you can see above when generating the deposit message and below in building a custom handler contract, the tradeoff of using the multicall handler contract is that the complexity is encountered when crafting the message, which must be a correctly-encoded Instructions object. Once the message is formed correctly, you don't need to write any more code.",
             "Handler contracts only uses the funds that are sent to it. That means that the message is assumed to only have authority over those funds and, critically, no outside funds. This is important because relayers can send invalid relays. They will not be repaid if they attempt this, but if an invalid message could unlock other funds, then a relayer could spoof messages maliciously. ",
             "Now that you have a process for constructing a message, creating a deposit transaction, all you need to do is send the deposit to have the generic multicall handler get executed on the destination.",
@@ -591,6 +598,24 @@
             "Here is an example of generating a message that can be used with an already-deployed Multicall handler contract:",
             "Using the above contract, generate a message by calling generateMessageForMulticallHandler and then use this message when submitting a deposit. Like in the Aave example, the outputAmount and outputToken used to form the message should match the deposit's outputAmount and outputToken.",
             "The deposit recipient should be set to the deployed MulticallHandler address on the destination chain. Generating the Deposit is identical to process described above.",
+            "In this example, our message will include the user's address, the fee percentage, and the fee recipient's address as the minimum required information that our handler contract would need to know. Here's an example for generating this in typescript:",
+            "Example in solidity:",
+            "Using the above contract, generate a message by calling generateMessageForMulticallHandler and then use this message when requesting a quote and submitting a deposit. In the above example, the outputAmount will be set equal to the outputAmount specified in the Across deposit. ",
+            "We assume feePercentage is set to some fixed value, e.g. 0.01e18to charge 1% on the outputAmount. When querying GET /suggested-fees, the returned outputAmount is inputAmount less bridge fees only (so that the deposit is profitable to relay). Therefore, the user's expected output amount to receive post-fees will be GET /suggested-fees outputAmount less feePercentage. ",
+            "In this example we'll be walking through how to use this functionality to perform a Uniswap swap on behalf of the user on the destination chain. Our message will include the user's address, the Uniswap pool contract address, and the calldata we want to execute to swap against the pool as the minimum required information that our handler contract would need to know to generate the Uniswap swap instruction. ",
+            "Example in solidity:",
+            "Using the above contract, generate a message by calling generateMessageForMulticallHandler and then use this message when requesting a quote and submitting a deposit.",
+            "ExactInputSingleParams parameters:",
+            "tokenIn will be the token that we initiate the swap with so it will be the outputToken that we expect to receive on the destination chain following the Across transaction.",
+            "tokenOut will be the token that we want to swap into via the Uniswap swap router.",
+            "fee will be the fee of the pool we expect to swap through. The Uniswap docs will explain this parameter better but we'll know it at deposit time.",
+            "recipient should be the userAddress",
+            "deadline The Uniswap docs provides details about this parameter, which is the unix time after which the swap fails.",
+            "amountIn will be the amount to initiate the swap with so it will be the outputAmount in the Across transaction. When crafting an Across deposit, usually the suggested-fees endpoint in the API is queried to get the suggested outputAmount to set in order to make the inputAmount profitable for fillers to relay. We recommend doing the following in cases like this Uniswap example:",
+            "In the message you use as a parameter when querying the suggested-fees endpoint, set amountIn = outputAmount = inputAmount which will return you a suggested output amount.",
+            "When you call depositV3, set outputAmount to the newly suggested output amount, and keep inputAmount equal to the original amountIn from the prior step. This will ensure that your deposit is profitable for fillers.",
+            "amountOutMinimum should be based on the amountIn value used above and the minimum price ratio you're willing to accept",
+            "sqrtPriceLimitX96 similar to above, read the Uniswap docs for better details.",
             "If the message specifies a transaction that could revert when handled on the destination, it is recommended to set a fallbackRecipient ",
             "If a fallbackRecipient is set to some non-zero address and any instruction reverts, the tokens that are received in the fill as outputAmount will be sent to the fallbackRecipient on the destinationChainId",
             "If no fallback is set, and any instructions fail, the fill on destination will fail and cannot occur. In this case the deposit will expire when the destination SpokePool timestamp exceeds the deposit fillDeadline timestamp, the depositor will be refunded on the originChainId.  Ensure that the depositor address on the origin SpokePool is capable of receiving refunds.",
@@ -609,7 +634,7 @@
             "Last updated 1 month ago"
         ],
         "lists": [
-            "Creating a Transaction for an Aave Deposit (Example #1)\nCreating a Transaction for WrapChoice (Example #2)\nReverting Transactions\nSummarized Requirements\nSecurity & Safety Considerations",
+            "Creating a Transaction for an Aave Deposit (Example #1)\nCreating a Transaction for WrapChoice (Example #2)\nCharging Protocol Fees (Example #3)\nCreating a Transaction for a Uniswap Swap (Example #4)\nReverting Transactions\nSummarized Requirements\nSecurity & Safety Considerations",
             "If the \nmessage\n specifies a transaction that could revert when handled on the destination, it is recommended to set a \nfallbackRecipient\n \nIf a \nfallbackRecipient\n is set to some non-zero address and any instruction reverts, the tokens that are received in the fill as \noutputAmount\n will be sent to the \nfallbackRecipient\n on the \ndestinationChainId\nIf no fallback is set, and any instructions fail, the fill on destination will fail and cannot occur. In this case the deposit will expire when the destination SpokePool timestamp exceeds the deposit fillDeadline timestamp, the depositor will be refunded on the \noriginChainId\n.  Ensure that the depositor address on the origin SpokePool is capable of receiving refunds.",
             "If a \nfallbackRecipient\n is set to some non-zero address and any instruction reverts, the tokens that are received in the fill as \noutputAmount\n will be sent to the \nfallbackRecipient\n on the \ndestinationChainId\nIf no fallback is set, and any instructions fail, the fill on destination will fail and cannot occur. In this case the deposit will expire when the destination SpokePool timestamp exceeds the deposit fillDeadline timestamp, the depositor will be refunded on the \noriginChainId\n.  Ensure that the depositor address on the origin SpokePool is capable of receiving refunds.",
             "The deposit \nmessage\n is not empty. Create the \nmessage\n by encoding instructions correctly that will be executed by the \nMulticallHandler\n on the destination chain.\nMulticall Handler contract deployments can be found \nhere\nAlongside the encoded instructions in the \nmessage\n, set a \nfallbackRecipient\n address to one that should receive any leftover tokens regardless of instruction execution success. In most cases, this should be the end user's address\nThe \nrecipient\n address is the multicall handler contract on the \ndestinationChainId\nUse the Across API to get an estimate of the \noutputAmount\n you should set for your message and recipient combination.\nCall \ndepositV3()\n passing in your message and the suggested \noutputAmount\n.\nOnce the relayer calls \nfillV3Relay()\n on the destination, the recipient multicall handler contract's \nhandleV3AcrossMessage\n will be executed\nThe additional gas cost to execute the above function is compensated for in the difference between the deposit's \ninputAmount\n and \noutputAmount\n.",
@@ -628,6 +653,18 @@
             {
                 "id": "ikJ0WtSzABP5",
                 "code": "import {IERC20} from \"openzeppelin-contracts/contracts/token/ERC20/IERC20.sol\";\nimport {SafeERC20} from \"openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol\";\n\ninterface WETHInterface {\n  function withdraw(uint wad) external;\n}\n\ncontract GenerateMessageHelper {\n  using SafeERC20 for IERC20;\n  \n  // Optimism WETH contract hardcoded as an example.\n  address public constant WETH = 0x4200000000000000000000000000000000000006;\n  \n  struct Call {\n        address target;\n        bytes callData;\n        uint256 value;\n  }\n  struct Instructions {\n        //  Calls that will be attempted.\n        Call[] calls;\n        // Where the tokens go if any part of the call fails.\n        // Leftover tokens are sent here as well if the action succeeds.\n        address fallbackRecipient;\n  }\n  \n  error NotWETH();\n  \n  function generateMessageForMulticallHandler(\n    userAddress: address,\n    outputToken: address,\n    outputAmount: uint256,\n    sendWeth: bool\n  ) returns (bytes memory) {\n    if (outputToken != weth) revert NotWETH();\n    Call[] calls;\n    if (sendWETH) {\n      // Transfer WETH directly to user address.\n      bytes memory transferCalldata = abi.encodeWithSelector(\n        IERC20.safeTransfer.selector, \n        userAddress, \n        outputAmount\n      );\n      calls.push(Call({ target: outputToken, callData: transferCalldata, value: 0 });\n    } else {\n      // Unwrap WETH and send ETH directly to user address\n      bytes memory withdrawCalldata = abi.encodeWithSelector(\n        WETHInterface.withdraw.selector,\n        outputAmount\n      );\n      calls.push(Call({ target: outputToken, callData: withdrawCalldata, value: 0 });\n      calls.push(Call({ target: userAddress, callData: \"\", value: outputAmount });\n    }\n    Instructions memory instructions = Instructions({\n      calls: calls,\n      fallbackRecipient: userAddress\n    });\n    return abi.encode(instructions);\n  }\n}"
+            },
+            {
+                "id": "KNfSfQj7m6kH",
+                "code": "// Ethers V6\nimport { ethers } from \"ethers\";\n\nfunction generateMessageForMulticallHandler(\n  userAddress, \n  outputAmount, \n  outputCurrency,\n  feeRecipientAddress, \n  feePercentage\n) {\n  const abiCoder = ethers.AbiCoder.defaultAbiCoder();\n\n  // Define the ABI of the functions\n  const transferFunction = \"function transfer(address to, uint256 amount)\";\n  \n  // Create Interface instances\n  const erc20Interface = new ethers.Interface([transferFunction]);\n\n  // Compute output amount post fees that we'll transfer to user. We'll keep the fee\n  // in the handler contract, that the admin can withdraw.\n  const oneEther = ethers.utils.parseUnits(\"1.0\");\n  //     oneEther = { BigNumber: \"1000000000000000000\" }\n  const feeAmount = outputAmount.mul(feePercentage).div(oneEther); \n  const outputAmountPostFees = outputAmount.sub(feeAmount);\n  //     Assumption #1: feePercentage is specified in \"wei\" units, same as outputAmount \n  //     Assumption #2: outputCurrency has 18 decimals of precision, same as Ether\n  \n  // Encode the function calls with selectors\n  const userTransferCalldata = erc20Interface.encodeFunctionData(\"transfer\", [userAddress, outputAmountPostFees]);\n  const feeTransferCalldata = erc20Interface.encodeFunctionData(\"transfer\", [feeRecipientAddress, feeAmount]);\n\n  // Encode the Instructions object\n  return abiCoder.encode(\n    [\n      \"tuple(\" +\n        \"tuple(\" +\n          \"address target,\" +\n          \"bytes callData,\" +\n          \"uint256 value\" +\n        \")[],\" +\n        \"address fallbackRecipient\" +\n      \")\"\n    ],\n    [\n      [\n        [\n          [outputCurrency, userTransferCalldata, 0],\n          [outputCurrency, feeTransferCalldata, 0],\n        ],\n        userAddress\n      ]\n    ]\n  );\n}"
+            },
+            {
+                "id": "TDk3DPgn7Xih",
+                "code": "import {IERC20} from \"openzeppelin-contracts/contracts/token/ERC20/IERC20.sol\";\nimport {SafeERC20} from \"openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol\";\n\ncontract GenerateMessageHelper {\n  using SafeERC20 for IERC20;\n  \n  struct Call {\n        address target;\n        bytes callData;\n        uint256 value;\n  }\n  struct Instructions {\n        //  Calls that will be attempted.\n        Call[] calls;\n        // Where the tokens go if any part of the call fails.\n        // Leftover tokens are sent here as well if the action succeeds.\n        address fallbackRecipient;\n  }\n  \n  function generateMessageForMulticallHandler(\n    userAddress: address,\n    outputAmount: uint256,\n    outputCurrency: address,\n    feeRecipientAddress: address,\n    feePercentage: uint256,\n  ) returns (bytes memory) {\n    // Assume feePercentage and outputAmount are both specified in 18 decimals of precision.\n    // e.g. feePercentage = 0.01e18 = 1% fee\n    uint256 feeAmount = outputAmount * feePercentage / 1e18;\n    uint256 outputAmountPostFees = outputAmount - feeAmount;\n    bytes memory userTransferCalldata = abi.encodeWithSelector(\n      IERC20.safeTransfer.selector, \n      userAddress, \n      outputAmountPostFees\n    );\n    bytes memory feeTransferCalldata = abi.encodeWithSelector(\n      IERC20.safeTransfer.selector, \n      feeRecipientAddress, \n      feeAmount\n    );\n    Call[] calls;\n    calls.push(Call({ target: outputCurrency, callData: userTransferCalldata, value: 0 });\n    calls.push(Call({ target: outputCurrency, callData: feeTransferCalldata, value: 0 });\n    Instructions memory instructions = Instructions({\n      calls: calls,\n      fallbackRecipient: userAddress\n    });\n    return abi.encode(instructions);\n  }\n  \n  function generateMessageForCustomhandler(address userAddress) returns (bytes memory) {\n    return abi.encode(userAddress);\n  }\n}"
+            },
+            {
+                "id": "Dxu7Ej0VJjeh",
+                "code": "import {IERC20} from \"openzeppelin-contracts/contracts/token/ERC20/IERC20.sol\";\nimport {SafeERC20} from \"openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol\";\n\n// source: https://github.com/Uniswap/v3-periphery/blob/0682387198a24c7cd63566a2c58398533860a5d1/contracts/interfaces/ISwapRouter.sol#L9\ninterface ISwapRouter {\n      struct ExactInputSingleParams {\n        address tokenIn;\n        address tokenOut;\n        uint24 fee;\n        address recipient;\n        uint256 deadline;\n        uint256 amountIn;\n        uint256 amountOutMinimum;\n        uint160 sqrtPriceLimitX96;\n    }\n\n    /// @notice Swaps `amountIn` of one token for as much as possible of another token\n    /// @param params The parameters necessary for the swap, encoded as `ExactInputSingleParams` in calldata\n    /// @return amountOut The amount of the received token\n    function exactInputSingle(ExactInputSingleParams calldata params) external payable returns (uint256 amountOut);\n}\n\ncontract GenerateMessageHelper {\n  using SafeERC20 for IERC20;\n  \n  struct Call {\n        address target;\n        bytes callData;\n        uint256 value;\n  }\n  struct Instructions {\n        //  Calls that will be attempted.\n        Call[] calls;\n        // Where the tokens go if any part of the call fails.\n        // Leftover tokens are sent here as well if the action succeeds.\n        address fallbackRecipient;\n  }\n  \n  function generateMessageForMulticallHandler(\n    userAddress: address,\n    uniswapSwapRouter: ISwapRouter,\n    swapParams: ISwapRouter.ExactInputSingleParams\n  ) returns (bytes memory) {\n    bytes memory approveCalldata = abi.encodeWithSelector(\n      IERC20.safeIncreaseAllowance.selector, \n      aaveAddress, \n      depositAmount\n    );\n    bytes memory swapCalldata = abi.encodeWithSelector(\n      ISwapRouter.exactInputSingle.selector, \n      swapParams\n    );\n    Call[] calls;\n    calls.push(Call({ target: depositCurrency, callData: approveCalldata, value: 0 });\n    calls.push(Call({ target: address(uniswapSwapRouter), callData: swapCalldata, value: 0 });\n    Instructions memory instructions = Instructions({\n      calls: calls,\n      fallbackRecipient: userAddress\n    });\n    return abi.encode(instructions);\n  }\n  \n  function generateMessageForCustomhandler(address userAddress) returns (bytes memory) {\n    return abi.encode(userAddress);\n  }\n}"
             }
         ]
     },
@@ -675,7 +712,7 @@
             "Avoid making unvalidated assumptions about the message data supplied to handleV3AcrossMessage(). Across does not guarantee message integrity, only that a relayer who spoofs a message will not be repaid by Across. If integrity is required, integrators should consider including a depositor signature in the message for additional verification. Message data should otherwise be treated as spoofable and untrusted for use beyond directing the funds passed along with it.",
             "Avoid embedding assumptions about the transfer token or transfer amount into their messages. Instead use the tokenSent and amount variables supplied with to the handleV3AcrossMessage() function. These fields are enforced by the SpokePool contract and so can be assumed to be correct by the recipient contract.",
             "The relayer(s) able to complete a fill can be restricted by storing an approved set of addresses in a mapping and validating the handleV3AcrossMessage() relayer parameter. This implies a trust relationship with one or more relayers.",
-            "Last updated 2 months ago"
+            "Last updated 4 months ago"
         ],
         "lists": [
             "Creating an Transaction for an Aave Deposit (Example #1)\nCreating a Transaction for WrapChoice (Example #2)\nReverting Transactions\nSummarized Requirements\nSecurity & Safety Considerations",
@@ -718,7 +755,7 @@
             "Example Flow"
         ],
         "paragraphs": [
-            "Last updated 2 months ago",
+            "Last updated 4 months ago",
             "Embed a source chain selector directly within the UI component where users perform an action. ",
             "Default the source chain selector to the balance where the user has the most funds of the input asset. The destination chain is the network where the user is interacting with your protocol. ",
             "Don't require users to go to wallet, switch network, then return to app to perform an action. For example, if the user selects a source chain that is not the network they are currently connected to:",
@@ -760,7 +797,7 @@
             "Across Settlement provides additional advantages over naive cross-chain settlement systems, which ultimately lead to better execution of intent fulfillment for users and relayers:",
             "Aggregated and Optimistic Verification: The Across Settlement system aggregates valid fills events off-chain to create a repayment bundle, which is then optimistically verified by UMA's Optimistic Oracle. This verification and repayment mechanism scales gas cost of repayment at O(1) instead of O(N) with the number of fills. This offers an order of magnitude in gas savings vs. other approaches and ultimately leads to better pricing for users and more profit for relayers.",
             "Relayer Cross-chain Management: With Across’ settlement architecture, repayment is made on the relayer’s chain of choice, reducing overhead and complexity of managing cross-chain positions. This lowers costs for relayers, enabling better pricing and execution for end-users. It is enabled by Across’ Hub and Spoke model, where passive LPs extend loans to relayers for taking on time-value risk as funds are rebalanced through canonical bridges by the protocol.",
-            "Last updated 6 months ago"
+            "Last updated 8 months ago"
         ],
         "lists": [
             "Integrating Across Settlement into Your Application\nAcross Settlement Example"
@@ -780,7 +817,6 @@
             "ERC 7683"
         ],
         "paragraphs": [
-            "Last updated 2 months ago",
             "An intent is a type of order where a user specifies an outcome instead of an execution path. Intents can be single-chain, or cross-chain where the user's desired outcomes is on a different chain than input assets. Across is only focused on cross-chain intents. ",
             "We see the progression of cross-chain intents in the following way:",
             "Phase 1: Users' intent specifies moving the same asset from Chain A to Chain B",
@@ -788,14 +824,15 @@
             "Phase 2: Users' intent specifies moving the same asset from Chain A to Chain B and then executing a transaction on Chain B",
             "This is enabled in Across by new functionality to embed instructions on the origin deposit to be executed on the destination. ",
             "Phase 3: Users' intent specifies swapping asset X on Chain A for a minimum amount of asset Y on Chain B and then executing a transaction on Chain B",
-            "Across Settlement supports these types of orders now. See .  ",
-            "To grow the adoption of interoperability solutions powered by intents, Across is working on defining a cross-chain intent order standard, based on the concepts outlined in Phase 3 above. This will enable a unified way to ingest, bid on, escrow and settle user intents. See more at erc7683.org. "
+            "Across Settlement supports these types of orders now. See Intent Structure in Across.  ",
+            "To grow the adoption of interoperability solutions powered by intents, Across is working on defining a cross-chain intent order standard, based on the concepts outlined in Phase 3 above. This will enable a unified way to ingest, bid on, escrow and settle user intents. See more at erc7683.org. ",
+            "Last updated 4 months ago"
         ],
         "lists": [
             "What are Intents?\nERC 7683",
             "This is what Across started with and has been supporting since 2021.",
             "This is enabled in Across by new functionality to \nembed instructions\n on the origin deposit to be executed on the destination.",
-            "Across Settlement\n supports these types of orders now. See \n."
+            "Across Settlement\n supports these types of orders now. See \nIntent Structure in Across\n."
         ],
         "tables": [],
         "code_blocks": []
@@ -807,7 +844,6 @@
             "Modular Intents Settlement Layer"
         ],
         "paragraphs": [
-            "Last updated 7 days ago",
             "Across' cross-chain intents architecture can be distilled into a 3-layered system: a request for quote mechanism to house users' intents, enabling a competitive network of relayers to bid, claim and fill those orders, and lastly a settlement layer to verify intent fulfillment and repay relayers. ",
             "Below is a diagram of the planned architecture of Across after implementing a RFQ price auction to enable gasless orders and cross-chain swaps:",
             "Users Request Quotes to Fill their Intent",
@@ -826,7 +862,8 @@
             "Settlement is the core offering and advantage of Across' architecture. ",
             "Across can accept any cross-chain intent based order flow and provide settlement (escrow, verification and repayment). The order only needs to be able to be translated into a structure SpokePools recognize. Across Settlement provides two core advantages, which ultimately leads to better execution of intent fulfillment for users and relayers:",
             "Aggregated and Optimistic Verification: As described in steps 4-6 in the above diagram, Across Settlement system aggregates valid fills events off-chain to create a repayment bundle, which is then optimistically verified by UMA's Optimistic Oracle. This verification and repayment mechanism scales gas cost of repayment at O(1) instead of O(N) with the number of fills. This offers an order of magnitude in gas savings vs. other approaches and ultimately leads to better pricing for users and more profit for relayers. ",
-            "Relayer Cross-chain Management: With Across' settlement architecture, repayment is made on the relayer’s chain of choice, reducing overhead and complexity of managing cross-chain positions. This lowers costs for relayers enabling better pricing and execution for end-users. It is enabled by Across' Hub and Spoke model, where passive LPs extend loans to relayers for taking on time-value risk as funds are rebalanced through canonical bridges by the protocol. "
+            "Relayer Cross-chain Management: With Across' settlement architecture, repayment is made on the relayer’s chain of choice, reducing overhead and complexity of managing cross-chain positions. This lowers costs for relayers enabling better pricing and execution for end-users. It is enabled by Across' Hub and Spoke model, where passive LPs extend loans to relayers for taking on time-value risk as funds are rebalanced through canonical bridges by the protocol. ",
+            "Last updated 2 months ago"
         ],
         "lists": [
             "Across' Intents Architecture\nModular Intents Settlement Layer",
@@ -894,66 +931,13 @@
             "a preselected relayer who is given the exclusive right to fill the user",
             "exclusivityDeadline",
             "deadline for the exclusive relayer to perform the fill before it is opened to other fillers",
-            "Last updated 6 months ago"
+            "Last updated 8 months ago"
         ],
         "lists": [
             "Intents as a Building Block\nInitiation\nFill\nSlow Fill or Expiration (if no fill)\nSettlement\nIntent Structure in Across",
             "The input token and output token are the same asset.\nrequestV3SlowFill\n is called on the destination chain before the expiration time for the intent.\nThe slow fill is executed before any relayer fills it or the intent expires."
         ],
-        "tables": [
-            [
-                [
-                    "Field",
-                    "Description"
-                ],
-                [
-                    "recipient",
-                    "the address that should receive the funds"
-                ],
-                [
-                    "inputToken",
-                    "the token that the user supplies"
-                ],
-                [
-                    "inputAmount",
-                    "the amount of the inputToken the user supplies"
-                ],
-                [
-                    "outputToken",
-                    "the token that the user wants to receive"
-                ],
-                [
-                    "outputAmount",
-                    "the amount of the output token the user wants to receive"
-                ],
-                [
-                    "destinationChainId",
-                    "where the user wants to receive the output tokens"
-                ],
-                [
-                    "fillDeadline",
-                    "deadline for the user to receive the tokens"
-                ],
-                [
-                    "message",
-                    "custom data that is sent to the recipient if it's a contract; this allows for custom actions to be executed on the destination chain"
-                ]
-            ],
-            [
-                [
-                    "Field",
-                    "Description"
-                ],
-                [
-                    "exclusiveRelayer",
-                    "a preselected relayer who is given the exclusive right to fill the user"
-                ],
-                [
-                    "exclusivityDeadline",
-                    "deadline for the exclusive relayer to perform the fill before it is opened to other fillers"
-                ]
-            ]
-        ],
+        "tables": [],
         "code_blocks": []
     },
     "https://docs.across.to/concepts/canonical-asset-maximalism": {
@@ -963,7 +947,7 @@
             "How Assets Move between Chains"
         ],
         "paragraphs": [
-            "Last updated 2 months ago",
+            "Last updated 4 months ago",
             "Canonical assets are the only secure way to represent value across chains. Intent bridges like Across Bridge enable interoperability with canonical assets at faster speeds and lower fees than 3rd party messaging bridges without the security tradeoffs. ",
             "Canonical assets refer to the original or \"native\" form of a token on its home blockchain. In the context of interoperability, tokens can either be \"canonical\" or \"representative.\" The distinction generally comes down to the trust assumptions in securing assets on secondary chains. ",
             "Regardless of chain, interoperability protocol or technology, there is only a singular way to \"move\" a token from its native chain to a secondary chain (and it's not really moving at all): ",
@@ -999,7 +983,7 @@
             "Users of the Across API are requested to cache results for no longer than 300 seconds. ",
             "The Across API serves data that is derived from the on-chain state of the Across contracts and relayer bots. The on-chain state is subject to change each block, and cached data can quickly become invalid as a result.",
             "The exception is the /deposit/status endpoint which is implemented in this stateful repository because it relies on an indexing solution.",
-            "Last updated 1 month ago",
+            "Last updated 17 days ago",
             "Returns the fill status of a deposit along with a corresponding fill transaction hash if filled.",
             "This endpoint loads data queried by an indexing service that polls relevant events on a 10-second cadence.\nUsers should therefore expect an average latency of 1 to 15 seconds after submitting a deposit to see the status changed in this endpoint.\nThis delay comes from the time it takes for the internal indexing to include the deposit transaction.",
             "Lifecycle of a transaction",
@@ -1032,18 +1016,18 @@
             "The expected time (in seconds) for a fill to be made. Represents 75th percentile of the 7-day rolling average of times (updated daily). Times are dynamic by origin/destination token/chain for a given amount."
         ],
         "lists": [
-            "filled: Deposits with this status have been filled on the destination chain and the recipient should have received funds. A FilledV3Relay event was emitted on the destination chain SpokePool.\n\n\npending: Deposit has not been filled yet.\n\n\nexpired: Deposit has expired and will not be filled. Expired deposits will be refunded to the \ndepositor\n on the \noriginChainId\n in the next batch of repayments.",
-            "Source Code\nCaching & Liveness\nAPI Endpoints\nGET\nRetrieve suggested fee quote for a deposit.\nGET\nRetrieve current transfer limits of the system\nGET\nRetrieve available routes for transfers\nGET\nTrack the lifecycle of a deposit"
+            "Source Code\nCaching & Liveness\nAPI Endpoints\nGET\nRetrieve suggested fee quote for a deposit.\nGET\nRetrieve current transfer limits of the system\nGET\nRetrieve available routes for transfers\nGET\nTrack the lifecycle of a deposit",
+            "filled: Deposits with this status have been filled on the destination chain and the recipient should have received funds. A FilledV3Relay event was emitted on the destination chain SpokePool.\n\n\npending: Deposit has not been filled yet.\n\n\nexpired: Deposit has expired and will not be filled. Expired deposits will be refunded to the \ndepositor\n on the \noriginChainId\n in the next batch of repayments."
         ],
         "tables": [],
         "code_blocks": [
             {
                 "id": ":S3:",
-                "code": "const response = await fetch('https://app.across.to/api/deposit/status?originChainId=%5Bobject+Object%5D', {\n    method: 'GET',\n    headers: {},\n});\nconst data = await response.json();"
+                "code": "const response = await fetch('https://app.across.to/api/deposit/status?originChainId=%5Bobject+Object%5D&depositId=0', {\n    method: 'GET',\n    headers: {},\n});\nconst data = await response.json();"
             },
             {
                 "id": ":S6:",
-                "code": "{\n  \"fillStatus\": \"filled\",\n  \"fillTxHash\": \"text\"\n}"
+                "code": "{\n  \"fillStatus\": \"filled\",\n  \"fillTxHash\": \"text\",\n  \"destinationChainId\": 0\n}"
             },
             {
                 "id": ":S7:",
@@ -1071,31 +1055,29 @@
             }
         ]
     },
-    "https://docs.across.to/reference/sdk-reference": {
-        "title": "SDK Reference | Across Docs",
+    "https://docs.across.to/reference/app-sdk-reference": {
+        "title": "App SDK Reference | Across Docs",
         "headers": [
-            "About the SDK",
-            "How can I use the SDK?",
-            "If I want to integrate Across into my dApp, should I use the SDK or the API?",
+            "About the App SDK",
+            "How can I use the App SDK?",
             "Installation",
             "Basic Usage"
         ],
         "paragraphs": [
-            "The Across SDK is written and maintained by the engineering team at Risk Labs.",
-            "It is written in typescript and available on NPM at @across-protocol/sdk-v2. It's compatible with both Node JS environments and in the browser.",
-            "The SDK can be used currently to query suggested deposit fees and limits, and get liquidity pool statistics. It is imported and used in the API's implementation.",
-            "We recommend using the API, which wraps SDK functions and has an easier interface. However, if speed is a concern then we recommend reviewing the API implementation of the SDK to understand best how to use the SDK. ",
-            "To add the SDK to your project, use npm or yarn to npm install @across-protocol/sdk-v2 or yarn add @across-protocol/sdk-v2.",
+            "The Across App SDK is written and maintained by the engineering team at Risk Labs.",
+            "It is written in typescript and available on NPM at @across-protocol/app-sdk.",
+            "retrieve routes, chain and token details",
+            "retrieve and execute quotes",
+            "handle destination chain contract calls",
+            "track status of deposits",
+            "To add the App SDK to your project, use npm or yarn to npm install @across-protocol/app-sdk or yarn add @across-protocol/app-sdk.",
             "This can be used either in a frontend application or a node js project. ",
-            "You can read about the different SDK modules on the Github README page. For convenience, the available modules are:",
-            "lpFeeCalculator: Get liquidity provider fee that will be charged on deposit for its quoteTimestamp",
-            "relayFeeCalculator: Get suggested relayerFeePct for a deposit, which accounts for opportunity cost of capital and gas costs. If the depositor opts to set this fee lower than the suggested fee, then there is a chance that the deposit goes unfilled for a long time.",
-            "pool: Get HubPool statistics, such as available liquidReserves that be used to refund relayers and estimatedApy for liquidity providers.",
-            "Last updated 3 months ago"
+            "You can read about the different App SDK modules on the Github README page. ",
+            "Last updated 1 month ago"
         ],
         "lists": [
-            "About the SDK\nHow can I use the SDK?\nIf I want to integrate Across into my dApp, should I use the SDK or the API?\nInstallation\nBasic Usage",
-            "lpFeeCalculator: Get \nliquidity provider fee\n that will be charged on deposit for its \nquoteTimestamp\nrelayFeeCalculator: Get suggested \nrelayerFeePct\n for a deposit, which accounts for \nopportunity cost of capital and gas costs\n. If the depositor opts to set this fee lower than the suggested fee, then there is a chance that the deposit goes unfilled for a long time.\npool: Get HubPool statistics, such as available \nliquidReserves\n that be used to refund relayers and \nestimatedApy\n for \nliquidity providers\n."
+            "About the App SDK\nHow can I use the App SDK?\nInstallation\nBasic Usage",
+            "retrieve routes, chain and token details\nretrieve and execute quotes\nhandle destination chain contract calls\ntrack status of deposits"
         ],
         "tables": [],
         "code_blocks": []
@@ -1105,6 +1087,7 @@
         "headers": [],
         "paragraphs": [
             "You can find the contract addresses on the following pages:",
+            "Aleph Zero",
             "Arbitrum",
             "Base",
             "Blast",
@@ -1119,15 +1102,32 @@
             "World Chain",
             "zkSync",
             "Zora",
-            "Last updated 9 days ago"
+            "Last updated 11 days ago"
         ],
         "lists": [
-            "Arbitrum\nBase\nBlast\nEthereum Mainnet\nLinea\nLisk\nMode\nOptimism\nPolygon\nRedstone\nScroll\nWorld Chain\nzkSync\nZora"
+            "Aleph Zero\nArbitrum\nBase\nBlast\nEthereum Mainnet\nLinea\nLisk\nMode\nOptimism\nPolygon\nRedstone\nScroll\nWorld Chain\nzkSync\nZora"
         ],
         "tables": [],
         "code_blocks": []
     },
     "https://docs.across.to/reference/contract-addresses/arbitrum-chain-id-42161": {
+        "title": "Aleph Zero (Chain ID: 41455) | Across Docs",
+        "headers": [
+            "Aleph Zero (Chain ID: 41455)"
+        ],
+        "paragraphs": [
+            "",
+            "AlephZero_SpokePool",
+            "0x13fDac9F9b4777705db45291bbFF3c972c6d1d97",
+            "MulticallHandler",
+            "0x924a9f036260DdD5808007E1AA95f08eD08aA569",
+            "Last updated 11 days ago"
+        ],
+        "lists": [],
+        "tables": [],
+        "code_blocks": []
+    },
+    "https://docs.across.to/reference/contract-addresses/arbitrum-chain-id-42161-1": {
         "title": "Arbitrum (Chain ID: 42161) | Across Docs",
         "headers": [],
         "paragraphs": [
@@ -1138,29 +1138,10 @@
             "0x53691596d1BCe8CEa565b84d4915e69e03d9C99d",
             "MulticallHandler",
             "0x924a9f036260DdD5808007E1AA95f08eD08aA569",
-            "Last updated 3 months ago"
+            "Last updated 5 months ago"
         ],
         "lists": [],
-        "tables": [
-            [
-                [
-                    "Contract Name",
-                    "Address"
-                ],
-                [
-                    "Arbitrum_SpokePool",
-                    "0xe35e9842fceaca96570b734083f4a58e8f7c5f2a"
-                ],
-                [
-                    "Across Governance Token",
-                    "0x53691596d1BCe8CEa565b84d4915e69e03d9C99d"
-                ],
-                [
-                    "MulticallHandler",
-                    "0x924a9f036260DdD5808007E1AA95f08eD08aA569"
-                ]
-            ]
-        ],
+        "tables": [],
         "code_blocks": []
     },
     "https://docs.across.to/reference/contract-addresses/base-chain-id-8453": {
@@ -1173,25 +1154,10 @@
             "MulticallHandler",
             "0x924a9f036260DdD5808007E1AA95f08eD08aA569",
             "",
-            "Last updated 3 months ago"
+            "Last updated 5 months ago"
         ],
         "lists": [],
-        "tables": [
-            [
-                [
-                    "Contract Name",
-                    "Address"
-                ],
-                [
-                    "Base_SpokePool",
-                    "0x09aea4b2242abC8bb4BB78D537A67a245A7bEC64"
-                ],
-                [
-                    "MulticallHandler",
-                    "0x924a9f036260DdD5808007E1AA95f08eD08aA569"
-                ]
-            ]
-        ],
+        "tables": [],
         "code_blocks": []
     },
     "https://docs.across.to/reference/contract-addresses/blast-chain-id-81457": {
@@ -1202,25 +1168,10 @@
             "0x2D509190Ed0172ba588407D4c2df918F955Cc6E1",
             "MulticallHandler",
             "0x924a9f036260DdD5808007E1AA95f08eD08aA569",
-            "Last updated 3 months ago"
+            "Last updated 5 months ago"
         ],
         "lists": [],
-        "tables": [
-            [
-                [
-                    "Contract Name",
-                    "Address"
-                ],
-                [
-                    "Blast_SpokePool",
-                    "0x2D509190Ed0172ba588407D4c2df918F955Cc6E1"
-                ],
-                [
-                    "MulticallHandler",
-                    "0x924a9f036260DdD5808007E1AA95f08eD08aA569"
-                ]
-            ]
-        ],
+        "tables": [],
         "code_blocks": []
     },
     "https://docs.across.to/reference/contract-addresses/mainnet-chain-id-1": {
@@ -1269,97 +1220,10 @@
             "MulticallHandler",
             "0x924a9f036260DdD5808007E1AA95f08eD08aA569",
             "",
-            "Last updated 3 months ago"
+            "Last updated 5 months ago"
         ],
         "lists": [],
-        "tables": [
-            [
-                [
-                    "Contract Name",
-                    "Address"
-                ],
-                [
-                    "LPTokenFactory",
-                    "0x7dB69eb9F52eD773E9b03f5068A1ea0275b2fD9d"
-                ],
-                [
-                    "HubPool",
-                    "0xc186fA914353c44b2E33eBE05f21846F1048bEda"
-                ],
-                [
-                    "Optimism_Adapter",
-                    "0xAd1b0a86c98703fd5F4E56fff04F6b2D9b9f246F"
-                ],
-                [
-                    "Boba_Adapter",
-                    "0x33B0Ec794c15D6Cc705818E70d4CaCe7bCfB5Af3"
-                ],
-                [
-                    "Arbitrum_Adapter",
-                    "0x29528780E29abb8Af95a5e5a125b94766987543F"
-                ],
-                [
-                    "Ethereum_Adapter",
-                    "0x527E872a5c3f0C7c24Fe33F2593cFB890a285084"
-                ],
-                [
-                    "Ethereum_SpokePool",
-                    "0x5c7BCd6E7De5423a257D81B442095A1a6ced35C5"
-                ],
-                [
-                    "PolygonTokenBridger",
-                    "0x0330E9b4D0325cCfF515E81DFbc7754F2a02ac57"
-                ],
-                [
-                    "Polygon_Adapter",
-                    "0x3E94e8d4316a1eBfb2245E45E6F0B8724094CE1A"
-                ],
-                [
-                    "zkSync Adapter",
-                    "0xE233009838CB898b50e0012a6E783FC9FeE447FB"
-                ],
-                [
-                    "Base Adapter",
-                    "0x2d8B1e2B0Dff62DF132d23BEa68a6D2c4D20046E"
-                ],
-                [
-                    "Linea Adapter",
-                    "0x7Ea0D1882D610095A45E512B0113f79cA98a8EfE"
-                ],
-                [
-                    "Mode Adapter",
-                    "0xf1B59868697f3925b72889ede818B9E7ba0316d0"
-                ],
-                [
-                    "AcrossConfigStore",
-                    "0x3B03509645713718B78951126E0A6de6f10043f5"
-                ],
-                [
-                    "AcceleratingDistributor",
-                    "0x9040e41eF5E8b281535a96D9a48aCb8cfaBD9a48"
-                ],
-                [
-                    "AcrossMerkleDistributor",
-                    "0xE50b2cEAC4f60E840Ae513924033E753e2366487"
-                ],
-                [
-                    "ClaimAndStake",
-                    "0x985e8A89Dd6Af8896Ef075c8dd93512433dc5829"
-                ],
-                [
-                    "Across Governance Token",
-                    "0x44108f0223A3C3028F5Fe7AEC7f9bb2E66beF82F"
-                ],
-                [
-                    "Across Bond Token",
-                    "0xee1DC6BCF1Ee967a350e9aC6CaaAA236109002ea"
-                ],
-                [
-                    "MulticallHandler",
-                    "0x924a9f036260DdD5808007E1AA95f08eD08aA569"
-                ]
-            ]
-        ],
+        "tables": [],
         "code_blocks": []
     },
     "https://docs.across.to/reference/contract-addresses/linea-chain-id-59144": {
@@ -1371,55 +1235,25 @@
             "0x7E63A5f1a8F0B4d0934B2f2327DAED3F6bb2ee75",
             "MulticallHandler",
             "0x1015c58894961F4F7Dd7D68ba033e28Ed3ee1cDB",
-            "Last updated 4 months ago"
+            "Last updated 6 months ago"
         ],
         "lists": [],
-        "tables": [
-            [
-                [
-                    "Contract Name",
-                    "Address"
-                ],
-                [
-                    "Linea_SpokePool",
-                    "0x7E63A5f1a8F0B4d0934B2f2327DAED3F6bb2ee75"
-                ],
-                [
-                    "MulticallHandler",
-                    "0x1015c58894961F4F7Dd7D68ba033e28Ed3ee1cDB"
-                ]
-            ]
-        ],
+        "tables": [],
         "code_blocks": []
     },
     "https://docs.across.to/reference/contract-addresses/lisk-chain-id-1135": {
         "title": "Lisk (Chain ID: 1135) | Across Docs",
         "headers": [],
         "paragraphs": [
-            "Last updated 3 months ago",
-            "",
             "Lisk_SpokePool",
             "0x9552a0a6624A23B848060AE5901659CDDa1f83f8",
             "MulticallHandler",
-            "0x924a9f036260DdD5808007E1AA95f08eD08aA569"
+            "0x924a9f036260DdD5808007E1AA95f08eD08aA569",
+            "",
+            "Last updated 5 months ago"
         ],
         "lists": [],
-        "tables": [
-            [
-                [
-                    "Contract Name",
-                    "Address"
-                ],
-                [
-                    "",
-                    ""
-                ],
-                [
-                    "",
-                    ""
-                ]
-            ]
-        ],
+        "tables": [],
         "code_blocks": []
     },
     "https://docs.across.to/reference/contract-addresses/mode-chain-id-34443": {
@@ -1432,25 +1266,10 @@
             "MulticallHandler",
             "0x924a9f036260DdD5808007E1AA95f08eD08aA569",
             "",
-            "Last updated 3 months ago"
+            "Last updated 5 months ago"
         ],
         "lists": [],
-        "tables": [
-            [
-                [
-                    "Contract Name",
-                    "Address"
-                ],
-                [
-                    "Mode_SpokePool",
-                    "0x3baD7AD0728f9917d1Bf08af5782dCbD516cDd96"
-                ],
-                [
-                    "MulticallHandler",
-                    "0x924a9f036260DdD5808007E1AA95f08eD08aA569"
-                ]
-            ]
-        ],
+        "tables": [],
         "code_blocks": []
     },
     "https://docs.across.to/reference/contract-addresses/optimism-chain-id-10": {
@@ -1464,29 +1283,10 @@
             "0xFf733b2A3557a7ed6697007ab5D11B79FdD1b76B",
             "MulticallHandler",
             "0x924a9f036260DdD5808007E1AA95f08eD08aA569",
-            "Last updated 3 months ago"
+            "Last updated 5 months ago"
         ],
         "lists": [],
-        "tables": [
-            [
-                [
-                    "Contract Name",
-                    "Address"
-                ],
-                [
-                    "Optimism_SpokePool",
-                    "0x6f26Bf09B1C792e3228e5467807a900A503c0281"
-                ],
-                [
-                    "Across Governance Token",
-                    "0xFf733b2A3557a7ed6697007ab5D11B79FdD1b76B"
-                ],
-                [
-                    "MulticallHandler",
-                    "0x924a9f036260DdD5808007E1AA95f08eD08aA569"
-                ]
-            ]
-        ],
+        "tables": [],
         "code_blocks": []
     },
     "https://docs.across.to/reference/contract-addresses/polygon-chain-id-137": {
@@ -1502,33 +1302,10 @@
             "0xF328b73B6c685831F238c30a23Fc19140CB4D8FC",
             "MulticallHandler",
             "0x924a9f036260DdD5808007E1AA95f08eD08aA569",
-            "Last updated 3 months ago"
+            "Last updated 5 months ago"
         ],
         "lists": [],
-        "tables": [
-            [
-                [
-                    "Contract Name",
-                    "Address"
-                ],
-                [
-                    "PolygonTokenBridger",
-                    "0x0330E9b4D0325cCfF515E81DFbc7754F2a02ac57"
-                ],
-                [
-                    "Polygon_SpokePool",
-                    "0x9295ee1d8C5b022Be115A2AD3c30C72E34e7F096"
-                ],
-                [
-                    "Across Governance Token",
-                    "0xF328b73B6c685831F238c30a23Fc19140CB4D8FC"
-                ],
-                [
-                    "MulticallHandler",
-                    "0x924a9f036260DdD5808007E1AA95f08eD08aA569"
-                ]
-            ]
-        ],
+        "tables": [],
         "code_blocks": []
     },
     "https://docs.across.to/reference/contract-addresses/redstone-chain-id-690": {
@@ -1540,25 +1317,10 @@
             "0x13fDac9F9b4777705db45291bbFF3c972c6d1d97",
             "MulticallHandler",
             "0x924a9f036260DdD5808007E1AA95f08eD08aA569",
-            "Last updated 2 months ago"
+            "Last updated 4 months ago"
         ],
         "lists": [],
-        "tables": [
-            [
-                [
-                    "Contract Name",
-                    "Address"
-                ],
-                [
-                    "Redstone_SpokePool",
-                    "0x13fDac9F9b4777705db45291bbFF3c972c6d1d97"
-                ],
-                [
-                    "MulticallHandler",
-                    "0x924a9f036260DdD5808007E1AA95f08eD08aA569"
-                ]
-            ]
-        ],
+        "tables": [],
         "code_blocks": []
     },
     "https://docs.across.to/reference/contract-addresses/scroll-chain-id-534352": {
@@ -1570,25 +1332,10 @@
             "0x3bad7ad0728f9917d1bf08af5782dcbd516cdd96",
             "MulticallHandler",
             "0x924a9f036260DdD5808007E1AA95f08eD08aA569",
-            "Last updated 1 month ago"
+            "Last updated 3 months ago"
         ],
         "lists": [],
-        "tables": [
-            [
-                [
-                    "Contract Name",
-                    "Address"
-                ],
-                [
-                    "Scroll_SpokePool",
-                    "0x3bad7ad0728f9917d1bf08af5782dcbd516cdd96"
-                ],
-                [
-                    "MulticallHandler",
-                    "0x924a9f036260DdD5808007E1AA95f08eD08aA569"
-                ]
-            ]
-        ],
+        "tables": [],
         "code_blocks": []
     },
     "https://docs.across.to/reference/contract-addresses/scroll-chain-id-534352-1": {
@@ -1601,25 +1348,10 @@
             "MulticallHandler",
             "0x924a9f036260DdD5808007E1AA95f08eD08aA569",
             "",
-            "Last updated 9 days ago"
+            "Last updated 2 months ago"
         ],
         "lists": [],
-        "tables": [
-            [
-                [
-                    "Contract Name",
-                    "Address"
-                ],
-                [
-                    "WorldChain_SpokePool",
-                    "0x09aea4b2242abC8bb4BB78D537A67a245A7bEC64"
-                ],
-                [
-                    "MulticallHandler",
-                    "0x924a9f036260DdD5808007E1AA95f08eD08aA569"
-                ]
-            ]
-        ],
+        "tables": [],
         "code_blocks": []
     },
     "https://docs.across.to/reference/contract-addresses/zksync-chain-id-324": {
@@ -1631,25 +1363,10 @@
             "0xE0B015E54d54fc84a6cB9B666099c46adE9335FF",
             "MulticallHandler",
             "0x863859ef502F0Ee9676626ED5B418037252eFeb2",
-            "Last updated 4 months ago"
+            "Last updated 6 months ago"
         ],
         "lists": [],
-        "tables": [
-            [
-                [
-                    "Contract Name",
-                    "Address"
-                ],
-                [
-                    "zkSync_SpokePool",
-                    "0xE0B015E54d54fc84a6cB9B666099c46adE9335FF"
-                ],
-                [
-                    "MulticallHandler",
-                    "0x863859ef502F0Ee9676626ED5B418037252eFeb2"
-                ]
-            ]
-        ],
+        "tables": [],
         "code_blocks": []
     },
     "https://docs.across.to/reference/contract-addresses/zora-chain-id-7777777": {
@@ -1661,25 +1378,10 @@
             "0x13fDac9F9b4777705db45291bbFF3c972c6d1d97",
             "MulticallHandler",
             "0x924a9f036260DdD5808007E1AA95f08eD08aA569",
-            "Last updated 2 months ago"
+            "Last updated 4 months ago"
         ],
         "lists": [],
-        "tables": [
-            [
-                [
-                    "Contract Name",
-                    "Address"
-                ],
-                [
-                    "Zora_SpokePool",
-                    "0x13fDac9F9b4777705db45291bbFF3c972c6d1d97"
-                ],
-                [
-                    "MulticallHandler",
-                    "0x924a9f036260DdD5808007E1AA95f08eD08aA569"
-                ]
-            ]
-        ],
+        "tables": [],
         "code_blocks": []
     },
     "https://docs.across.to/reference/contract-addresses/sepolia-testnet": {
@@ -1704,49 +1406,10 @@
             "11155420",
             "Polygon (Amoy)",
             "80002",
-            "Last updated 2 months ago"
+            "Last updated 4 months ago"
         ],
         "lists": [],
-        "tables": [
-            [
-                [
-                    "Name",
-                    "Chain ID"
-                ],
-                [
-                    "Arbitrum",
-                    "421614"
-                ],
-                [
-                    "Base",
-                    "84532"
-                ],
-                [
-                    "Blast",
-                    "168587773"
-                ],
-                [
-                    "Ethereum",
-                    "11155111"
-                ],
-                [
-                    "Lisk",
-                    "4202"
-                ],
-                [
-                    "Mode",
-                    "919"
-                ],
-                [
-                    "Optimism",
-                    "11155420"
-                ],
-                [
-                    "Polygon (Amoy)",
-                    "80002"
-                ]
-            ]
-        ],
+        "tables": [],
         "code_blocks": []
     },
     "https://docs.across.to/reference/selected-contract-functions": {
@@ -1835,115 +1498,10 @@
             "bytes",
             "depositorSignature",
             "Signed message containing contents here​",
-            "Last updated 1 month ago"
+            "Last updated 3 months ago"
         ],
         "lists": [],
-        "tables": [
-            [
-                [
-                    "Type",
-                    "Name",
-                    "Explanation"
-                ],
-                [
-                    "address",
-                    "depositor",
-                    "The account credited with the deposit, but not necessarily the one who has to send inputTokens to the contract if the msg.sender differs from this address."
-                ],
-                [
-                    "address",
-                    "recipient",
-                    "The account receiving funds on the destination chain. Can be an EOA or a contract. If the output token is the wrapped native token for the chain, then the recipient will receive native token if an EOA or wrapped native token if a contract."
-                ],
-                [
-                    "address",
-                    "inputToken",
-                    "The token pulled from the caller's account and locked into this contract to initiate the deposit. If this is equal to the wrapped native token then the caller can optionally pass in native token as * msg.value, as long as msg.value = inputTokenAmount."
-                ],
-                [
-                    "address",
-                    "outputToken",
-                    "The token that the relayer will send to the recipient on the destination chain. Must be an ERC20. Note, this can be set to the zero address (0x0) in which case, fillers will replace this with the destination chain equivalent of the input token."
-                ],
-                [
-                    "uint256",
-                    "inputAmount",
-                    "The amount of input tokens to pull from the caller's account and lock into this contract. This amount will be sent to the relayer on their repayment chain of choice as a refund following an optimistic challenge window in the HubPool, less a system fee."
-                ],
-                [
-                    "uint256",
-                    "outputAmount",
-                    "The amount of output tokens that the relayer will send to the recipient on the destination."
-                ],
-                [
-                    "uint256",
-                    "destinationChainId",
-                    "The destination chain identifier. Must be enabled along with the input token as a valid deposit route from this spoke pool or this transaction will revert."
-                ],
-                [
-                    "address",
-                    "exclusiveRelayer",
-                    "The relayer that will be exclusively allowed to fill this deposit before the exclusivity deadline timestamp. This must be a valid, non-zero address if the exclusivity deadline is greater than the current block.timestamp. If the exclusivity deadline is < currentTime, then this must be address(0), and vice versa if this is address(0)."
-                ],
-                [
-                    "uint32",
-                    "quoteTimestamp",
-                    "Timestamp of deposit. Used by relayers to compute the LP fee % for the deposit. Must be withindepositQuoteTimeBuffer() of the current time."
-                ],
-                [
-                    "uint32",
-                    "fillDeadline",
-                    "The deadline for the relayer to fill the deposit. After this destination chain timestamp, the fill will revert on the destination chain. Must be set between [currentTime, currentTime + fillDeadlineBuffer] where currentTime is block.timestamp on this chain or this transaction will revert."
-                ],
-                [
-                    "uint32",
-                    "exclusivityDeadline",
-                    "The deadline for the exclusive relayer to fill the deposit. After this destination chain timestamp, anyone can fill this deposit on the destination chain. If exclusiveRelayer is set to address(0), then this also must be set to 0, (and vice versa), otherwise this must be set >= current time."
-                ],
-                [
-                    "bytes",
-                    "message",
-                    "Data that can be passed to the recipient if it is a contract. If no message is to be sent, set this field to an empty bytes array: \"\"(i.e. bytes` of length 0, or the \"empty string\"). See Composable Bridging for examples on how messaging can be used."
-                ]
-            ],
-            [
-                [
-                    "Type",
-                    "Name",
-                    "Description"
-                ],
-                [
-                    "address",
-                    "depositor",
-                    "Sender of deposit to be sped up. Does not need to equal msg.sender"
-                ],
-                [
-                    "uint32",
-                    "depositId",
-                    "UUID of deposit to be sped up"
-                ],
-                [
-                    "uint256",
-                    "updatedOutputAmount",
-                    "New output amount that depositor requests to receive. Should be lower than outputAmount to be taken seriously by fillers"
-                ],
-                [
-                    "address",
-                    "updatedRecipient",
-                    "New recipient of deposit."
-                ],
-                [
-                    "bytes",
-                    "updatedMessage",
-                    "Updated data that is sent to updatedRecipient. As described in section above, this should be set to 0x for the forseeable future."
-                ],
-                [
-                    "bytes",
-                    "depositorSignature",
-                    "Signed message containing contents here​"
-                ]
-            ]
-        ],
+        "tables": [],
         "code_blocks": []
     },
     "https://docs.across.to/reference/supported-chains": {
@@ -1996,109 +1554,12 @@
             "Polygon (Amoy)",
             "80002",
             "",
-            "Last updated 2 months ago"
+            "Last updated 4 months ago"
         ],
         "lists": [
             "Mainnet Chains\nTestnet Chains"
         ],
-        "tables": [
-            [
-                [
-                    "Name",
-                    "Chain ID"
-                ],
-                [
-                    "Arbitrum",
-                    "42161"
-                ],
-                [
-                    "Base",
-                    "8453"
-                ],
-                [
-                    "Blast",
-                    "81457"
-                ],
-                [
-                    "Ethereum",
-                    "1"
-                ],
-                [
-                    "Linea",
-                    "59144"
-                ],
-                [
-                    "Lisk",
-                    "1135"
-                ],
-                [
-                    "Mode",
-                    "34443"
-                ],
-                [
-                    "Optimism",
-                    "10"
-                ],
-                [
-                    "Polygon",
-                    "137"
-                ],
-                [
-                    "Redstone",
-                    "690"
-                ],
-                [
-                    "Scroll",
-                    "534352"
-                ],
-                [
-                    "zkSync",
-                    "324"
-                ],
-                [
-                    "Zora",
-                    "7777777"
-                ]
-            ],
-            [
-                [
-                    "Name",
-                    "Chain ID"
-                ],
-                [
-                    "Arbitrum",
-                    "421614"
-                ],
-                [
-                    "Base",
-                    "84532"
-                ],
-                [
-                    "Blast",
-                    "168587773"
-                ],
-                [
-                    "Ethereum",
-                    "11155111"
-                ],
-                [
-                    "Lisk",
-                    "4202"
-                ],
-                [
-                    "Mode",
-                    "919"
-                ],
-                [
-                    "Optimism",
-                    "11155420"
-                ],
-                [
-                    "Polygon (Amoy)",
-                    "80002"
-                ]
-            ]
-        ],
+        "tables": [],
         "code_blocks": []
     },
     "https://docs.across.to/reference/fees-in-the-system": {
@@ -2108,6 +1569,7 @@
             "Relayer Fees"
         ],
         "paragraphs": [
+            "Last updated 2 months ago",
             "We view using Across as being similar to lending protocols such as AAVE or Compound. When a user bridges a particular token from one chain to another, the fast bridge isn't \"moving tokens from one chain to another\" but, rather, it is a relayer or the protocol itself providing tokens on the destination chain in return for tokens on the origin chain. We choose to use a similar pricing model for our liquidity provider fees because of this parallel.",
             "In summary, liquidity provider fees are charged on each transaction based on where the relayer decides to take repayment. If a relayer elects to take repayment on the origin chain, where the deposit occurred, then liquidity provider funds are not needed to repay the relayer because the repayment can be taken directly from the deposited funds. Therefore, liquidity provider fees in this case will be zero. On the other hand, a non-zero liquidity provider fee will be charged for any transaction based on the pricing model for the specific chain that the relayer elects to take repayment on. The following section outlines the parameters used to construct this pricing model; the parameters are different for each repayment chain based on how easy it is transfer funds out of that chain.",
             "We base our pricing model on the one described in AAVE's documentation. Let,",
@@ -2131,8 +1593,7 @@
             "Gas fees: The relayer pays gas to perform the relay and to claim their repayment.",
             "Capital opportunity costs: The fact that the relayer is using their capital to perform a relay means that they are not using it for other yield opportunities.",
             "Capital at risk: A relayer takes on certain risks by relaying funds. If they make a mistake when relaying that could jeopardize their repayment of the capital they invested.",
-            "Both Liquidity Provider fees and Relayer fees are implied from the spread between inputAmount and outputAmount in a depositV3 transaction. You can intuitively think of liquidity provider fees as being taken out of the full relayer fee. Therefore, relayers are expected to factor in the expected liquidity provider fee when quoting fees to potential depositors.",
-            "Last updated 7 days ago"
+            "Both Liquidity Provider fees and Relayer fees are implied from the spread between inputAmount and outputAmount in a depositV3 transaction. You can intuitively think of liquidity provider fees as being taken out of the full relayer fee. Therefore, relayers are expected to factor in the expected liquidity provider fee when quoting fees to potential depositors."
         ],
         "lists": [
             "Liquidity Provider Fees\nRelayer Fees",
@@ -2169,7 +1630,7 @@
             "Generally, liquidity providers take on the following risks when passively providing liquidity to Across:",
             "Cost of capital: LP's must deposit their tokens into an Across contract on mainnet.",
             "Liquidity risk: If Across is experiencing high demand then there is a chance that so much of the LP capital is reallocated to repaying relayers, fulfilling deposits and being rebalanced through canonical bridges that not all LP's who want to withdraw can withdraw at the current moment. This is a transitory situation as once funds are received from the canonical bridge LP's will be able to withdraw. ",
-            "Last updated 6 months ago"
+            "Last updated 8 months ago"
         ],
         "lists": [
             "User\nRelayer \nDataworker\nLiquidity Provider",
@@ -2186,7 +1647,7 @@
         "paragraphs": [
             "The Across smart contracts plus the UMIP provide the fundamental rules of the Across Protocol. The ACROSS-V2 price in UMIP-157 and extended by UMIP-179 precisely define the constraints and rules of the system. Actors in the system (relayer, dataworker) must behave in accordance to these rules. The system is secured by optimistic verification of relayer repayments and rebalance instructions by UMA's Optimistic Oracle, requiring only a single honest actor to dispute invalid proposals to keep the system secure. ",
             "Please refer to UMIP-157 and UMIP-179 for detailed information about system architecture, security model and verificaiton. ",
-            "Last updated 8 months ago"
+            "Last updated 10 months ago"
         ],
         "lists": [],
         "tables": [],
@@ -2213,7 +1674,7 @@
             "1.The configured EOA must be funded with at least 0.45 ABT or ETH (1 ABT == 1 ETH), plus additional ETH for gas to handle the necessary deposit, approval and/or dispute transactions.",
             "2.It is sufficient for the entire amount to be held in ETH, since the dispute script automates the steps of minting ABT and approving the HubPool to spend it.",
             "3.The actual amounts are subject to change based on the prevailing gas price at the time of the dispute, and the configured bond amount.",
-            "Last updated 8 months ago"
+            "Last updated 10 months ago"
         ],
         "lists": [
             "About\nManual Dispute Procedure\nAutomated Dispute Procedure\nInstallation\nExecution"
@@ -2234,7 +1695,7 @@
         "title": "Validating Root Bundles | Across Docs",
         "headers": [],
         "paragraphs": [
-            "Last updated 8 months ago",
+            "Last updated 10 months ago",
             "Root bundles instruct the Across system on how to transfer funds between smart contracts on different chains to refund relayers and fulfill user deposits.",
             "This explainer video explains why root bundles are critical to making the Across system work and how they are validated. Root bundles are optimistically validated and ultimately secured by the UMA Oracle. It is recommended that UMA voters and other actors in the UMA ecosystem have an understanding of how Across utilizes the UMA oracle."
         ],
@@ -2265,7 +1726,7 @@
             "Fill ETAs for deposits vary based on route and available filler liquidity. For example, most deposit transactions will not be filled until they probabilistically finalized on the origin chain, where the deposit occurred.",
             "In general, deposits that exceed current filler liquidity on the destination chain will be delayed, and unprofitable deposits (where the difference in the output amount and the input amount is insufficient to cover the filler's transaction and opportunity costs) might never be filled until they expire. Expired deposits will eventually be refunded, as described above. ",
             "The Limits endpoint can be called with the deposit information to forecast the fill ETA. If the deposit amount exceeds the maxDepositShortDelay, then the deposit is likely to have been marked for slow fill. To deterministically check if a deposit has been marked for slow fill, you can call the fillStatuses() function on the destination SpokePool as described above.",
-            "Last updated 4 months ago"
+            "Last updated 6 months ago"
         ],
         "lists": [
             "Using our API\nUsing your own managed service"
@@ -2400,7 +1861,7 @@
             "A dataworker can propose a bundle at any time. However, if a current bundle is in liveness - it is required that either that bundle be disputed or the bundle passes liveness and is executed before a new bundle is proposed.",
             "",
             "",
-            "Last updated 7 days ago"
+            "Last updated 2 months ago"
         ],
         "lists": [
             "Flushes any existing installed dependencies.\nPulls down the latest relayer-v3 commit.\nInstalls all dependencies and builds the relayer.\nDisplays the latest commit in the relayer-v3 repository.",
@@ -2408,26 +1869,7 @@
             "MNEMONIC (when run with --wallet mnemonic)\nPRIVATE_KEY (when run with --wallet privateKey)",
             "Relayer refunds are contained in root bundles that are optimistically published to the HubPool\nOnce the root bundle proposal passes liveness, refunds can be sent to relayers. At this point, relayers are made whole and receive an additional relayer fee\nThe fastest cadence of root bundle proposals is once every two hours. In the worst case, root bundles can take much longer if volume is low across the system\nA dataworker can propose a bundle at any time. However, if a current bundle is in liveness - it is required that either that bundle be disputed or the bundle passes liveness and is executed before a new bundle is proposed."
         ],
-        "tables": [
-            [
-                [
-                    "Resource",
-                    "Recommended"
-                ],
-                [
-                    "CPU",
-                    "64-bit Dual Core @ 2+ GHz"
-                ],
-                [
-                    "RAM",
-                    "4GB"
-                ],
-                [
-                    "OS",
-                    "UNIX-like (GNU/Linux, MacOS)"
-                ]
-            ]
-        ],
+        "tables": [],
         "code_blocks": [
             {
                 "id": "6d6e5e39786745f7b116710fc81f9f09",
@@ -2472,8 +1914,8 @@
             "Speed-based relayer competition can lead to collisions and gas price competition amongst relayers. Many relayer implementations have reached a point of maturity where additional speed gains are difficult to unlock and increasingly encroach on origin chain finality guarantees.",
             "Ensure that their implementations respect the exclusiveRelayer and exclusivityDeadline fields.",
             "Ensure that they react promptly when their own relayer address is specified on a new deposit.",
-            "When selecting an exclusive relayer, the Across API applies a selection process that considers a number of inputs, including the relayers’ own configuration preferences and their balance on the destination chain. The exact implementation and criteria for exclusive relayer selection is maintained by Risk Labs and is subject to change in order to optimise user experience and minimise externalities that leak value from the system. Recent relayer performance may also be factored in as part of the selection criteria. Third parties integrating Across Settlement are free to apply their own relayer exclusivity selection logic as they see fit.",
-            "Relayer exclusivity is being rolled out incrementally in the Across Bridge dapp on select routes in order to trial the system. Performance is being monitored by the Across team and adjustments will be made as required. Third-party integrators are expected to begin incorporating relayer exclusivity in Q4 2024.",
+            "When selecting an exclusive relayer, the Across API applies a selection process that considers a number of inputs, including the relayers’ own configuration preferences and their balance on the destination chain. The exact implementation and criteria for exclusive relayer selection is maintained by Risk Labs and is subject to change in order to optimise user experience and minimise externalities that leak value from the system. Recent relayer performance may also be factored in as part of the selection criteria. ",
+            "Relayer exclusivity is being rolled out incrementally in the Across API on select routes in order to trial the system. Performance is being monitored by the Across team and adjustments will be made as required. Third-party integrators are expected to begin incorporating relayer exclusivity in Q4 2024.",
             "Last updated 1 month ago"
         ],
         "lists": [
@@ -2487,7 +1929,7 @@
         "title": "Release Notes | Across Docs",
         "headers": [],
         "paragraphs": [
-            "Last updated 8 months ago"
+            "Last updated 10 months ago"
         ],
         "lists": [],
         "tables": [],
@@ -2502,7 +1944,7 @@
             "Twitter",
             "Medium",
             "Github",
-            "Last updated 8 months ago"
+            "Last updated 10 months ago"
         ],
         "lists": [
             "Twitter\nMedium\nGithub"
@@ -2518,7 +1960,7 @@
             "Terms & Conditions"
         ],
         "paragraphs": [
-            "Last updated 3 months ago",
+            "Last updated 5 months ago",
             "Security of the platform is our highest priority. All smart contracts and off-chain code (i.e. most of the code within the across-protocol repository) are within scope and are publicly verifiable. Security researchers are eligible for a bug bounty for reporting undiscovered vulnerabilities.",
             "We encourage the community to audit our open source code; we also encourage the responsible disclosure of any issues. The bug bounty program is intended to recognize the value of working with the community of independent security researchers and sets out our definition of good faith in the context of finding and reporting vulnerabilities, as well as what you can expect from us in return.",
             "Across offers substantial rewards for discoveries that can prevent the loss of assets, the freezing of assets, or harm to users.",
@@ -2545,30 +1987,7 @@
             "Bounty Program\nSubmissions\nTerms & Conditions",
             "Description: Describe at a high level the bug with links to problematic code\nAttack: Detailed instructions for exploiting the bug\nMitigation: How to resolve the bug\nSuggested risk rating: The recommended severity of this bug"
         ],
-        "tables": [
-            [
-                [
-                    "Severity",
-                    "Reward"
-                ],
-                [
-                    "Low",
-                    "$250"
-                ],
-                [
-                    "Medium",
-                    "$1,000"
-                ],
-                [
-                    "High",
-                    "$10,000"
-                ],
-                [
-                    "Critical",
-                    "up to $1,000,000"
-                ]
-            ]
-        ],
+        "tables": [],
         "code_blocks": []
     },
     "https://docs.across.to/resources/audits": {
@@ -2583,7 +2002,7 @@
             "UMA Audit – L2 Bridges",
             "UMA Audit – Phase 4",
             "UMA Audit – Phase 6",
-            "Last updated 3 months ago"
+            "Last updated 5 months ago"
         ],
         "lists": [
             "Across V3 Incremental Audit\nAcross V3 Audit\nAcross Token and Token Distributor Audit\nAcross V2 Audit\nUMA's Continuous Audit (Optimistic Oracle)\nUMA Audit – L2 Bridges\nUMA Audit – Phase 4\nUMA Audit – Phase 6"
@@ -2609,7 +2028,7 @@
             "\n",
             "",
             "",
-            "Last updated 5 months ago"
+            "Last updated 7 months ago"
         ],
         "lists": [
             "Hard Requirements\nAdditional Considerations",
@@ -2620,7 +2039,7 @@
         "code_blocks": []
     },
     "https://www.gitbook.com/?utm_source=content&utm_medium=trademark&utm_campaign=aWQyh5Xkad3O9yHZEqaK": {
-        "title": "GitBook",
+        "title": "GitBook â Build product documentation your users will love",
         "headers": [
             "Product documentationyour users will love",
             "Publish unbeatable documentation",
@@ -2635,8 +2054,7 @@
             "Get started for free"
         ],
         "paragraphs": [
-            "New in GitBook: Revamped Documentation",
-            "Register for the webinar",
+            "Docs",
             "",
             "",
             "",
@@ -2647,11 +2065,6 @@
             "",
             "",
             "We're hiring!",
-            "New in GitBook: Revamped Documentation",
-            "Register for the webinar",
-            "",
-            "",
-            "",
             "Forget building your own custom docs platform. With GitBook you get beautiful documentation for your users, and a branch-based Git workflow for your team.",
             "Sign up with GitHub",
             "Home Hero GitHub CTA",
@@ -2710,7 +2123,7 @@
             "Learn More",
             "open_internal_docs_website",
             "Git Sync",
-            "Sync your docs with a GitHub or GitLab repository and everyone can contribute to your docs, wherever they prefer to work. So your technical writers can use WYSIWYG editor, while engineers add to your docs directly in Git. And everything stays in sync, with feedback and reviews to guarantee quality.",
+            "Sync your docs with a GitHub or GitLab repository and everyone can contribute to your docs, wherever they prefer to work. So your technical writers can use a WYSIWYG editor, while engineers add to your docs directly in Git. And everything stays in sync, with feedback and reviews to guarantee quality.",
             "Discover Git Sync",
             "Home GitSync Block",
             "Tell me more",
@@ -2878,6 +2291,10 @@
             "",
             "",
             "",
+            "Customer showcase",
+            "",
+            "",
+            "",
             "Product tour",
             "",
             "",
@@ -2902,7 +2319,11 @@
             "",
             "",
             "",
-            "Docs",
+            "GitBook product docs",
+            "",
+            "",
+            "",
+            "GitBook developer docs",
             "",
             "",
             "",
@@ -2939,6 +2360,14 @@
             "",
             "",
             "Contact and support",
+            "",
+            "",
+            "",
+            "Terms of service",
+            "",
+            "",
+            "",
+            "Privacy policy",
             "",
             "",
             "",
@@ -2963,6 +2392,10 @@
             "",
             "",
             "",
+            "Customer showcase",
+            "",
+            "",
+            "",
             "Product tour",
             "",
             "",
@@ -2987,7 +2420,11 @@
             "",
             "",
             "",
-            "Docs",
+            "GitBook product docs",
+            "",
+            "",
+            "",
+            "GitBook developer docs",
             "",
             "",
             "",
@@ -3024,6 +2461,14 @@
             "",
             "",
             "Contact and support",
+            "",
+            "",
+            "",
+            "Terms of service",
+            "",
+            "",
+            "",
+            "Privacy policy",
             "",
             "",
             "",
@@ -3048,6 +2493,10 @@
             "",
             "",
             "",
+            "Customer showcase",
+            "",
+            "",
+            "",
             "Product tour",
             "",
             "",
@@ -3072,7 +2521,11 @@
             "",
             "",
             "",
-            "Docs",
+            "GitBook product docs",
+            "",
+            "",
+            "",
+            "GitBook developer docs",
             "",
             "",
             "",
@@ -3112,17 +2565,15 @@
             "",
             "",
             "",
-            "Â© 2024 Copyright GitBook INC. 440 N Barranca Ave #7171, Covina, CA 91723, USA. EIN: 320502699",
-            "New in GitBook: Revamped Documentation",
-            "Register for the webinar",
+            "Terms of service",
             "",
             "",
             "",
-            "New in GitBook: Revamped Documentation",
-            "Register for the webinar",
+            "Privacy policy",
             "",
             "",
-            ""
+            "",
+            "Â© 2024 Copyright GitBook INC. 440 N Barranca Ave #7171, Covina, CA 91723, USA. EIN: 320502699"
         ],
         "lists": [
             "",
@@ -3138,19 +2589,27 @@
         "tables": [],
         "code_blocks": []
     },
+    "https://docs.across.to/introduction": {
+        "title": "Getting Started | Across Docs",
+        "headers": [],
+        "paragraphs": [],
+        "lists": [],
+        "tables": [],
+        "code_blocks": []
+    },
     "https://docs.across.to/#looking-for-something-else-get-in-touch": {
         "title": "Getting Started | Across Docs",
         "headers": [
             "Looking for something else? Get in touch"
         ],
         "paragraphs": [
-            "Across is an interoperability protocol powered by intents. It is the first cross-chain intents protocol in production today, enabling the fastest and lowest-cost way to transfer value without security tradeoffs.",
+            "Across is an interoperability protocol powered by intents. It is the first cross-chain intents protocol in production today, enabling the fastest and lowest-cost way to transfer value with better security tradeoffs vs. traditional bridge designs. ",
             "Across can be easily integrated via our easy to use REST API into any application requiring instant, low cost cross-chain value transfer. Let users easily onboard assets without leaving your app. ",
             "Across can also be integrated in your application to abstract bridging completely, enabling users to directly interact with your app from any chain. ",
             "Across Settlement is the only production-ready, modular settlement layer built to facilitate cross-chain intents. Powers use cases that require customization beyond the Across Core offering, like cross-chain token swaps, new request for quote auction designs and more. ",
             "Join the growing network of independent relayers (a.k.a solvers, fillers, market makers) fulfilling intent order flow on Across. Earn up to 100% APY. ",
             "",
-            "Last updated 2 months ago"
+            "Last updated 25 days ago"
         ],
         "lists": [],
         "tables": [],

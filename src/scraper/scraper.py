@@ -4,6 +4,7 @@ import json
 import os
 from loguru import logger
 from urllib.parse import urljoin, urlparse
+import shutil
 
 def scrape_page(url):
     """Scrape a single page"""
@@ -28,6 +29,8 @@ def extract_links(soup, base_url):
 def build_knowledge_base(BASE_URL: str, OUTPUT_FILE: str):
     """Build the knowledge base by scraping pages sequentially"""
     knowledge_base = {}
+    temp_output_file = f"{OUTPUT_FILE}.tmp"  # Temporary file
+    
     main_page_html = scrape_page(BASE_URL)
     logger.info("Base URL: ", BASE_URL)
     if main_page_html:
@@ -41,10 +44,14 @@ def build_knowledge_base(BASE_URL: str, OUTPUT_FILE: str):
             if page_html:
                 knowledge_base[link] = page_html  
 
-    with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
+    # Write to temporary file first
+    with open(temp_output_file, 'w', encoding='utf-8') as f:
         json.dump(knowledge_base, f, ensure_ascii=False, indent=4)
-    
+
+    # Atomically rename the temporary file to the final file
+    shutil.move(temp_output_file, OUTPUT_FILE)
     logger.info(f"Knowledge base saved to {OUTPUT_FILE}\n\n")
+
 
 def run_scrapers_sequentially():
     """Run the scrapers sequentially"""
