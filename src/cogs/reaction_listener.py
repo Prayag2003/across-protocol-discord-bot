@@ -51,7 +51,7 @@ class RLHFListener(commands.Cog):
                     message_count += 1
 
             logger.info(f"Successfully cached {message_count} messages with .txt attachments")
-            logger.debug(f"Cached message IDs: {list(self.cached_messages.keys())}")
+            logger.debug(f"Cached message IDs: {list(self.cached_messages.keys())[0]}")
 
         except Exception as e:
             logger.error(f"Error caching messages: {e}")

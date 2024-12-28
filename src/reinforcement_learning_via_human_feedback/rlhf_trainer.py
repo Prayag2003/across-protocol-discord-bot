@@ -11,7 +11,7 @@ from .preprocess_jsonl import process_jsonl_content
 class OpenAIModel(Enum):
     """Available models for fine-tuning"""
     
-    GPT35_TURBO_1106 = "gpt-3.5-turbo-1106"
+    GPT_4o_06082024 = "gpt-4o-2024-08-06"
     # GPT_4_0613 = "gpt-4-0613"
     # GPT35_TURBO = "gpt-3.5-turbo" 
     # GPT35_TURBO_0613 = "gpt-3.5-turbo-0613"
@@ -38,7 +38,7 @@ class FeedbackEntry:
 class RLHFTrainer:
     def __init__(self, api_key: str, model_name: Optional[str] = None):
         self.client = AsyncOpenAI(api_key=api_key)
-        self.model_name = model_name or OpenAIModel.GPT35_TURBO_1106.value
+        self.model_name = model_name or OpenAIModel.GPT_4o_06082024.value
         
     def _validate_model(self) -> None:
         """
@@ -61,18 +61,26 @@ class RLHFTrainer:
         dataset = []
         try:
             for feedback in feedbacks:
-                label = 1 if feedback.feedback_type == 'positive' else 0
-                entry = {
-                    "messages": [
-                        {"role": "system", "content": "You are a helpful assistant for a web3 protocol."},
-                        {"role": "user", "content": feedback.query},
-                        {"role": "assistant", "content": feedback.response}
-                    ],
-                    "label": label
-                }
+                if feedback.feedback_type == 'positive':
+                    entry = {
+                        "messages": [
+                            {"role": "system", "content": "You are a helpful assistant for a web3 protocol."},
+                            {"role": "user", "content": feedback.query},
+                            {"role": "system", "content": "Respond it was a nice response, go ahead with this."},
+                            {"role": "assistant", "content": feedback.response}
+                        ]
+                    }
+                else:
+                    entry = {
+                        "messages": [
+                            {"role": "system", "content": "You are a helpful assistant for a web3 protocol."},
+                            {"role": "user", "content": feedback.query},
+                            {"role": "system", "content": "Please generate a better response next time."},
+                            {"role": "assistant", "content": feedback.response}
+                        ]
+                    }
                 dataset.append(entry)
-                logger.debug(f"Processed feedback for query: '{feedback.query[:50]}...' with label: {label}")
-            
+                logger.debug(f"Processed feedback for query: '{feedback.query[:50]}...' with feedback type: {feedback.feedback_type}")
             logger.info(f"Generated labeled dataset with {len(dataset)} entries.")
             return dataset
         except Exception as e:
@@ -131,13 +139,17 @@ class RLHFTrainer:
             
             logger.info(f"Successfully created training job: {job.id}")
             return job.id
+            
         except Exception as e:
             logger.error(f"Error creating training job: {str(e)}")
             raise RLHFError(f"Failed to create training job: {str(e)}")
 
     async def get_fine_tuned_model(self, job_id: str) -> str:
         try:
+            logger.info(f"Retrieving fine-tuned model for job: {job_id}")
+
             while True:
+                events = await self.client.fine_tuning.jobs.list_events(fine_tuning_job_id=job_id)
                 job_status = await self.client.fine_tuning.jobs.retrieve(job_id)
                 logger.info(f"Current job status: {job_status.status}")
                 
@@ -147,36 +159,15 @@ class RLHFTrainer:
                     return fine_tuned_model
                 
                 if job_status.status in {"failed", "cancelled"}:
+                    for event in events.data:
+                        logger.info(f"Training event: {event.message} at {event.created_at}")
                     logger.error(f"Fine-tuning job failed with status: {job_status.status}")
                     break
                 
+
                 await asyncio.sleep(60)
             return None
+
         except Exception as e:
             logger.error(f"Error retrieving fine-tuned model: {str(e)}")
             raise RLHFError(f"Failed to get fine-tuned model: {str(e)}")
-
-
-async def run_training_pipeline(api_key: str, feedbacks: List[FeedbackEntry]) -> str:
-    try:
-        trainer = RLHFTrainer(
-            api_key=api_key,
-            model_name=OpenAIModel.GPT35_TURBO_1106.value 
-        )
-        
-        dataset = await trainer.create_labeled_dataset(feedbacks)
-        training_file = await trainer.prepare_training_file(dataset)
-        job_id = await trainer.create_training_job(training_file)
-
-        while True:
-            fine_tuned_model = await trainer.get_fine_tuned_model(job_id)
-            if fine_tuned_model:
-                logger.info(f"Fine-tuned model ready: {fine_tuned_model}")
-                return fine_tuned_model
-            await asyncio.sleep(60) 
-        
-        return job_id
-        
-    except RLHFError as e:
-        logger.error(f"Training pipeline failed: {str(e)}")
-        raise

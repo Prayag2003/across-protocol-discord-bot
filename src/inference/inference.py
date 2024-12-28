@@ -8,8 +8,19 @@ from pymongo import MongoClient
 from sklearn.metrics.pairwise import cosine_similarity
 from inference.logger import log_query_and_response
 from inference.template.prompt_template import generate_prompt_template
-
 load_dotenv()
+
+def get_latest_fine_tuned_model() -> str:
+    try:
+        with open("latest_model.txt", "r") as f:
+            lines = [line.strip() for line in f.readlines() if line.strip()]
+            if lines:
+                return lines[-1]  # The last model ID
+    except FileNotFoundError:
+        logger.warning("No fine-tuned model found. Using default model.")
+    except Exception as e:
+        logger.error(f"Error reading fine-tuned model file: {e}")    
+    return "gpt-4o-2024-08-06"
 
 def load_embeddings(file_path):
     """Load embeddings from file, with MongoDB fallback."""
@@ -104,10 +115,22 @@ def generate_context_from_documents(similar_docs, max_length=2000):
     
     return "\n\n".join(context_parts)
 
+_openai_client = None
+
+def get_openai_client():
+    global _openai_client
+    if _openai_client is None:
+        _openai_client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
+        logger.info("Initialized OpenAI client")
+    return _openai_client
+
 def generate_response_with_context(user_query: str, username: str):
     logger.info("Starting Across Protocol Bot")
     logger.info(f"Processing query: {user_query}")
-    client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
+    client = get_openai_client()
+
+    model_name = get_latest_fine_tuned_model()
+    logger.info(f"Using model: {model_name}")
 
     embeddings_path = os.path.join('knowledge_base', 'embeddings', 'merged_knowledge_base_embeddings.json')
     logger.info(f"Loading embeddings from: {embeddings_path}")
@@ -131,7 +154,7 @@ def generate_response_with_context(user_query: str, username: str):
 
     try:
         response = client.chat.completions.create(
-            model="gpt-4-turbo",
+            model=model_name,
             messages=messages,
             max_tokens=1000,
             temperature=0.15,

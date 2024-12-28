@@ -8,12 +8,12 @@ from inference.inference import generate_response_with_context
 async def setup_events(bot):
     @bot.event
     async def on_ready():
-        logger.info(f'Logged in as {bot.user}!')
+        # logger.info(f'Logged in as {bot.user}!')
         
         for guild in bot.guilds:
             log_channel = await log_manager.setup_log_channel(guild)
-            if log_channel:
-                logger.info(f"Logging channel setup complete for {guild.name}")
+            # if log_channel:
+                # logger.info(f"Logging channel setup complete for {guild.name}")
 
     @bot.event
     async def on_message(message):

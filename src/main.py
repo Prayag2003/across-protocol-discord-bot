@@ -36,7 +36,7 @@ def schedule_execute_files():
     """
     Schedules the execute_files.py script to run every 30 days.
     """
-    # run_execute_files() // just done for the first time for t = 0 
+    # run_execute_files() # just done for the first time for t = 0 
     # scheduler.add_job(run_execute_files, IntervalTrigger(minutes=15))
     
     scheduler = AsyncIOScheduler()

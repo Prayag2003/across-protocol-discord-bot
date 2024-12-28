@@ -11,6 +11,7 @@ from pymongo import MongoClient
 from utils.message import chunk_message_by_paragraphs, extract_code_blocks, get_file_extension
 from inference.inference import generate_response_with_context
 from services.mongo import MongoService
+from utils.logging import log_manager
 import sys
 import json
 load_dotenv()
@@ -42,8 +43,8 @@ class DiscordResponseHandler:
             )
 
             clean_text, code_blocks = extract_code_blocks(explanation)
-            logger.info(f"Code blocks: {code_blocks}")  
-            logger.info(f"Clean text: {clean_text}")
+            # logger.info(f"Code blocks: {code_blocks}")  
+            # logger.info(f"Clean text: {clean_text}")
 
             for idx, code_block in enumerate(code_blocks, 1):
                 language = code_block["language"]
@@ -81,7 +82,6 @@ class DiscordResponseHandler:
             logger.error(f"Thread creation error: {e}")
             return None
 
-
 class ExplainCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -91,13 +91,12 @@ class ExplainCog(commands.Cog):
     async def update_announcement_channels(self, guild: discord.Guild):
         """Update cached announcement channels for a given guild."""
         self.announcement_channels = await AnnouncementChannelManager.get_announcement_channels(guild)
-        logger.info(f"Updated announcement channels: {[c.name for c in self.announcement_channels]}")
+        # logger.info(f"Updated announcement channels: {[c.name for c in self.announcement_channels]}")
 
     @commands.Cog.listener()
     async def on_ready(self):
         """Populate announcement channels cache when the bot is ready."""
         logger.info("Bot is ready!")
-        print("Bot is ready!")
         for guild in self.bot.guilds:
             await self.update_announcement_channels(guild)
         logger.info("Announcement channels cache initialized.")
@@ -211,31 +210,15 @@ class ExplainCog(commands.Cog):
         """Generate an explanation for the user query."""
         try:
             username = ctx.author.name
-            # Generate the explanation
             explanation = await asyncio.to_thread(generate_response_with_context, user_query, username)
             explanation = explanation.strip()
 
-            # Log the explanation length
             logger.info(f"Full explanation length: {len(explanation)}")
             logger.info(f"Message: {ctx.message}, Explanation: {explanation}")
 
-            # Handle long messages
-            # if len(explanation) > 2000:
-            #     explanation_parts = [explanation[i:i+2000] for i in range(0, len(explanation), 2000)]
-            #     if isinstance(ctx.channel, (discord.TextChannel, discord.ForumChannel)):
-            #         thread = await ctx.channel.create_thread(
-            #             name=f"Explanation: {ctx.message.content[:50]}",
-            #             message=ctx.message
-            #         )
-            #         for part in explanation_parts:
-            #             await thread.send(part)
-            #     else:
-            #         error_msg = "Threads are not supported in this channel. Please use this command in a text channel."
-            #         await ctx.channel.send(error_msg)
-            #         logger.warning(error_msg)
-            # else:
             if isinstance(ctx.channel, (discord.TextChannel, discord.ForumChannel)):
                 await DiscordResponseHandler.send_explanation_in_thread(ctx.message, explanation)
+                await log_manager.stream_log(ctx.message, explanation)
             else:
                 error_msg = "Threads are not supported in this channel. Please use this command in a text channel."
                 await ctx.channel.send(error_msg)

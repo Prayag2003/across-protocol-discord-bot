@@ -26,6 +26,8 @@ class RLHFPipeline:
             # Get fine-tuned model
             fine_tuned_model = await self.trainer.get_fine_tuned_model(job_id)
             if fine_tuned_model:
+                with open("latest_model.txt", "w") as f:
+                    f.write(fine_tuned_model)
                 logger.info(f"Fine-tuned model ready: {fine_tuned_model}")
                 return fine_tuned_model
             else:
