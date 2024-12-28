@@ -1,18 +1,22 @@
+import json
+import asyncio
 from enum import Enum
 from datetime import datetime
 from typing import List, Dict, Optional
 from dataclasses import dataclass
 from openai import AsyncOpenAI
 from loguru import logger
-import json
+from .preprocess_jsonl import process_jsonl_content
 
 class OpenAIModel(Enum):
     """Available models for fine-tuning"""
-    GPT35_TURBO = "gpt-35-turbo"
-    GPT35_TURBO_0613 = "gpt-35-turbo-0613"
-    GPT35_TURBO_1106 = "gpt-35-turbo-1106"
-    BABBAGE_002 = "babbage-002"
-    DAVINCI_002 = "davinci-002"
+    
+    GPT35_TURBO_1106 = "gpt-3.5-turbo-1106"
+    # GPT_4_0613 = "gpt-4-0613"
+    # GPT35_TURBO = "gpt-3.5-turbo" 
+    # GPT35_TURBO_0613 = "gpt-3.5-turbo-0613"
+    # BABBAGE_002 = "babbage-002"
+    # DAVINCI_002 = "davinci-002"
 
 class RLHFError(Exception):
     """Base exception for RLHF-related errors"""
@@ -34,7 +38,7 @@ class FeedbackEntry:
 class RLHFTrainer:
     def __init__(self, api_key: str, model_name: Optional[str] = None):
         self.client = AsyncOpenAI(api_key=api_key)
-        self.model_name = model_name or OpenAIModel.GPT35_TURBO.value
+        self.model_name = model_name or OpenAIModel.GPT35_TURBO_1106.value
         
     def _validate_model(self) -> None:
         """
@@ -82,7 +86,7 @@ class RLHFTrainer:
         try:
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
             filename = f"{file_prefix}_{timestamp}.jsonl"
-            
+
             with open(filename, 'w') as f:
                 for entry in dataset:
                     f.write(json.dumps(entry) + '\n')
@@ -94,13 +98,8 @@ class RLHFTrainer:
             raise RLHFError(f"Failed to prepare training file: {str(e)}")
 
     async def create_training_job(self, training_file: str) -> str:
-        """
-        Initiates a training job with the labeled data.
-        """
         try:
-            # Validate model before attempting to create training job
             self._validate_model()
-            
             logger.info(f"Creating training job with model: {self.model_name}")
             
             with open(training_file, 'rb') as f:
@@ -108,7 +107,9 @@ class RLHFTrainer:
                     file=f, 
                     purpose='fine-tune'
                 )
-                
+
+            logger.info(f"File upload response: {file_upload}")    
+            
             job = await self.client.fine_tuning.jobs.create(
                 training_file=file_upload.id,
                 model=self.model_name,
@@ -119,26 +120,60 @@ class RLHFTrainer:
                 }
             )
             
+            # Get job status
+            job_status = await self.client.fine_tuning.jobs.retrieve(job.id)
+            logger.info(f"Job status: {job_status.status}")
+            
+            # List events - corrected syntax
+            events = await self.client.fine_tuning.jobs.list_events(fine_tuning_job_id=job.id)
+            for event in events.data:
+                logger.info(f"Training event: {event.message} at {event.created_at}")
+            
             logger.info(f"Successfully created training job: {job.id}")
             return job.id
-            
-        except ModelNotAvailableError as e:
-            logger.error(f"Model validation failed: {str(e)}")
-            raise
         except Exception as e:
             logger.error(f"Error creating training job: {str(e)}")
             raise RLHFError(f"Failed to create training job: {str(e)}")
+
+    async def get_fine_tuned_model(self, job_id: str) -> str:
+        try:
+            while True:
+                job_status = await self.client.fine_tuning.jobs.retrieve(job_id)
+                logger.info(f"Current job status: {job_status.status}")
+                
+                if job_status.status == "succeeded":
+                    fine_tuned_model = job_status.fine_tuned_model
+                    logger.info(f"Fine-tuned model ready: {fine_tuned_model}")
+                    return fine_tuned_model
+                
+                if job_status.status in {"failed", "cancelled"}:
+                    logger.error(f"Fine-tuning job failed with status: {job_status.status}")
+                    break
+                
+                await asyncio.sleep(60)
+            return None
+        except Exception as e:
+            logger.error(f"Error retrieving fine-tuned model: {str(e)}")
+            raise RLHFError(f"Failed to get fine-tuned model: {str(e)}")
+
 
 async def run_training_pipeline(api_key: str, feedbacks: List[FeedbackEntry]) -> str:
     try:
         trainer = RLHFTrainer(
             api_key=api_key,
-            model_name=OpenAIModel.GPT35_TURBO.value 
+            model_name=OpenAIModel.GPT35_TURBO_1106.value 
         )
         
         dataset = await trainer.create_labeled_dataset(feedbacks)
         training_file = await trainer.prepare_training_file(dataset)
         job_id = await trainer.create_training_job(training_file)
+
+        while True:
+            fine_tuned_model = await trainer.get_fine_tuned_model(job_id)
+            if fine_tuned_model:
+                logger.info(f"Fine-tuned model ready: {fine_tuned_model}")
+                return fine_tuned_model
+            await asyncio.sleep(60) 
         
         return job_id
         

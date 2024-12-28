@@ -179,7 +179,7 @@ class RLHFListener(commands.Cog):
             content = await attachment.read()
             content = content.decode('utf-8')
 
-            print("Content:\n", content)
+            # print("Content:\n", content)
 
             user_pattern = r"👤 User: ([^(]+)\s*\((\d+)\)"
             query_pattern = r"💭 Query: ([^\n]+)"

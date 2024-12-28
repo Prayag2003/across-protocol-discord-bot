@@ -25,7 +25,7 @@ class AnnouncementChannelManager:
     @staticmethod
     async def get_announcement_channels(guild: discord.Guild) -> List[discord.TextChannel]:
         """Find announcement-like channels in a guild."""
-        announcement_pattern = re.compile(r"announcement[s]?", re.IGNORECASE)
+        announcement_pattern = re.compile(r"announcement[s]?|update[s]?", re.IGNORECASE)
         return [
             channel for channel in guild.text_channels
             if announcement_pattern.search(channel.name)
@@ -35,34 +35,52 @@ class DiscordResponseHandler:
     @staticmethod
     async def send_explanation_in_thread(message: discord.Message, explanation: str) -> Optional[discord.Thread]:
         try:
+            thread_name = thread_name = (message.content[:50] + "...") if len(message.content) > 50 else message.content
             thread = await message.create_thread(
-                name=message.content[:80] + "...",
+                name = thread_name,
                 auto_archive_duration=60
             )
 
             clean_text, code_blocks = extract_code_blocks(explanation)
+            logger.info(f"Code blocks: {code_blocks}")  
+            logger.info(f"Clean text: {clean_text}")
 
             for idx, code_block in enumerate(code_blocks, 1):
                 language = code_block["language"]
                 extension = get_file_extension(language)
-                file = discord.File(
-                    io.StringIO(code_block["code"]),
-                    filename=f"code_snippet_{idx}.{extension}"
-                )
-                await thread.send(f"```{language}\n{code_block['code']}```")
-                await thread.send(file=file)
+                
+                # Check if the code is small (less than 500 characters) or large
+                if len(code_block["code"]) <= 500:
+                    # Small code, send it in the message directly with syntax highlighting
+                    await thread.send(f"```{language}\n{code_block['code']}```")
+                else:
+                    # Large code, send it as a file
+                    file = discord.File(
+                        io.StringIO(code_block["code"]),
+                        filename=f"code_snippet_{idx}.{extension}"
+                    )
+                    await thread.send(file=file)
+
+                # file = discord.File(
+                #     io.StringIO(code_block["code"]),
+                #     filename=f"code_snippet_{idx}.{extension}"
+                # )
+                
+                ## await thread.send(f"```{language}\n{code_block['code']}```")
+                
+                # await thread.send(file=file)
 
             if clean_text:
                 text_chunks = chunk_message_by_paragraphs(clean_text)
                 for chunk in text_chunks:
                     if chunk.strip():
                         await thread.send(chunk.strip())
-
             return thread
-            
+
         except discord.errors.HTTPException as e:
             logger.error(f"Thread creation error: {e}")
             return None
+
 
 class ExplainCog(commands.Cog):
     def __init__(self, bot):
@@ -202,26 +220,27 @@ class ExplainCog(commands.Cog):
             logger.info(f"Message: {ctx.message}, Explanation: {explanation}")
 
             # Handle long messages
-            if len(explanation) > 2000:
-                explanation_parts = [explanation[i:i+2000] for i in range(0, len(explanation), 2000)]
-                if isinstance(ctx.channel, (discord.TextChannel, discord.ForumChannel)):
-                    thread = await ctx.channel.create_thread(
-                        name=f"Explanation: {ctx.message.content[:50]}",
-                        message=ctx.message
-                    )
-                    for part in explanation_parts:
-                        await thread.send(part)
-                else:
-                    error_msg = "Threads are not supported in this channel. Please use this command in a text channel."
-                    await ctx.channel.send(error_msg)
-                    logger.warning(error_msg)
+            # if len(explanation) > 2000:
+            #     explanation_parts = [explanation[i:i+2000] for i in range(0, len(explanation), 2000)]
+            #     if isinstance(ctx.channel, (discord.TextChannel, discord.ForumChannel)):
+            #         thread = await ctx.channel.create_thread(
+            #             name=f"Explanation: {ctx.message.content[:50]}",
+            #             message=ctx.message
+            #         )
+            #         for part in explanation_parts:
+            #             await thread.send(part)
+            #     else:
+            #         error_msg = "Threads are not supported in this channel. Please use this command in a text channel."
+            #         await ctx.channel.send(error_msg)
+            #         logger.warning(error_msg)
+            # else:
+            if isinstance(ctx.channel, (discord.TextChannel, discord.ForumChannel)):
+                await DiscordResponseHandler.send_explanation_in_thread(ctx.message, explanation)
             else:
-                if isinstance(ctx.channel, (discord.TextChannel, discord.ForumChannel)):
-                    await DiscordResponseHandler.send_explanation_in_thread(ctx.message, explanation)
-                else:
-                    error_msg = "Threads are not supported in this channel. Please use this command in a text channel."
-                    await ctx.channel.send(error_msg)
-                    logger.warning(error_msg)
+                error_msg = "Threads are not supported in this channel. Please use this command in a text channel."
+                await ctx.channel.send(error_msg)
+                logger.warning(error_msg)
+
         except discord.errors.HTTPException as http_ex:
             logger.error(f"Error sending the explanation: {str(http_ex)}")
             await ctx.channel.send(f"Error: {http_ex}")

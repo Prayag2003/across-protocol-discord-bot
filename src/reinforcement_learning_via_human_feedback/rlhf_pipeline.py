@@ -15,7 +15,6 @@ class RLHFPipeline:
                 logger.info(f"Insufficient feedback data. Need at least {min_feedback_count} entries.")
                 return None
             
-            # Create a labeled dataset instead of comparisons
             dataset = await self.trainer.create_labeled_dataset(feedbacks)
             if not dataset:
                 logger.info("No valid entries found for training.")
@@ -23,7 +22,15 @@ class RLHFPipeline:
             
             training_file = await self.trainer.prepare_training_file(dataset)
             job_id = await self.trainer.create_training_job(training_file)
-            logger.info(f"Started training job {job_id} with {len(dataset)} entries.")
+            
+            # Get fine-tuned model
+            fine_tuned_model = await self.trainer.get_fine_tuned_model(job_id)
+            if fine_tuned_model:
+                logger.info(f"Fine-tuned model ready: {fine_tuned_model}")
+                return fine_tuned_model
+            else:
+                logger.info("Fine-tuned model not ready yet.")
+                
             return job_id
         except Exception as e:
             logger.error(f"Error in training cycle: {str(e)}")
