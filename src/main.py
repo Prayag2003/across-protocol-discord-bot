@@ -12,19 +12,18 @@ from apscheduler.triggers.interval import IntervalTrigger
 load_dotenv()
 TOKEN = os.getenv('TOKEN')
 
+logger.add("main.log", format="{time} {level} {message}", level="INFO", rotation="10 MB", compression="zip")
+
 def run_execute_files():
     """
     Runs the execute_files.py script as a non-blocking subprocess without waiting for it to complete.
     """
     logger.info("=======================================================================================================")
     try:
-        # script_path = os.path.join('src', 'execute_files.py')
         script_path = os.path.abspath(os.path.join('execute_files.py'))
-        # script_path =  os.path.join('src', 'execute_files.py'),  # Update the path
         logger.info(f"Attempting to run script: {script_path}")
         python_exec = "python" if os.name == "nt" else "python3"
         
-        # Run the process as a non-blocking subprocess
         subprocess.Popen([python_exec, script_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, env=os.environ.copy())
         
         logger.info(f"Started {script_path} as a non-blocking subprocess.")

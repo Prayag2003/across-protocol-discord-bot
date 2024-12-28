@@ -4,7 +4,7 @@ import logging
 
 # Configure logging to write logs to a file
 logging.basicConfig(
-    filename='execute_log.log',  # Log file name
+    filename='execute.log',  # Log file name
     level=logging.INFO,  # Log level
     format='%(asctime)s - %(levelname)s - %(message)s',  # Log message format
 )
