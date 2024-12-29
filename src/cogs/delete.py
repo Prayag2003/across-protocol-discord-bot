@@ -7,11 +7,11 @@ class DeleteMessagesCog(commands.Cog):
         self.bot = bot
 
     @commands.command(name='purge')
-    @commands.has_permissions(manage_messages=True)
+    @commands.has_permissions(administrator=True)
     async def purge_channel(self, ctx, confirmation: str = None):
         """
         Deletes all messages in the current channel.
-        Requires user to have 'Manage Messages' permission.
+        Requires user to have 'Administrator' permission.
         Requires explicit confirmation to prevent accidental deletion.
         
         Usage: 
@@ -49,8 +49,13 @@ class DeleteMessagesCog(commands.Cog):
         except discord.Forbidden:
             await ctx.send("❌ I don't have permission to delete messages.")
         except discord.HTTPException:
-            logger.error("An error occured while deleting messages")
+            logger.error("An error occurred while deleting messages")
             # await ctx.send("❌ An error occurred while deleting messages.")
+
+    @purge_channel.error
+    async def purge_channel_error(self, ctx, error):
+        if isinstance(error, commands.MissingPermissions):
+            await ctx.send("❌ You need to have Administrator permissions to use this command.")
 
 async def setup(bot):
     await bot.add_cog(DeleteMessagesCog(bot))

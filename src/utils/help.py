@@ -1,14 +1,14 @@
 COMMANDS = [
     {
-        "command": "/list",
-        "description": "Displays a list of all commands."
-    },
-    {
         "command": "/explain [query]",
-        "description": "Provides detailed explanation for a query."
+        "description": "Provides explanation query about documentation"
     },
     {
         "command": "/event [query]",
-        "description": "Inquires about events, updates, and announcements."
+        "description": "Inquires about events, updates, and announcements"
     },
+    {
+        "command": "/purge",
+        "description": "Deletes messages in bulk. [Admin only]"
+    }
 ]
