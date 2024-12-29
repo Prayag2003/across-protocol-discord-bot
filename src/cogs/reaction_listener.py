@@ -1,12 +1,11 @@
 import discord
 from discord.ext import commands
-from datetime import datetime
+from datetime import datetime, timedelta
 import pymongo
 import os
 from loguru import logger
 from discord.utils import get
 import re
-from loguru import logger
 
 class RLHFListener(commands.Cog):
     def __init__(self, bot):
@@ -15,20 +14,23 @@ class RLHFListener(commands.Cog):
         self.mongo_client = pymongo.MongoClient(os.getenv("MONGO_URI"))
         self.db = self.mongo_client["ross"]
         self.feedback_collection = self.db["feedback"]
-        self.cached_messages = {}
         self.is_ready = False
 
     @commands.Cog.listener()
     async def on_ready(self):
-        self.channel = self.get_logging_channel()
+        """Fetch the logging channel and logs from MongoDB on bot startup."""
+        self.channel = await self.get_logging_channel()
         if self.channel:
             logger.info(f"Listening for reactions in channel: {self.channel.name}")
-            await self.cache_existing_messages()
+            await self.fetch_recent_logs()
             self.is_ready = True
         else:
-            logger.warning("Channel 'ross-bot-logs' not found.")
+            logger.warning("Channel 'ross-bot-logs' not found, creating it.")
+            await self.create_logging_channel()
+            await self.fetch_recent_logs()
+            self.is_ready = True
 
-    def get_logging_channel(self):
+    async def get_logging_channel(self):
         """Fetch the logging channel by name."""
         for guild in self.bot.guilds:
             channel = get(guild.text_channels, name='ross-bot-logs')
@@ -36,25 +38,35 @@ class RLHFListener(commands.Cog):
                 return channel
         return None
 
-    async def cache_existing_messages(self):
-        """Cache existing messages from the logging channel."""
+    async def create_logging_channel(self):
+        """Create the 'ross-bot-logs' channel if it doesn't exist."""
+        for guild in self.bot.guilds:
+            if guild.me.guild_permissions.manage_channels:
+                channel = await guild.create_text_channel('ross-bot-logs')
+                logger.info(f"Created new logging channel: {channel.name}")
+                return channel
+            else:
+                logger.error("Bot doesn't have permissions to create channels in this guild.")
+        return None
+
+    async def fetch_recent_logs(self):
+        """Fetch logs from the last 30 days from MongoDB."""
         try:
-            logger.info("Starting to cache existing messages...")
-            message_count = 0
+            thirty_days_ago = datetime.utcnow() - timedelta(days=30)
+            logs = self.feedback_collection.find({
+                "timestamp": {"$gte": thirty_days_ago}
+            }).sort("timestamp", pymongo.DESCENDING)
 
-            async for message in self.channel.history(limit=None):
-                if message.attachments and any(att.filename.endswith('.txt') for att in message.attachments):
-                    self.cached_messages[message.id] = {
-                        'message': message,
-                        'attachments': [att for att in message.attachments if att.filename.endswith('.txt')]
-                    }
-                    message_count += 1
+            log_count = 0
+            for log in logs:  
+                log_count += 1
+                # logger.info(f"Fetched log: {log['_id']} for user: {log['original_user']['name']}")
 
-            logger.info(f"Successfully cached {message_count} messages with .txt attachments")
-            logger.debug(f"Cached message IDs: {list(self.cached_messages.keys())[0]}")
+            logger.info(f"Successfully fetched {log_count} logs from the last 30 days")
 
         except Exception as e:
-            logger.error(f"Error caching messages: {e}")
+            logger.error(f"Error fetching recent logs: {e}")
+
 
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload):
@@ -79,27 +91,6 @@ class RLHFListener(commands.Cog):
             logger.exception(f"Error in on_raw_reaction_add: {e}")
 
     @commands.Cog.listener()
-    async def on_raw_reaction_remove(self, payload):
-        """Handle reaction removal events."""
-        try:
-            if payload.channel_id != self.channel.id:
-                return
-
-            guild = self.bot.get_guild(payload.guild_id)
-            user = await guild.fetch_member(payload.user_id)
-
-            logger.info(f"Reaction removed: {payload.emoji} by {user.name} from message {payload.message_id}")
-
-            self.feedback_collection.delete_one({
-                "interaction.message_id": str(payload.message_id),
-                "reviewer.id": str(user.id)
-            })
-            logger.info(f"Feedback removed for message {payload.message_id}")
-
-        except Exception as e:
-            logger.exception(f"Error in on_raw_reaction_remove: {e}")
-
-    @commands.Cog.listener()
     async def on_message(self, message):
         """Track new messages with .txt attachments."""
         if not self.is_ready:
@@ -107,24 +98,63 @@ class RLHFListener(commands.Cog):
 
         if message.channel == self.channel and message.attachments:
             if any(att.filename.endswith('.txt') for att in message.attachments):
-                self.cached_messages[message.id] = {
-                    'message': message,
-                    'attachments': [att for att in message.attachments if att.filename.endswith('.txt')]
-                }
-                logger.info(f"New message cached: {message.id}")
+                await self.store_feedback(message)
+
+    async def store_feedback(self, message):
+        """Store feedback directly from new message with .txt attachments."""
+        try:
+            for attachment in message.attachments:
+                if attachment.filename.endswith('.txt'):
+                    content = await attachment.read()
+                    content = content.decode('utf-8')
+
+                    user_pattern = r"👤 User: ([^(]+)\s*\((\d+)\)"
+                    query_pattern = r"💭 Query: ([^\n]+)"
+                    response_pattern = r"🤖 Response:\s*([\s\S]+)"
+
+                    user_match = re.search(user_pattern, content)
+                    query_match = re.search(query_pattern, content)
+                    response_match = re.search(response_pattern, content)
+
+                    if not all([user_match, query_match, response_match]):
+                        logger.error("Failed to extract all required information from log file")
+                        return
+
+                    log_data = {
+                        "username": user_match.group(1).strip(),
+                        "user_id": user_match.group(2).strip(),
+                        "query": query_match.group(1).strip(),
+                        "response": response_match.group(1).strip()
+                    }
+
+                    feedback_entry = {
+                        "timestamp": datetime.utcnow(),
+                        "original_user": {
+                            "name": log_data["username"],
+                            "id": log_data["user_id"]
+                        },
+                        "interaction": {
+                            "query": log_data["query"],
+                            "response": log_data["response"],
+                            "message_id": str(message.id)
+                        },
+                        "feedback": {
+                            "type": None,  # No feedback yet
+                            "timestamp": datetime.utcnow()
+                        }
+                    }
+
+                    self.feedback_collection.insert_one(feedback_entry)
+                    logger.info(f"New feedback stored from message {message.id}")
+
+        except Exception as e:
+            logger.error(f"Error storing feedback: {e}")
 
     async def get_message_from_payload(self, payload):
         """Retrieve the message from cache or fetch it."""
         try:
-            if payload.message_id in self.cached_messages:
-                return self.cached_messages[payload.message_id]['message']
-            else:
-                message = await self.channel.fetch_message(payload.message_id)
-                if message.attachments and any(att.filename.endswith('.txt') for att in message.attachments):
-                    self.cached_messages[message.id] = {
-                        'message': message,
-                        'attachments': [att for att in message.attachments if att.filename.endswith('.txt')]
-                    }
+            message = await self.channel.fetch_message(payload.message_id)
+            if message.attachments and any(att.filename.endswith('.txt') for att in message.attachments):
                 return message
         except Exception as e:
             logger.warning(f"Failed to fetch message: {e}")
@@ -168,9 +198,6 @@ class RLHFListener(commands.Cog):
 
     def get_txt_attachment(self, message):
         """Retrieve the .txt attachment from the message."""
-        message_data = self.cached_messages.get(message.id)
-        if message_data and message_data['attachments']:
-            return message_data['attachments'][0]
         return next((att for att in message.attachments if att.filename.endswith('.txt')), None)
 
     async def process_log_file(self, attachment):
@@ -178,8 +205,6 @@ class RLHFListener(commands.Cog):
         try:
             content = await attachment.read()
             content = content.decode('utf-8')
-
-            # print("Content:\n", content)
 
             user_pattern = r"👤 User: ([^(]+)\s*\((\d+)\)"
             query_pattern = r"💭 Query: ([^\n]+)"
@@ -189,15 +214,10 @@ class RLHFListener(commands.Cog):
             query_match = re.search(query_pattern, content)
             response_match = re.search(response_pattern, content)
 
-            # print("User match:\n", user_match)
-            # print("Query match:\n", query_match)
-            # print("Response match:\n", response_match)
-
             if not all([user_match, query_match, response_match]):
                 logger.error("Failed to extract all required information from log file")
                 return None
 
-            # Construct the extracted data
             data = {
                 "username": user_match.group(1).strip(),
                 "user_id": user_match.group(2).strip(),
@@ -211,7 +231,6 @@ class RLHFListener(commands.Cog):
             logger.exception(f"Error processing log file: {e}")
             return None
 
-
     async def is_valid_reaction(self, reaction, user):
         """Check if the reaction is valid for processing."""
         if user.bot:
@@ -220,7 +239,7 @@ class RLHFListener(commands.Cog):
         if not user.guild_permissions.administrator:
             logger.warning(f"User {user.name} lacks administrator permissions")
             return False
-        if str(reaction.emoji) not in ["👍🏻","👍","👍🏼","👍🏽","👍🏾","👍🏿","👎","👎🏻","👎🏼","👎🏽","👎🏿"]:
+        if str(reaction.emoji) not in ["👍🏻", "👍", "👍🏼", "👍🏽", "👍🏾", "👍🏿", "👎", "👎🏻", "👎🏼", "👎🏽", "👎🏿"]:
             logger.warning(f"Invalid reaction emoji: {reaction.emoji}")
             return False
         return True
@@ -281,7 +300,7 @@ class RLHFListener(commands.Cog):
                 self.feedback_collection.update_one(
                     {"_id": existing_feedback["_id"]},
                     {"$set": {
-                        "feedback.type": "positive" if str(reaction.emoji) == "\ud83d\udc4d" else "negative",
+                        "feedback.type": "positive" if str(reaction.emoji) == "👍" else "negative",
                         "feedback.timestamp": datetime.utcnow()
                     }}
                 )
@@ -293,6 +312,7 @@ class RLHFListener(commands.Cog):
         except Exception as e:
             logger.exception(f"Error updating existing feedback: {e}")
             return False
+
 
 async def setup(bot):
     await bot.add_cog(RLHFListener(bot))

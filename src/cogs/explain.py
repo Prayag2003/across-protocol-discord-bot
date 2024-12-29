@@ -42,9 +42,8 @@ class DiscordResponseHandler:
                 auto_archive_duration=60
             )
 
+            # segregate the code blocks and text content
             clean_text, code_blocks = extract_code_blocks(explanation)
-            # logger.info(f"Code blocks: {code_blocks}")  
-            # logger.info(f"Clean text: {clean_text}")
 
             for idx, code_block in enumerate(code_blocks, 1):
                 language = code_block["language"]
@@ -61,15 +60,6 @@ class DiscordResponseHandler:
                         filename=f"code_snippet_{idx}.{extension}"
                     )
                     await thread.send(file=file)
-
-                # file = discord.File(
-                #     io.StringIO(code_block["code"]),
-                #     filename=f"code_snippet_{idx}.{extension}"
-                # )
-                
-                ## await thread.send(f"```{language}\n{code_block['code']}```")
-                
-                # await thread.send(file=file)
 
             if clean_text:
                 text_chunks = chunk_message_by_paragraphs(clean_text)
@@ -91,8 +81,7 @@ class ExplainCog(commands.Cog):
     async def update_announcement_channels(self, guild: discord.Guild):
         """Update cached announcement channels for a given guild."""
         self.announcement_channels = await AnnouncementChannelManager.get_announcement_channels(guild)
-        # logger.info(f"Updated announcement channels: {[c.name for c in self.announcement_channels]}")
-
+    
     @commands.Cog.listener()
     async def on_ready(self):
         """Populate announcement channels cache when the bot is ready."""
@@ -109,19 +98,24 @@ class ExplainCog(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        logger.debug(f"Received message in channel: {message.channel.name}")
         """Process new announcements and add them to MongoDB."""
+        # Ignore messages from bots
         if message.author.bot:
             return
-        logger.debug("oky1")
+
+        # Check if the message is a `/purge` command
+        if message.content.startswith("/purge") or message.content.startswith("/purge confirm"):
+            # logger.info(f"Ignored message: {message.content}")
+            return
+
+        # Check if the message is in an announcement channel
         if message.channel.name in [channel.name for channel in self.announcement_channels]:
             try:
                 content = (
-                    message.content or 
-                    " ".join(embed.description or embed.title or '' for embed in message.embeds) or 
+                    message.content or
+                    " ".join(embed.description or embed.title or '' for embed in message.embeds) or
                     " ".join(attachment.url for attachment in message.attachments)
                 )
-                # content = str(content)
                 if not content.strip():
                     logger.info(f"No processable content in {message.channel.name} by {message.author.name}.")
                     return
@@ -146,12 +140,8 @@ class ExplainCog(commands.Cog):
                     logger.error("Failed to store announcement in MongoDB Vector Search.")
 
                 # Save to MongoDB (for raw content)
-                # announcement_collection.insert_one(metadata)
                 try:
                     announcement_collection.insert_one(metadata)
-                    print("METADATA: ")
-                    print(metadata)
-                    # print("METADATA: " + json.dumps(metadata, indent=4))
                     logger.info("Metadata successfully inserted into MongoDB.")
                 except Exception as e:
                     logger.error(f"Failed to insert metadata into MongoDB: {e}")
@@ -161,11 +151,66 @@ class ExplainCog(commands.Cog):
             except Exception as e:
                 logger.error(f"Failed to process announcement: {e}")
 
+
+    # @commands.Cog.listener()
+    # async def on_message(self, message):
+    #     logger.debug(f"Received message in channel: {message.channel.name}")
+    #     """Process new announcements and add them to MongoDB."""
+    #     if message.author.bot:
+    #         return
+
+    #     if message.channel.name in [channel.name for channel in self.announcement_channels]:
+    #         try:
+    #             content = (
+    #                 message.content or 
+    #                 " ".join(embed.description or embed.title or '' for embed in message.embeds) or 
+    #                 " ".join(attachment.url for attachment in message.attachments)
+    #             )
+    #             # content = str(content)
+    #             if not content.strip():
+    #                 logger.info(f"No processable content in {message.channel.name} by {message.author.name}.")
+    #                 return
+
+    #             logger.info(f"Processing message in {message.channel.name}: {content}")
+
+    #             metadata = {
+    #                 "content": content.strip(),
+    #                 "channel": message.channel.name,
+    #                 "author": message.author.name,
+    #                 "timestamp": message.created_at.isoformat(),
+    #                 "url": f"https://discord.com/channels/{message.guild.id}/{message.channel.id}/{message.id}"
+    #             }
+
+    #             logger.info(f"Metadata: {metadata}")
+
+    #             # Save to MongoDB with Vector Search
+    #             success = self.mongo_service.upsert_announcement(metadata)
+    #             if success:
+    #                 logger.info(f"Announcement vectorized and stored in MongoDB Vector Search. Channel: {message.channel.name}")
+    #             else:
+    #                 logger.error("Failed to store announcement in MongoDB Vector Search.")
+
+    #             # Save to MongoDB (for raw content)
+    #             # announcement_collection.insert_one(metadata)
+    #             try:
+    #                 announcement_collection.insert_one(metadata)
+    #                 print("METADATA: ")
+    #                 print(metadata)
+    #                 # print("METADATA: " + json.dumps(metadata, indent=4))
+    #                 logger.info("Metadata successfully inserted into MongoDB.")
+    #             except Exception as e:
+    #                 logger.error(f"Failed to insert metadata into MongoDB: {e}")
+
+    #             logger.info(f"Announcement stored in MongoDB. Channel: {message.channel.name}, Author: {message.author.name}")
+
+    #         except Exception as e:
+    #             logger.error(f"Failed to process announcement: {e}")
+
     @commands.command()
     async def search(self, ctx, *, query: str):
         """Search for announcements using a query."""
         try:
-            # Generate embedding for the query
+            print("QUERY insearch: " + query)
             query_embedding = self.mongo_service.generate_embedding(query)
 
             # Search announcements based on embedding similarity
@@ -189,13 +234,16 @@ class ExplainCog(commands.Cog):
                 
     @commands.command(name='event')
     async def event(self, ctx, *, user_query: str):
-        """Handle user query and generate response from MongoDB."""
+        """Ask queries related to events, announcements and updates."""
+        print("QUERY in event: " + user_query)
+        if user_query == "/purge" or user_query == "/purge confirm": 
+            return
+
         try:
             # Generate response from MongoDB vector search
             logger.debug(f"Event command triggered. Query: {user_query}")
             response = self.mongo_service.generate_response_from_mongo(user_query)
-            logger.info(f"User query: {user_query}, Response: {response}")
-
+            # logger.info(f"User query: {user_query}, Response: {response}")
 
             if response.get("response"):
                 await ctx.channel.send(response["response"])
@@ -210,27 +258,109 @@ class ExplainCog(commands.Cog):
         """Generate an explanation for the user query."""
         try:
             username = ctx.author.name
+
+            # Send the initial "Thinking..." message
+            thinking_message = await ctx.channel.send("Analyzing your query... 🤔")
+            loading = True
+
+            async def update_thinking_message():
+                """Provide staged progress updates."""
+                stages = [
+                    "Analyzing your question... 🤔",
+                    "Fetching relevant information... 🔍",
+                    "Composing a thoughtful response... ✍️",
+                    "Almost done! Finalizing... 🛠️"
+                ]
+                try:
+                    for stage in stages:
+                        if not loading:  # Stop if the response is ready
+                            break
+                        await thinking_message.edit(content=stage)
+                        await asyncio.sleep(2)
+                    # If stages finish before response, show final stage
+                    if loading:
+                        await thinking_message.edit(content="Almost done! Finalizing... 🛠️")
+                except asyncio.CancelledError:
+                    # If the task is cancelled, handle it gracefully
+                    pass
+
+            # Start the loading effect in the background
+            loader_task = asyncio.create_task(update_thinking_message())
+
+            # Generate the explanation in a background thread
             explanation = await asyncio.to_thread(generate_response_with_context, user_query, username)
             explanation = explanation.strip()
 
-            logger.info(f"Full explanation length: {len(explanation)}")
-            logger.info(f"Message: {ctx.message}, Explanation: {explanation}")
+            # Stop the loading effect and cancel the loader task
+            loading = False
+            loader_task.cancel()
+            await loader_task  # Ensure the task is fully cancelled
 
-            if isinstance(ctx.channel, (discord.TextChannel, discord.ForumChannel)):
-                await DiscordResponseHandler.send_explanation_in_thread(ctx.message, explanation)
+            # Delete the Loading message and send the final response
+            await thinking_message.delete()
+            thread = await DiscordResponseHandler.send_explanation_in_thread(ctx.message, explanation)
+            if thread:
                 await log_manager.stream_log(ctx.message, explanation)
-            else:
-                error_msg = "Threads are not supported in this channel. Please use this command in a text channel."
-                await ctx.channel.send(error_msg)
-                logger.warning(error_msg)
 
-        except discord.errors.HTTPException as http_ex:
-            logger.error(f"Error sending the explanation: {str(http_ex)}")
-            await ctx.channel.send(f"Error: {http_ex}")
         except Exception as e:
+            loading = False
+            if 'thinking_message' in locals() and thinking_message:  # Ensure thinking_message exists
+                await thinking_message.delete()
             logger.error(f"Error: {e}")
             await ctx.channel.send(f"An error occurred: {e}")
-            
+
+
+    # @commands.command(name='explain')
+    # async def explain(self, ctx, *, user_query: str):
+    #     """Generate an explanation for the user query."""
+    #     try:
+    #         username = ctx.author.name
+
+    #         # Send the initial "Thinking..." message
+    #         thinking_message = await ctx.channel.send("Analyzing your query... 🤔")
+    #         loading = True
+
+    #         async def update_thinking_message():
+    #             """Provide staged progress updates."""
+    #             stages = [
+    #                 "Analyzing your question... 🤔",
+    #                 "Fetching relevant information... 🔍",
+    #                 "Composing a thoughtful response... ✍️",
+    #                 "Almost done! Finalizing... 🛠️"
+    #             ]
+    #             for stage in stages:
+    #                 if not loading:
+    #                     break
+    #                 await thinking_message.edit(content=stage)
+    #                 await asyncio.sleep(2)
+                
+    #             # in case of timeup, show the final stage
+    #             if loading:
+    #                 await thinking_message.edit(content="Almost done! Finalizing... 🛠️")
+
+    #         # Start the loading effect in the background
+    #         loader_task = asyncio.create_task(update_thinking_message())
+
+    #         # Generate the explanation in a background thread
+    #         explanation = await asyncio.to_thread(generate_response_with_context, user_query, username)
+    #         explanation = explanation.strip()
+
+    #         # Stop the loading effect
+    #         loading = False
+    #         await loader_task  # Wait for the loader task to complete
+
+    #         # Delete the Loading message and send the final response
+    #         await thinking_message.delete()
+    #         thread = await DiscordResponseHandler.send_explanation_in_thread(ctx.message, explanation)
+    #         if thread:
+    #             await log_manager.stream_log(ctx.message, explanation)
+
+    #     except Exception as e:
+    #         loading = False
+    #         await thinking_message.delete()
+    #         logger.error(f"Error: {e}")
+    #         await ctx.channel.send(f"An error occurred: {e}")
+
 async def setup(bot):
     """Setup function to add the Explain Cog to the bot."""
     await bot.add_cog(ExplainCog(bot))

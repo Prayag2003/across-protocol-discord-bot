@@ -12,7 +12,6 @@ load_dotenv()
 
 class MongoService:
     def __init__(self):
-        logger.info("Initializing MongoService...")
         try:
             mongo_uri = os.getenv("MONGO_URI")
             db_name = os.getenv("MONGO_DB_NAME")
@@ -21,10 +20,8 @@ class MongoService:
             
             # Collections
             self.announcements_collection = self.db[os.getenv("ANNOUNCEMENTS_COLLECTION")]
-            self.embeddings_collection = self.db[os.getenv("ANNOUNCEMENTS_COLLECTION")]
-
             openai.api_key = os.getenv("OPENAI_API_KEY")
-            logger.info("MongoService initialized successfully.")
+            
         except Exception as e:
             logger.error(f"Error initializing MongoService: {str(e)}")
             raise
@@ -48,8 +45,6 @@ class MongoService:
                 model="text-embedding-ada-002"
             )
             embedding = response.data[0].embedding
-
-            logger.debug(f"Generated embedding: {embedding[:5]}... (truncated)")
             return self.normalize_embedding(embedding)
         except Exception as e:
             logger.error(f"Error generating embedding using OpenAI API: {str(e)}")
@@ -78,16 +73,17 @@ class MongoService:
             )
             logger.info(f"Inserted/updated announcement with ID: {announcement_id}")
 
-            # Upsert into embeddings collection
-            embedding_document = {
-                "_id": announcement_id,
-                "embedding": embedding,
-                "metadata": metadata
-            }
-            self.embeddings_collection.replace_one(
-                {"_id": announcement_id}, embedding_document, upsert=True
-            )
-            logger.info(f"Inserted/updated embedding with ID: {announcement_id}")
+            # # Upsert into embeddings collection
+            # embedding_document = {
+            #     "_id": announcement_id,
+            #     "embedding": embedding,
+            #     "metadata": metadata
+            # }
+            # self.embeddings_collection.replace_one(
+            #     {"_id": announcement_id}, embedding_document, upsert=True
+            # )
+            # logger.info(f"Inserted/updated embedding with ID: {announcement_id}")
+
             return True
         except Exception as e:
             logger.error(f"Error upserting announcement: {str(e)}")
@@ -99,7 +95,6 @@ class MongoService:
             # Preprocess the query and generate its embedding
             processed_query = self.preprocess_text(query)
             query_embedding = self.generate_embedding(processed_query)
-            logger.debug(f"Query embedding: {query_embedding}")
 
             logger.debug("Performing vector similarity search in MongoDB using knnBeta...")
             
@@ -122,10 +117,9 @@ class MongoService:
                     }
                 }
             ]
-            logger.debug("=====================================================\n")
-            logger.debug(self.embeddings_collection)
-            results = list(self.embeddings_collection.aggregate(pipeline))
-            logger.debug(f"Search results: {results}")
+
+            results = list(self.announcements_collection.aggregate(pipeline))
+
             contexts = []
             for result in results:
                 logger.debug(f"Processing search result with ID: {result['_id']}")
@@ -151,13 +145,13 @@ class MongoService:
 
     def _create_prompt(self, query: str, contexts: List[Dict]) -> str:
         logger.info(f"Creating prompt for query: {query}")
-        prompt = f"User Query: {query}\n\nRelevant Announcements:\n\n"
+        prompt = f"User Query: {query}\n\nRelevant Announcements:"
         
         if not contexts:
             prompt += "No relevant announcements found.\n"
         else:
             for idx, context in enumerate(contexts, 1):
-                prompt += f"Announcement {idx}:\n{context['content']}\n\n"
+                prompt += f"Announcement {idx}: {context['content']}\n\n"
 
         prompt += "\nBased on these announcements, please provide a relevant response to the user's query. "
         prompt += "Include specific details when available. "
