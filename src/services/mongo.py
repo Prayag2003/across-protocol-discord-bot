@@ -6,7 +6,8 @@ from pymongo import MongoClient
 from typing import Dict, List, Optional
 from functools import lru_cache
 from dotenv import load_dotenv
-# from services.log_manager import log_manager
+from datetime import datetime
+from dateutil.parser import parse as parse_iso
 
 load_dotenv()
 
@@ -27,13 +28,12 @@ class MongoService:
             raise
 
     def preprocess_text(self, text: str) -> str:
-        logger.debug(f"Preprocessing text: {text}")
+        logger.info(f"Preprocessing text")
         return ' '.join(text.split()).strip()
-
+    
     def normalize_embedding(self, embedding: List[float]) -> List[float]:
         norm = np.linalg.norm(embedding)
         normalized = (embedding / norm).tolist() if norm > 0 else embedding
-        logger.debug(f"Normalized embedding: {normalized[:5]}... (truncated)")
         return normalized
 
     @lru_cache(maxsize=1000)
@@ -50,8 +50,19 @@ class MongoService:
             logger.error(f"Error generating embedding using OpenAI API: {str(e)}")
             raise
 
+    
+    def parse_timestamp(self, timestamp_str: str) -> datetime:
+        """Parses timestamp string into datetime object."""
+        try:
+            # Parse ISO 8601 format
+            return parse_iso(timestamp_str)
+        except Exception as e:
+            logger.error(f"Error parsing timestamp {timestamp_str}: {str(e)}")
+            return datetime.min
+
+
     def upsert_announcement(self, metadata: Dict) -> bool:
-        logger.info(f"Upserting announcement with metadata: {metadata}")
+        logger.info(f"Upserting announcement")
         try:
             content = metadata.get("content", "").strip()
             if not content:
@@ -62,7 +73,6 @@ class MongoService:
             embedding = self.generate_embedding(processed_content)
             announcement_id = f"{metadata['channel']}_{metadata['timestamp']}"
 
-            # Upsert into announcements collection
             announcement_document = {
                 "_id": announcement_id,
                 "embedding": embedding,
@@ -73,17 +83,6 @@ class MongoService:
             )
             logger.info(f"Inserted/updated announcement with ID: {announcement_id}")
 
-            # # Upsert into embeddings collection
-            # embedding_document = {
-            #     "_id": announcement_id,
-            #     "embedding": embedding,
-            #     "metadata": metadata
-            # }
-            # self.embeddings_collection.replace_one(
-            #     {"_id": announcement_id}, embedding_document, upsert=True
-            # )
-            # logger.info(f"Inserted/updated embedding with ID: {announcement_id}")
-
             return True
         except Exception as e:
             logger.error(f"Error upserting announcement: {str(e)}")
@@ -92,13 +91,11 @@ class MongoService:
     def search_announcements(self, query: str) -> List[Dict]:
         logger.info(f"Searching for announcements relevant to query: {query}")
         try:
-            # Preprocess the query and generate its embedding
             processed_query = self.preprocess_text(query)
             query_embedding = self.generate_embedding(processed_query)
 
-            logger.debug("Performing vector similarity search in MongoDB using knnBeta...")
+            logger.info("Performing vector similarity search in MongoDB using knnBeta...")
             
-            # Use the aggregate pipeline with knnBeta for vector search
             pipeline = [
                 {
                     "$search": {
@@ -122,21 +119,23 @@ class MongoService:
 
             contexts = []
             for result in results:
-                logger.debug(f"Processing search result with ID: {result['_id']}")
-
-                # Fetch the announcement metadata using the ID
+                logger.info(f"Processing result | ID:{result['_id']}")
                 announcement = self.announcements_collection.find_one({"_id": result["_id"]})
-                print("===========================================\n")
-                print(announcement.keys())
                 if announcement:
                     contexts.append({
                         "content": announcement["metadata"]["content"],
                         "channel": announcement["metadata"]["channel"],
                         "timestamp": announcement["metadata"]["timestamp"],
-                        "similarity": result["score"]  # Use the similarity score from knnBeta
+                        "similarity": result["score"]
                     })
+            
+            # Sort contexts by timestamp in descending order (most recent first)
+            contexts.sort(
+                key=lambda x: self.parse_timestamp(x["timestamp"]),
+                reverse=True
+            )
 
-            logger.info(f"Found {len(contexts)} relevant announcements.")
+            logger.info(f"Found {len(contexts)} relevant announcements, sorted by timestamp.")
             return contexts
         except Exception as e:
             logger.error(f"Error during search: {str(e)}")
@@ -144,43 +143,48 @@ class MongoService:
 
 
     def _create_prompt(self, query: str, contexts: List[Dict]) -> str:
-        logger.info(f"Creating prompt for query: {query}")
-        prompt = f"User Query: {query}\n\nRelevant Announcements:"
+        prompt = f"User Query: {query}\n\nRelevant Announcements (sorted by most recent first):\n\n"
         
         if not contexts:
             prompt += "No relevant announcements found.\n"
         else:
             for idx, context in enumerate(contexts, 1):
-                prompt += f"Announcement {idx}: {context['content']}\n\n"
+                prompt += (
+                    f"[Announcement {idx} - {context['timestamp']}]\n"
+                    f"{context['content']}\n\n"
+                )
 
-        prompt += "\nBased on these announcements, please provide a relevant response to the user's query. "
-        prompt += "Include specific details when available. "
-        prompt += "If the announcements don't contain relevant information, please indicate that."
+        prompt += (
+            "\nBased on these announcements, please provide a relevant response to the user's query. "
+            "Important notes:\n"
+            "1. Recent announcements carry more weight and may override older information.\n"
+            "2. If conflicting statements exist, prioritize the most recent one.\n"
+            "3. Provide specific details and timestamps when possible to offer clear context.\n"
+            "4. If the announcements lack relevant details, explicitly mention this.\n"
+        )
         
         logger.debug(f"Generated prompt: {prompt[:100]}... (truncated)")
         return prompt
 
     def generate_response_from_mongo(self, user_query: str) -> Dict:
         try:
-            # Search for relevant announcements
             contexts = self.search_announcements(user_query)
 
-            # Define the system prompt
-            system_prompt = """You are a helpful assistant that provides information about announcements. 
+            system_prompt = """You are a helpful discord bot assistant that provides information about announcements. 
             Your task is to:
-            1. Answer questions about announcements, events, and updates
-            2. If a query is about dates or upcoming events, focus on temporal aspects
-            3. Provide specific details from the announcements when available
-            4. If multiple announcements are relevant, combine the information coherently
-            5. If no announcements match the query, clearly state that
+            1. Answer questions about announcements, events, and updates.
+            2. Always prioritize the most recent information, as it represents the current state
+            3. When discussing status updates or changes, explicitly mention the latest known state
+            4. Include relevant timestamps to provide context about when information was announced
+            5. If there are conflicting announcements, explain the timeline and current status
+            6. If no announcements match the query, clearly state that
             
-            Always maintain a helpful and informative tone."""
+            Always maintain a helpful and informative tone while ensuring users understand the current state of affairs."""
 
-            # Create the user prompt
             user_prompt = self._create_prompt(user_query, contexts)
-            api_key1=os.getenv("OPENAI_API_KEY")
+            api_key1 = os.getenv("OPENAI_API_KEY")
             client = openai.Client(api_key=api_key1)
-            # Generate response using the new OpenAI API
+            
             response = client.chat.completions.create(
                 model="gpt-4",
                 messages=[
@@ -191,9 +195,8 @@ class MongoService:
                 max_tokens=500
             )
 
-            # Extract the response content
             response_content = response.choices[0].message.content
-
+            
             return {
                 "response": response_content,
                 "contexts": contexts,
@@ -204,4 +207,3 @@ class MongoService:
                 "response": "Sorry, I encountered an error while searching for announcements.",
                 "error": str(e)
             }
-

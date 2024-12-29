@@ -35,7 +35,6 @@ def load_embeddings(file_path):
             db = client[os.getenv('MONGO_DB_NAME')]
             collection = db[os.getenv('EMBEDDINGS_COLLECTION')]
 
-            # Load embeddings from MongoDB
             embeddings_list = list(collection.find({}, {'_id': 0})) 
             logger.info("Successfully loaded embeddings from MongoDB.")
             return embeddings_list
@@ -125,7 +124,7 @@ def get_openai_client():
     return _openai_client
 
 def generate_response_with_context(user_query: str, username: str):
-    logger.info("Starting Across Protocol Bot")
+
     logger.info(f"Processing query: {user_query}")
     client = get_openai_client()
 
@@ -133,7 +132,6 @@ def generate_response_with_context(user_query: str, username: str):
     logger.info(f"Using model: {model_name}")
 
     embeddings_path = os.path.join('knowledge_base', 'embeddings', 'merged_knowledge_base_embeddings.json')
-    logger.info(f"Loading embeddings from: {embeddings_path}")
 
     try:
         embeddings_list = load_embeddings(embeddings_path)
@@ -143,7 +141,6 @@ def generate_response_with_context(user_query: str, username: str):
         return "Failed to retrieve embeddings from file and MongoDB."
 
     query_embedding = generate_embedding_for_query(client, user_query)
-
     most_similar_docs = find_most_similar_documents(query_embedding, embeddings_list, user_query, top_n=3)
     logger.info(f"Found {len(most_similar_docs)} most similar documents.")
 
@@ -159,7 +156,9 @@ def generate_response_with_context(user_query: str, username: str):
             max_tokens=1000,
             temperature=0.15,
         )
+
         response_text = response.choices[0].message.content.strip()
+        logger.info(f"Generated response.")
         log_query_and_response(user_query, response_text, username)
         return response_text
 

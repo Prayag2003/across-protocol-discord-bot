@@ -151,27 +151,20 @@ class ExplainCog(commands.Cog):
             except Exception as e:
                 logger.error(f"Failed to process announcement: {e}")
 
-
     @commands.command(name='event')
     async def event(self, ctx, *, user_query: str):
-        """Ask queries related to events, announcements, and updates."""
-        try:
-            logger.info(f"Event command triggered. Query: {user_query}")
-            
-            # Send the initial "Thinking..." message
-            thinking_message = await ctx.channel.send("Analyzing your query... 🤔")
-            loading = True
-
-            async def update_thinking_message():
+        """Ask queries related to events, announcements and updates."""
+        async def update_thinking_message():
+                """Provide staged progress updates."""
                 stages = [
-                    "Analyzing your query... 🤔",
+                    "Analyzing your question... 🤔",
                     "Fetching relevant information... 🔍",
                     "Composing a thoughtful response... ✍️",
                     "Almost done! Finalizing... 🛠️"
                 ]
                 try:
                     for stage in stages:
-                        if not loading: 
+                        if not loading:  # Stop if the response is ready
                             break
                         await thinking_message.edit(content=stage)
                         await asyncio.sleep(2)
@@ -181,12 +174,17 @@ class ExplainCog(commands.Cog):
                 except asyncio.CancelledError:
                     # If the task is cancelled, handle it gracefully
                     pass
+        try:
+            thinking_message = await ctx.channel.send("Analyzing your query... 🤔")
+            loading = True
+            
+            logger.info(f"Event command triggered. Query: {user_query}")
 
             # Start the loading effect in the background
             loader_task = asyncio.create_task(update_thinking_message())
 
-            # Call the synchronous method in a thread-safe way
-            response = await asyncio.to_thread(self.mongo_service.generate_response_from_mongo, user_query)
+            response = self.mongo_service.generate_response_from_mongo(user_query)
+            # logger.info(f"User query: {user_query}, Response: {response}")
 
             # Stop the loading effect and cancel the loader task
             loading = False
@@ -197,14 +195,12 @@ class ExplainCog(commands.Cog):
 
             if response.get("response"):
                 await ctx.channel.send(response["response"])
-                logger.info("Response generated and sent to channel.")
+                if sent_message:
+                    logger.info(f"Response generated and sent to channel.")
             else:
                 await ctx.channel.send("No relevant announcements found.")
 
         except Exception as e:
-            loading = False
-            if 'thinking_message' in locals() and thinking_message:  # Ensure thinking_message exists
-                await thinking_message.delete()
             logger.error(f"Error generating response: {e}")
             await ctx.channel.send(f"An error occurred while processing your query: {e}")
 
@@ -221,7 +217,7 @@ class ExplainCog(commands.Cog):
             async def update_thinking_message():
                 """Provide staged progress updates."""
                 stages = [
-                    "Analyzing your query... 🤔",
+                    "Analyzing your question... 🤔",
                     "Fetching relevant information... 🔍",
                     "Composing a thoughtful response... ✍️",
                     "Almost done! Finalizing... 🛠️"
@@ -267,3 +263,26 @@ class ExplainCog(commands.Cog):
 async def setup(bot):
     """Setup function to add the Explain Cog to the bot."""
     await bot.add_cog(ExplainCog(bot))
+
+async def display_loading_message(ctx, stages: List[str], delay: float = 2.0):
+    """Display a staged loading effect for a command."""
+    try:
+        thinking_message = await ctx.channel.send(stages[0])
+        loading = True
+
+        async def update_message():
+            nonlocal loading
+            for stage in stages[1:]:
+                if not loading:
+                    break
+                await thinking_message.edit(content=stage)
+                await asyncio.sleep(delay)
+            if loading:  # Ensure the final stage is shown if loading isn't stopped early
+                await thinking_message.edit(content=stages[-1])
+
+        # Run the staged updates in a background task
+        loader_task = asyncio.create_task(update_message())
+        return thinking_message, loader_task
+    except Exception as e:
+        logger.error(f"Error displaying loading message: {e}")
+        return None, None
