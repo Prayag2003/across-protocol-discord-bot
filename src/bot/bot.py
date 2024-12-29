@@ -3,5 +3,5 @@ from permissions.intents import intents
 
 def create_bot():
     """Create and configure the bot instance"""
-    bot = commands.Bot(command_prefix="/", intents=intents)
+    bot = commands.Bot(command_prefix="/", intents=intents, help_command=None)
     return bot
