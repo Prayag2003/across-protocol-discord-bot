@@ -8,3 +8,5 @@ beautifulsoup4
 pymongo
 pinecone
 apscheduler
+tabulate
+pandas

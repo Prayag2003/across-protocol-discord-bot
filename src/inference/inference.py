@@ -1,3 +1,4 @@
+import re
 import os
 import json
 import numpy as np
@@ -124,7 +125,6 @@ def get_openai_client():
     return _openai_client
 
 def generate_response_with_context(user_query: str, username: str):
-
     logger.info(f"Processing query: {user_query}")
     client = get_openai_client()
 
@@ -147,6 +147,7 @@ def generate_response_with_context(user_query: str, username: str):
     context = generate_context_from_documents(most_similar_docs)
     logger.info(f"Generated context with {len(context)} characters.")
 
+    # First API Call: Generate the main response based on query and context
     messages = generate_prompt_template(context, user_query)
 
     try:
@@ -157,11 +158,98 @@ def generate_response_with_context(user_query: str, username: str):
             temperature=0.15,
         )
 
+        # The main response generated from the first API call
         response_text = response.choices[0].message.content.strip()
-        logger.info(f"Generated response.")
-        log_query_and_response(user_query, response_text, username)
-        return response_text
+        logger.info(f"Generated response: {response_text}")
 
+        # Second API Call: Extract topics and tags
+        analysis_prompt = f"""
+        Analyze this query and:
+        1. Extract the main topic(s) being discussed.
+        2. Provide 1-3 relevant tags that emerge naturally from the content.
+        Return as JSON with these keys: topics, tags
+        Query: {user_query}
+        """
+
+        try:
+            analysis_response = client.chat.completions.create(
+                model=model_name,
+                messages=[{"role": "system", "content": analysis_prompt}],
+                max_tokens=100,
+                temperature=0.15,
+            )
+
+            raw_analysis_response = analysis_response.choices[0].message.content.strip()
+            logger.info(f"Raw analysis response: {raw_analysis_response}")
+
+            # Remove 'json' prefix and backticks
+            cleaned_response = re.sub(r'^(?:json\s*)?```(?:json\s*)?|```$', '', raw_analysis_response)
+            cleaned_response = cleaned_response.strip()
+
+            if not cleaned_response:
+                logger.error("Received empty response for topics and tags analysis")
+                return "Sorry, there was an error processing the analysis."
+
+            try:
+                analysis_json = json.loads(cleaned_response)
+                topics = analysis_json.get('topics', [])
+                tags = analysis_json.get('tags', [])
+
+                log_query_and_response(user_query, response_text, username, topics, tags)
+                return response_text
+
+            except json.JSONDecodeError as e:
+                logger.error(f"JSON decode error: {str(e)}. Cleaned response: {cleaned_response}")
+                return response_text  # Return main response even if analysis fails
+
+        except Exception as e:
+            logger.error(f"Error generating response: {str(e)}")
+            return "Sorry, there was an error generating the response."
+        
     except Exception as e:
         logger.error(f"Error generating response: {str(e)}")
         return "Sorry, there was an error generating the response."
+
+
+# def generate_response_with_context(user_query: str, username: str):
+
+#     logger.info(f"Processing query: {user_query}")
+#     client = get_openai_client()
+
+#     model_name = get_latest_fine_tuned_model()
+#     logger.info(f"Using model: {model_name}")
+
+#     embeddings_path = os.path.join('knowledge_base', 'embeddings', 'merged_knowledge_base_embeddings.json')
+
+#     try:
+#         embeddings_list = load_embeddings(embeddings_path)
+#         logger.info("Successfully loaded embeddings.")
+#     except Exception as e:
+#         logger.error(f"Failed to load embeddings: {str(e)}")
+#         return "Failed to retrieve embeddings from file and MongoDB."
+
+#     query_embedding = generate_embedding_for_query(client, user_query)
+#     most_similar_docs = find_most_similar_documents(query_embedding, embeddings_list, user_query, top_n=3)
+#     logger.info(f"Found {len(most_similar_docs)} most similar documents.")
+
+#     context = generate_context_from_documents(most_similar_docs)
+#     logger.info(f"Generated context with {len(context)} characters.")
+
+#     messages = generate_prompt_template(context, user_query)
+
+#     try:
+#         response = client.chat.completions.create(
+#             model=model_name,
+#             messages=messages,
+#             max_tokens=1000,
+#             temperature=0.15,
+#         )
+
+#         response_text = response.choices[0].message.content.strip()
+#         logger.info(f"Generated response.")
+#         log_query_and_response(user_query, response_text, username)
+#         return response_text
+
+#     except Exception as e:
+#         logger.error(f"Error generating response: {str(e)}")
+#         return "Sorry, there was an error generating the response."

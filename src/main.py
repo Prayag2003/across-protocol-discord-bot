@@ -74,7 +74,7 @@ async def main():
     await bot.load_extension('cogs.help_cog')
 
     # Reinforcement learning pipeline
-    # asyncio.create_task(setup_rlhf())
+    asyncio.create_task(setup_rlhf())
     
     # Run bot
     try:

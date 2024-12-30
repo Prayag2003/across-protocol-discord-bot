@@ -18,6 +18,16 @@ COMMANDS = [
         "command": "/purge",
         "description": "Deletes messages in bulk. [Admin only]",
         "category": "Admin"
+    },
+    {
+        "command": "/analyse",
+        "description": "Generate weekly analysis report. [Admin only]",
+        "category": "Admin"
+    },
+    {
+        "command": "/learn",
+        "description": "Inculcate feedback learning",
+        "category": "Admin"
     }
 ]
 

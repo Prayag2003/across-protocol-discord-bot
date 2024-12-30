@@ -9,14 +9,16 @@ client = MongoClient(os.getenv("MONGO_URI"))
 db = client[os.getenv("MONGO_DB_NAME")]
 log_collection = db[os.getenv("LOGS_COLLECTION")]
 
-def log_query_and_response(query, response, username):
+def log_query_and_response(query, response, username, topics, tags):
     """Logs the query, response, and metadata to MongoDB."""
-    timestamp = datetime.now().isoformat()
+    timestamp = datetime.utcnow().isoformat()
     log_entry = {
         "timestamp": timestamp,
         "username": username,
         "query": query,
-        "response": response
+        "response": response,
+        "topics": topics,
+        "tags": tags
     }
     
     try:

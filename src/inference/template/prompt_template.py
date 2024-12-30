@@ -44,7 +44,7 @@ def generate_prompt_template(context, query, role="user", detail_level="standard
         "brief": "Provide a concise response strictly using KB content.",
         "standard": "Provide a clear, context-specific response strictly based on KB content.",
         "detailed": "Provide an in-depth response strictly within the KB context, with comprehensive details and clarifications."
-    }.get(detail_level, "Provide a clear, context-specific response strictly based on KB content.")
+    }.get(detail_level, "Provide a clear, context-specific response strictly based on KB content. Add the source links as well")
 
     role_instruction = {
         "developer": "Craft a precise code solution or explanation based only on KB content, including inline comments and documentation references." if is_code_query else "Offer a technical explanation rooted in KB specifics, avoiding external examples.",
@@ -52,7 +52,6 @@ def generate_prompt_template(context, query, role="user", detail_level="standard
         "user": "Explain concepts or provide relevant context strictly using KB content, limiting the response to KB-verified information." if not is_code_query else "Provide a straightforward code solution derived solely from KB content."
     }.get(role, "Provide a clear, KB-based response without external references.")
 
-    # Format references for output if available.
     formatted_references = "\n".join(
         [f"**Source**: [{ref['title']}]({ref['url']})\n**Similarity**: {ref['similarity']}\n" for ref in references]
     )
@@ -66,9 +65,7 @@ User Query:
 {role_instruction}
 {output_instruction}
 """
-    
     return [
         {"role": "system", "content": system_message},
         {"role": "user", "content": user_message}
     ]
-

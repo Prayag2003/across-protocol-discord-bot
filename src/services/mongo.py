@@ -21,6 +21,7 @@ class MongoService:
             
             # Collections
             self.announcements_collection = self.db[os.getenv("ANNOUNCEMENTS_COLLECTION")]
+            self.logs_collection = self.db[os.getenv("LOGS_COLLECTION")]
             openai.api_key = os.getenv("OPENAI_API_KEY")
             
         except Exception as e:
@@ -162,6 +163,8 @@ class MongoService:
             "3. Provide specific details and timestamps when possible to offer clear context.\n"
             "4. If the announcements lack relevant details, explicitly mention this.\n"
         )
+        prompt += "Also please always prefer latest announcements as per time stamp to give accurate results."
+        prompt += "The results must also be not ambiguous."
         
         logger.debug(f"Generated prompt: {prompt[:100]}... (truncated)")
         return prompt
@@ -172,12 +175,14 @@ class MongoService:
 
             system_prompt = """You are a helpful discord bot assistant that provides information about announcements. 
             Your task is to:
-            1. Answer questions about announcements, events, and updates.
-            2. Always prioritize the most recent information, as it represents the current state
-            3. When discussing status updates or changes, explicitly mention the latest known state
-            4. Include relevant timestamps to provide context about when information was announced
-            5. If there are conflicting announcements, explain the timeline and current status
-            6. If no announcements match the query, clearly state that
+            1. Always prefer latest announcements as per time stamp to give accurate results. Take this very seriosuly
+            2. The results must not be ambiguous.
+            3. Answer questions about announcements, events, and updates.
+            4. Always prioritize the most recent information, as it represents the current state
+            5. When discussing status updates or changes, explicitly mention the latest known state
+            6. Include relevant timestamps to provide context about when information was announced
+            7. If there are conflicting announcements, explain the timeline and current status
+            8. If no announcements match the query, clearly state that
             
             Always maintain a helpful and informative tone while ensuring users understand the current state of affairs."""
 
