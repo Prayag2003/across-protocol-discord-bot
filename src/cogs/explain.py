@@ -17,6 +17,7 @@ from services.mongo import MongoService
 from typing import List, Optional, Dict
 from datetime import datetime, timedelta
 from inference.inference import generate_response_with_context
+from reinforcement_learning_via_human_feedback.setup import setup_rlhf
 from utils.message import chunk_message_by_paragraphs, extract_code_blocks, get_file_extension
 
 load_dotenv()
@@ -355,7 +356,7 @@ class ExplainCog(commands.Cog):
                 title="👥 User Activity",
                 color=0x5865F2
             )
-            
+
             user_stats = (
                 "```ansi\n"
                 + "\n".join(
@@ -380,6 +381,18 @@ class ExplainCog(commands.Cog):
         except Exception as e:
             logger.error(f"Error generating report: {e}")
             await ctx.send(f"An error occurred while generating the report: {str(e)}")
+
+    @commands.command(name='learn')
+    @commands.has_permissions(administrator=True)
+    async def learn(self, ctx):
+        """Re-train the model with the latest data."""
+        try:
+            await ctx.send("Re-training the model... 🤖")
+            asyncio.create_task(setup_rlhf())
+
+        except Exception as e:
+            logger.error(f"Error re-training model: {e}")
+            await ctx.send(f"An error occurred while re-training the model: {str(e)}")
 
 async def setup(bot):
     """Setup function to add the Explain Cog to the bot."""

@@ -4,7 +4,6 @@ from bot.bot import create_bot
 from dotenv import load_dotenv
 from loguru import logger
 from bot.events import setup_events
-from reinforcement_learning_via_human_feedback.setup import setup_rlhf
 from services.rescraping import update_documentation_by_scraping_again_and_prepare_new_knowledge_base
 
 load_dotenv()
@@ -28,7 +27,7 @@ async def main():
     """
 
     # Start the "scraping and prepare KB" script without waiting for it
-    update_documentation_by_scraping_again_and_prepare_new_knowledge_base()
+    # update_documentation_by_scraping_again_and_prepare_new_knowledge_base()
 
     # Create bot instance
     bot = create_bot()
@@ -41,9 +40,6 @@ async def main():
     await bot.load_extension('cogs.reaction_listener')
     await bot.load_extension('cogs.delete')
     await bot.load_extension('cogs.help_cog')
-
-    # Reinforcement learning pipeline
-    asyncio.create_task(setup_rlhf())
     
     # Run bot
     try:

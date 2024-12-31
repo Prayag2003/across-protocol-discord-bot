@@ -37,25 +37,25 @@ async def setup_rlhf():
 
     await run_training_cycle()  # Run the training cycle once at startup
 
-    # Create and configure the scheduler
-    scheduler = AsyncIOScheduler()
+    # # Create and configure the scheduler
+    # scheduler = AsyncIOScheduler()
 
-    # Schedule the training job to run every 7 days
-    scheduler.add_job(
-        lambda: asyncio.create_task(run_training_cycle()),  # Wrap in a coroutine task
-        trigger=IntervalTrigger(days=7),
-        id="weekly_training",
-        name="Weekly RLHF Training",
-        replace_existing=True
-    )
+    # # Schedule the training job to run every 7 days
+    # scheduler.add_job(
+    #     lambda: asyncio.create_task(run_training_cycle()),  # Wrap in a coroutine task
+    #     trigger=IntervalTrigger(days=7),
+    #     id="weekly_training",
+    #     name="Weekly RLHF Training",
+    #     replace_existing=True
+    # )
 
-    # Start the scheduler
-    scheduler.start()
-    logger.info("APScheduler started for weekly training.")
+    # # Start the scheduler
+    # scheduler.start()
+    # logger.info("APScheduler started for weekly training.")
 
-    # Keep the scheduler running without blocking the main process
-    try:
-        while True:
-            await asyncio.sleep(1)  # Sleep here to keep the event loop active
-    except asyncio.CancelledError:
-        pass
+    # # Keep the scheduler running without blocking the main process
+    # try:
+    #     while True:
+    #         await asyncio.sleep(1)  # Sleep here to keep the event loop active
+    # except asyncio.CancelledError:
+    #     pass
