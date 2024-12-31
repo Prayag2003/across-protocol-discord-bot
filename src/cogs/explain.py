@@ -154,7 +154,6 @@ class ExplainCog(commands.Cog):
             except Exception as e:
                 logger.error(f"Failed to process announcement: {e}")
 
-
     @commands.command(name='event')
     async def event(self, ctx, *, user_query: str):
         """Ask queries related to events, announcements, and updates."""
@@ -270,26 +269,22 @@ class ExplainCog(commands.Cog):
     @commands.command(name='analyse')
     @commands.has_permissions(administrator=True)
     async def analyse(self, ctx):
-        """Generate analytics report for the last 7 days."""
+        """Generate enhanced analytics report with both embed and downloadable format."""
         try:
             start_date = datetime.utcnow() - timedelta(days=7)
             end_date = datetime.utcnow()
 
-            start_date_str = start_date.isoformat()
-            end_date_str = end_date.isoformat()
-
-            # Query for both datetime and string timestamps
+            # Query for logs
             logs = list(self.mongo_service.logs_collection.find({
                 "$or": [
-                    {"timestamp": {"$gte": start_date, "$lte": end_date}},  # For datetime
-                    {"timestamp": {"$gte": start_date_str, "$lte": end_date_str}}  # For string
+                    {"timestamp": {"$gte": start_date, "$lte": end_date}},
+                    {"timestamp": {"$gte": start_date.isoformat(), "$lte": end_date.isoformat()}}
                 ]
             }))
-            
-            logger.info(f"Number of logs found: {len(logs)}")
+
+            logger.info(f"{len(logs)} logs found for Analysis")
             
             if not logs:
-                logger.error("No data found for the last 7 days.")
                 await ctx.send("No data found for the last 7 days.")
                 return
                 
@@ -300,66 +295,91 @@ class ExplainCog(commands.Cog):
             
             for log in logs:
                 users_counter[log.get("username", "unknown")] += 1
-                topics = log.get("topics", [])
-                tags = log.get("tags", [])
-                
-                for topic in topics:
+                for topic in log.get("topics", []):
                     topics_counter[topic] += 1
-                for tag in tags:
+                for tag in log.get("tags", []):
                     tags_counter[tag] += 1
             
-            # Calculate general statistics
+            # Calculate statistics
             total_queries = sum(users_counter.values())
             avg_queries_per_day = total_queries / 7
             queries_with_topics = sum(1 for log in logs if log.get("topics"))
             queries_with_tags = sum(1 for log in logs if log.get("tags"))
+
+            # Create the main embed with improved styling
+            main_embed = discord.Embed(
+                title="📊 Analytics Report",
+                description=f"Statistics for the period: `{start_date.strftime('%Y-%m-%d')}` to `{end_date.strftime('%Y-%m-%d')}`",
+                color=0x5865F2  # Discord Blurple color
+            )
+
+            # General statistics with improved formatting
+            stats_text = (
+                "```ansi\n"
+                f"\u001b[1;37mTotal Queries:\u001b[0m {total_queries:,}\n"
+                f"\u001b[1;37mDaily Average:\u001b[0m {avg_queries_per_day:.1f}\n"
+                f"\u001b[1;37mWith Topics:\u001b[0m   {queries_with_topics:,}\n"
+                f"\u001b[1;37mWith Tags:\u001b[0m     {queries_with_tags:,}\n"
+                "```"
+            )
+            main_embed.add_field(
+                name="📈 General Statistics",
+                value=stats_text,
+                inline=False
+            )
+
+            # Format top topics with numbers and emojis
+            top_topics = "\n".join(
+                f"`{count:3d}` {topic}" 
+                for topic, count in topics_counter.most_common(5)
+            )
+            main_embed.add_field(
+                name="🎯 Top Topics",
+                value=top_topics or "No topics found",
+                inline=True
+            )
+
+            # Format top tags with numbers and emojis
+            top_tags = "\n".join(
+                f"`{count:3d}` {tag}"
+                for tag, count in tags_counter.most_common(5)
+            )
+            main_embed.add_field(
+                name="🏷️ Top Tags",
+                value=top_tags or "No tags found",
+                inline=True
+            )
+
+            # Create the users embed with improved styling
+            users_embed = discord.Embed(
+                title="👥 User Activity",
+                color=0x5865F2
+            )
             
-            # Create the report in text format
-            report = f"""
-    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-                            📅 General Statistics                    
-    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    Total Queries        : {total_queries}
-    Average Queries/Day  : {avg_queries_per_day:.1f}
-    Queries with Topics  : {queries_with_topics}
-    Queries with Tags    : {queries_with_tags}
-    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+            user_stats = (
+                "```ansi\n"
+                + "\n".join(
+                    f"\u001b[1;37m{queries:3d}\u001b[0m {user}"  # Numbers in bright white color
+                    for user, queries in users_counter.most_common(5)
+                )
+                + "\n```"
+            )
 
-    🌟 Top Topics (Last 7 Days)
-    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    """
-            for topic, count in topics_counter.most_common(5):
-                report += f"{topic:<25} | {count:<8}\n"
+            users_embed.add_field(
+                name="Most Active Users",
+                value=user_stats if user_stats.strip() else "No user activity",
+                inline=False
+            )
 
-            report += """
-    🌟 Top Tags (Last 7 Days)
-    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    """
-            for tag, count in tags_counter.most_common(5):
-                report += f"{tag:<18} | {count:<8}\n"
+            footer_text = f"Generated at {end_date.strftime('%Y-%m-%d %H:%M:%S UTC')}"
+            main_embed.set_footer(text=footer_text)
 
-            report += """
-    👤 Most Active Users
-    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    """
-            for user, queries in users_counter.most_common(5):
-                report += f"{user:<20} | {queries:<8}\n"
-
-            report += """
-    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    """
-
-            # Save the report as a text file
-            file_name = f"weekly_report_{end_date.strftime('%Y%m%d')}.txt"
-            with open(file_name, "w", encoding="utf-8") as report_file:
-                report_file.write(report)
-
-            logger.info(f"Report successfully generated and saved as {file_name}.")
-            await ctx.send("Here's the weekly report:", file=discord.File(file_name))
+            await ctx.send(embed=main_embed)
+            await ctx.send(embed=users_embed)
 
         except Exception as e:
             logger.error(f"Error generating report: {e}")
-            return f"An error occurred: {e}"
+            await ctx.send(f"An error occurred while generating the report: {str(e)}")
 
 async def setup(bot):
     """Setup function to add the Explain Cog to the bot."""
