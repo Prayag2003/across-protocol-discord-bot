@@ -14,11 +14,13 @@ class FeedbackManager:
         cutoff_date = datetime.utcnow() - timedelta(days=days)
         
         cursor = self.collection.find({
-            "timestamp": {"$gte": cutoff_date}
+            "timestamp": {"$gte": cutoff_date},
+            "feedback.type": {"$ne": None}  # Exclude feedback with type as None
         })
         
         feedbacks = []
         for doc in cursor:
+            print(f"Doc: {doc}\n")
             if 'interaction' in doc and 'feedback' in doc and 'original_user' in doc:
                 feedback = FeedbackEntry(
                     message_id=doc["interaction"].get("message_id"),

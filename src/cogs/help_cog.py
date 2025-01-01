@@ -2,7 +2,6 @@ import discord
 from discord.ext import commands
 from discord.ui import View, Button
 
-# Your commands list - reordered with General first
 COMMANDS = [
     {
         "command": "/explain [query]",
@@ -10,7 +9,7 @@ COMMANDS = [
         "category": "General"
     },
     {
-        "command": "/event [query]",
+        "command": "/interpret [query]",
         "description": "Inquires about events, updates and announcements",
         "category": "General"
     },

@@ -155,7 +155,7 @@ class ExplainCog(commands.Cog):
             except Exception as e:
                 logger.error(f"Failed to process announcement: {e}")
 
-    @commands.command(name='event')
+    @commands.command(name='interpret')
     async def event(self, ctx, *, user_query: str):
         """Ask queries related to events, announcements, and updates."""
         try:
