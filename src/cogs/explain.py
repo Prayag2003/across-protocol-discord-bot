@@ -58,14 +58,12 @@ class ExplainCog(commands.Cog):
         if message.author.bot:
             return  
 
+        if message.content.startswith("/purge") or message.content.startswith("/purge confirm"):
+            return
+
     @commands.command(name='explain')
     async def explain(self, ctx, *, user_query: str):
         """Generate an explanation for the user query."""
-        # Prevent duplicate processing
-        if ctx.message.id in self.active_explanations:
-            return
-        self.active_explanations.add(ctx.message.id)
-
         try:
             username = ctx.author.name
             

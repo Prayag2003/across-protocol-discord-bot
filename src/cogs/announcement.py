@@ -55,11 +55,9 @@ class AnnouncementCog(commands.Cog):
                 logger.info(f"Processing guild: {guild.name} (ID: {guild.id})")
                 await self.update_announcement_channels(guild)
 
-            logger.info("Announcement channels cache initialized.")
+            logger.info("Announcement channels cache initialized. {}".format(self.announcement_channels))
         except Exception as e:
             logger.error(f"Error initializing announcement channels: {e}")
-
-
 
     @commands.Cog.listener()
     async def on_guild_channel_create(self, channel):
