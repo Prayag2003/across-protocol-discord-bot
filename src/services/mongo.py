@@ -90,7 +90,7 @@ class MongoService:
             return False
 
     def search_announcements(self, query: str) -> List[Dict]:
-        logger.info(f"Searching for announcements relevant to query: {query}")
+        logger.info(f"Searching relevant announcements | query: {query}")
         try:
             processed_query = self.preprocess_text(query)
             query_embedding = self.generate_embedding(processed_query)
@@ -100,16 +100,29 @@ class MongoService:
             pipeline = [
                 {
                     "$search": {
-                        "knnBeta": {
-                            "vector": query_embedding,
-                            "path": "embedding",
-                            "k": 5
+                        "compound": {
+                            "should": [
+                                {
+                                    "knnBeta": {
+                                        "vector": query_embedding,
+                                        "path": "embedding",
+                                        "k": 5
+                                    }
+                                },
+                                {
+                                    "text": {
+                                        "query": processed_query,
+                                        "path": "metadata.content"
+                                    }
+                                }
+                            ]
                         }
                     }
                 },
                 {
                     "$project": {
                         "_id": 1,
+                        "metadata": 1,
                         "embedding": 1,
                         "score": {"$meta": "searchScore"}
                     }

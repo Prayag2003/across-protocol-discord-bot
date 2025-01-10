@@ -9,7 +9,6 @@ from services.rescraping import update_documentation_by_scraping_again_and_prepa
 load_dotenv()
 TOKEN = os.getenv('TOKEN')
 
-# set up logging in the file main.log
 logger.add("main.log", format="{time} {level} {message}", level="INFO", rotation="10 MB", compression="zip")
     
 async def main():
@@ -36,10 +35,13 @@ async def main():
     await setup_events(bot)
     
     # Load cogs
+    await bot.load_extension('cogs.announcement')
     await bot.load_extension('cogs.explain')
     await bot.load_extension('cogs.reaction_listener')
     await bot.load_extension('cogs.delete')
     await bot.load_extension('cogs.help_cog')
+    await bot.load_extension('cogs.analyse')
+    await bot.load_extension('cogs.learn')
     
     # Run bot
     try:

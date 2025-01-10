@@ -8,42 +8,42 @@ from inference.inference import generate_response_with_context
 async def setup_events(bot):
     @bot.event
     async def on_ready():
-        # logger.info(f'Logged in as {bot.user}!')
+        logger.info(f'Logged in as {bot.user}!')
         
         for guild in bot.guilds:
             log_channel = await log_manager.setup_log_channel(guild)
-            # if log_channel:
-                # logger.info(f"Logging channel setup complete for {guild.name}")
+            if log_channel:
+                logger.info(f"Logging channel setup complete for {guild.name}")
 
-    @bot.event
-    async def on_message(message):
-        if message.author.bot:
-            return
+    # @bot.event
+    # async def on_message(message):
+    #     if message.author.bot:
+    #         return
 
-        # Only process messages inside threads
-        if isinstance(message.channel, discord.Thread):
-            try:
-                if not message.reference:
-                    response = await asyncio.to_thread(generate_response_with_context, message.content, message.author.name)
-                    await log_manager.stream_log(message, response)
+    #     # Only process messages inside threads
+    #     if isinstance(message.channel, discord.Thread):
+    #         try:
+    #             if not message.reference:
+    #                 response = await asyncio.to_thread(generate_response_with_context, message.content, message.author.name)
+    #                 await log_manager.stream_log(message, response)
                     
-                    chunks = chunk_message(response)
-                    for chunk in chunks:
-                        await message.channel.send(chunk)
+    #                 chunks = chunk_message(response)
+    #                 for chunk in chunks:
+    #                     await message.channel.send(chunk)
 
-            except Exception as e:
-                error_msg = f"Error processing thread message: {str(e)}"
-                logger.error(error_msg)
-                await message.channel.send(f"An error occurred: {str(e)}")
-                await log_manager.stream_log(message, f"ERROR: {error_msg}")
+    #         except Exception as e:
+    #             error_msg = f"Error processing thread message: {str(e)}"
+    #             logger.error(error_msg)
+    #             await message.channel.send(f"An error occurred: {str(e)}")
+    #             await log_manager.stream_log(message, f"ERROR: {error_msg}")
 
-        elif message.content == 'ping':
-            response = 'Pong!'
-            await message.channel.send(response)
-            await log_manager.stream_log(message, response)
+    #     elif message.content == 'ping':
+    #         response = 'Pong!'
+    #         await message.channel.send(response)
+    #         await log_manager.stream_log(message, response)
 
-        # Process other bot commands after handling custom messages
-        await bot.process_commands(message)
+    #     # Process other bot commands after handling custom messages
+    #     await bot.process_commands(message)
 
     @bot.event
     async def on_interaction(interaction):

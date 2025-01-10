@@ -20,7 +20,6 @@ class FeedbackManager:
         
         feedbacks = []
         for doc in cursor:
-            print(f"Doc: {doc}\n")
             if 'interaction' in doc and 'feedback' in doc and 'original_user' in doc:
                 feedback = FeedbackEntry(
                     message_id=doc["interaction"].get("message_id"),
