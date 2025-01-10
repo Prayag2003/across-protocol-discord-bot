@@ -97,7 +97,7 @@ def find_most_similar_documents(query_embedding, embeddings_list, query, top_n=3
 
 def generate_context_from_documents(similar_docs, max_length=2000):
     """Generate optimized context from similar documents including embedding content"""
-    logger.info("Generating context from similar documents with embedding content...")
+    logger.info("Generating context from similar documents...")
     context_parts = []
     current_length = 0
     
@@ -160,7 +160,7 @@ def generate_response_with_context(user_query: str, username: str):
 
         # The main response generated from the first API call
         response_text = response.choices[0].message.content.strip()
-        logger.info(f"Generated response: {response_text}")
+        logger.info(f"Generated response of: {len(response_text)} chars")
 
         # Second API Call: Extract topics and tags
         analysis_prompt = f"""
