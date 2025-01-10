@@ -71,7 +71,6 @@ class AnnouncementCog(commands.Cog):
         if message.author.bot:
             return  
 
-        # Check if the message is a `/purge` command
         if message.content.startswith("/purge") or message.content.startswith("/purge confirm"):
             return
 
@@ -87,7 +86,7 @@ class AnnouncementCog(commands.Cog):
                     logger.info(f"No processable content in {message.channel.name} by {message.author.name}.")
                     return
 
-                logger.info(f"Processing message in {message.channel.name}: {content}")
+                logger.info(f"Processing message in {message.channel.name}: {content[:30] + '...' + content[-30:]}")
 
                 metadata = {
                     "content": content.strip(),
@@ -102,17 +101,9 @@ class AnnouncementCog(commands.Cog):
                 # Save to MongoDB with Vector Search
                 success = self.mongo_service.upsert_announcement(metadata)
                 if success:
-                    logger.info(f"Announcement vectorized and stored in Mongo Vector Search. Channel: {message.channel.name}")
+                    logger.info(f"Announcement vectorized and stored in MongoDB Vector Search")
                 else:
                     logger.error("Failed to store announcement in MongoDB Vector Search.")
-
-                # Save to MongoDB (for raw content)
-                # try:
-                #     announcement_collection.insert_one(metadata)
-                #     logger.info("Metadata successfully inserted into MongoDB.")
-                # except Exception as e:
-                #     logger.error(f"Failed to insert metadata into MongoDB: {e}")
-                # logger.info(f"Announcement stored in MongoDB. Channel: {message.channel.name}, Author: {message.author.name}")
 
             except Exception as e:
                 logger.error(f"Failed to process announcement: {e}")

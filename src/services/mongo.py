@@ -21,9 +21,9 @@ class MongoService:
             
             # Collections
             self.announcements_collection = self.db[os.getenv("ANNOUNCEMENTS_COLLECTION")]
-            self.logs_collection = self.db[os.getenv("LOGS_COLLECTION")]
             openai.api_key = os.getenv("OPENAI_API_KEY")
-            
+            indexes = list(self.announcements_collection.list_indexes())
+
         except Exception as e:
             logger.error(f"Error initializing MongoService: {str(e)}")
             raise
@@ -51,7 +51,6 @@ class MongoService:
             logger.error(f"Error generating embedding using OpenAI API: {str(e)}")
             raise
 
-    
     def parse_timestamp(self, timestamp_str: str) -> datetime:
         """Parses timestamp string into datetime object."""
         try:
@@ -60,7 +59,6 @@ class MongoService:
         except Exception as e:
             logger.error(f"Error parsing timestamp {timestamp_str}: {str(e)}")
             return datetime.min
-
 
     def upsert_announcement(self, metadata: Dict) -> bool:
         logger.info(f"Upserting announcement")
@@ -88,34 +86,25 @@ class MongoService:
         except Exception as e:
             logger.error(f"Error upserting announcement: {str(e)}")
             return False
-
+    
     def search_announcements(self, query: str) -> List[Dict]:
         logger.info(f"Searching relevant announcements | query: {query}")
         try:
             processed_query = self.preprocess_text(query)
             query_embedding = self.generate_embedding(processed_query)
-
-            logger.info("Performing vector similarity search in MongoDB using knnBeta...")
             
-            pipeline = [
+            # Log collection stats
+            doc_count = self.announcements_collection.count_documents({})
+            logger.info(f"Collection has {doc_count} documents")
+
+            # Vector search pipeline
+            vector_pipeline = [
                 {
                     "$search": {
-                        "compound": {
-                            "should": [
-                                {
-                                    "knnBeta": {
-                                        "vector": query_embedding,
-                                        "path": "embedding",
-                                        "k": 5
-                                    }
-                                },
-                                {
-                                    "text": {
-                                        "query": processed_query,
-                                        "path": "metadata.content"
-                                    }
-                                }
-                            ]
+                        "knnBeta": {
+                            "vector": query_embedding,
+                            "path": "embedding",
+                            "k": 5
                         }
                     }
                 },
@@ -123,38 +112,80 @@ class MongoService:
                     "$project": {
                         "_id": 1,
                         "metadata": 1,
-                        "embedding": 1,
                         "score": {"$meta": "searchScore"}
                     }
                 }
             ]
 
-            results = list(self.announcements_collection.aggregate(pipeline))
+            # Execute vector search pipeline
+            logger.info("Executing vector search pipeline...")
+            try:
+                results = list(self.announcements_collection.aggregate(vector_pipeline))
+                logger.info(f"Found {len(results)} results from vector search")
+            except Exception as e:
+                logger.error(f"Vector search failed, falling back to text search: {str(e)}")
+                # Fallback text search pipeline
+                text_pipeline = [
+                    {
+                        "$match": {
+                            "$text": {"$search": processed_query}
+                        }
+                    },
+                    {
+                        "$project": {
+                            "_id": 1,
+                            "metadata": 1,
+                            "score": {"$meta": "textScore"}
+                        }
+                    },
+                    {"$sort": {"score": -1}}
+                ]
+                results = list(self.announcements_collection.aggregate(text_pipeline))
 
+            # Log found documents for debugging
+            for result in results:
+                logger.info(f"Found document:")
+                logger.info(f"Timestamp: {result['metadata'].get('timestamp', 'N/A')}")
+                logger.info(f"Content preview: {result['metadata'].get('content', '')[:100]}...")
+                logger.info(f"Search score: {result.get('score', 0)}")
+
+            # Process results
             contexts = []
             for result in results:
-                logger.info(f"Processing result | ID:{result['_id']}")
-                announcement = self.announcements_collection.find_one({"_id": result["_id"]})
-                if announcement:
-                    contexts.append({
-                        "content": announcement["metadata"]["content"],
-                        "channel": announcement["metadata"]["channel"],
-                        "timestamp": announcement["metadata"]["timestamp"],
-                        "similarity": result["score"]
-                    })
-            
-            # Sort contexts by timestamp in descending order (most recent first)
+                try:
+                    metadata = result.get('metadata', {})
+                    context = {
+                        "content": metadata.get('content', ''),
+                        "channel": metadata.get('channel', ''),
+                        "timestamp": metadata.get('timestamp', ''),
+                        "similarity": result.get('score', 0)
+                    }
+                    contexts.append(context)
+                except Exception as e:
+                    logger.error(f"Error processing result: {str(e)}")
+
+            # Final sort by timestamp
             contexts.sort(
                 key=lambda x: self.parse_timestamp(x["timestamp"]),
                 reverse=True
             )
 
-            logger.info(f"Found {len(contexts)} relevant announcements, sorted by timestamp.")
-            return contexts
-        except Exception as e:
-            logger.error(f"Error during search: {str(e)}")
-            return []
+            logger.info(f"Final processed contexts count: {len(contexts)}")
+            
+            # Log processed contexts for debugging
+            if contexts:
+                logger.info("Sample of found contexts:")
+                for ctx in contexts[:2]:
+                    logger.info(f"- Content preview: {ctx['content'][:100]}")
+                    logger.info(f"- Timestamp: {ctx['timestamp']}")
+            else:
+                logger.info("No contexts found after processing")
 
+            return contexts
+
+        except Exception as e:
+            logger.error(f"Error during search: {str(e)}\nTraceback:", exc_info=True)
+            return []
 
     def _create_prompt(self, query: str, contexts: List[Dict]) -> str:
         prompt = f"User Query: {query}\n\nRelevant Announcements (sorted by most recent first):\n\n"
@@ -175,12 +206,100 @@ class MongoService:
             "2. If conflicting statements exist, prioritize the most recent one.\n"
             "3. Provide specific details and timestamps when possible to offer clear context.\n"
             "4. If the announcements lack relevant details, explicitly mention this.\n"
+            "5. When discussing API or endpoint status, be explicit about which ones are up or down.\n"
         )
-        prompt += "Also please always prefer latest announcements as per time stamp to give accurate results."
-        prompt += "The results must also be not ambiguous."
         
-        logger.debug(f"Generated prompt: {prompt[:100]}... (truncated)")
+        logger.debug(f"Generated prompt: {prompt}")
         return prompt
+
+
+    # def search_announcements(self, query: str) -> List[Dict]:
+    #     logger.info(f"Searching relevant announcements | query: {query}")
+    #     try:
+    #         processed_query = self.preprocess_text(query)
+    #         query_embedding = self.generate_embedding(processed_query)
+
+    #         logger.info("Performing vector similarity search in MongoDB using knnBeta...")
+
+    #         # vector search pipeline
+    #         vector_pipeline = [
+    #             {
+    #                 "$search": {
+    #                     "knnBeta": {
+    #                         "vector": query_embedding,
+    #                         "path": "embedding",
+    #                         "k": 5
+    #                     }
+    #                 }
+    #             },
+    #             {
+    #                 "$project": {
+    #                     "_id": 1,
+    #                     "metadata": 1,
+    #                     "embedding": 1,
+    #                     "score": {"$meta": "searchScore"}
+    #                 }
+    #             }
+    #         ]
+            
+    #         # Text search pipeline
+    #         text_pipeline = [
+    #             {
+    #                 "$search": {
+    #                     "text": {
+    #                         "query": processed_query,
+    #                         "path": "metadata.content"
+    #                     }
+    #                 }
+    #             },
+    #             {
+    #                 "$project": {
+    #                     "_id": 1,
+    #                     "metadata": 1,
+    #                     "embedding": 1,
+    #                     "score": {"$meta": "searchScore"}
+    #                 }
+    #             }
+    #         ]
+
+    #         vector_results = list(self.announcements_collection.aggregate(vector_pipeline))
+    #         text_results = list(self.announcements_collection.aggregate(text_pipeline))
+            
+    #         # Combine results and remove duplicates based on _id
+    #         seen_ids = set()
+    #         combined_results = []
+
+    #         for result in vector_results + text_results:
+    #             if result["_id"] not in seen_ids:
+    #                 seen_ids.add(result["_id"])
+    #                 combined_results.append(result)
+
+    #         # results = list(self.announcements_collection.aggregate(pipeline))
+    #         print("Combined results: {}".format(combined_results))
+
+    #         contexts = []
+    #         for result in combined_results:
+    #             logger.info(f"Processing result | ID:{result['_id']}")
+    #             announcement = self.announcements_collection.find_one({"_id": result["_id"]})
+    #             if announcement:
+    #                 contexts.append({
+    #                     "content": announcement["metadata"]["content"],
+    #                     "channel": announcement["metadata"]["channel"],
+    #                     "timestamp": announcement["metadata"]["timestamp"],
+    #                     "similarity": result["score"]
+    #                 })
+            
+    #         # Sort contexts by timestamp in descending order (most recent first)
+    #         contexts.sort(
+    #             key=lambda x: self.parse_timestamp(x["timestamp"]),
+    #             reverse=True
+    #         )
+
+    #         logger.info(f"Found {len(contexts)} relevant announcements, sorted by timestamp.")
+    #         return contexts
+    #     except Exception as e:
+    #         logger.error(f"Error during search: {str(e)}")
+    #         return []
 
     def generate_response_from_mongo(self, user_query: str) -> Dict:
         try:
@@ -188,14 +307,14 @@ class MongoService:
 
             system_prompt = """You are a helpful discord bot assistant that provides information about announcements. 
             Your task is to:
-            1. Always prefer latest announcements as per time stamp to give accurate results. Take this very seriosuly
+            1. Always prefer latest announcements as per time stamp to give accurate results.Take this very seriously.
             2. The results must not be ambiguous.
-            3. Answer questions about announcements, events, and updates.
-            4. Always prioritize the most recent information, as it represents the current state
-            5. When discussing status updates or changes, explicitly mention the latest known state
-            6. Include relevant timestamps to provide context about when information was announced
-            7. If there are conflicting announcements, explain the timeline and current status
-            8. If no announcements match the query, clearly state that
+            3. Answer questions about announcements, events, updates and news.
+            4. Always prioritize the most recent information, as it represents the current state.
+            5. When discussing status updates or changes, explicitly mention the latest known state.
+            6. Include relevant timestamps to provide context about when information was announced.
+            7. If there are conflicting announcements, explain the timeline and current status.
+            8. If no announcements match the query, clearly state that.
             
             Always maintain a helpful and informative tone while ensuring users understand the current state of affairs."""
 

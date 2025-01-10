@@ -9,7 +9,7 @@ from services.rescraping import update_documentation_by_scraping_again_and_prepa
 load_dotenv()
 TOKEN = os.getenv('TOKEN')
 
-logger.add("main.log", format="{time} {level} {message}", level="INFO", rotation="10 MB", compression="zip")
+# logger.add("main.log", format="{time} {level} {message}", level="INFO", rotation="10 MB", compression="zip")
     
 async def main():
     """
