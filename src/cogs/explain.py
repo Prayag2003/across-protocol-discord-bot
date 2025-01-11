@@ -49,8 +49,6 @@ class DiscordResponseHandler:
 class ExplainCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.active_explanations = set()
-        self.thread_response_lock = asyncio.Lock()
 
     @commands.Cog.listener()
     async def on_message(self, message):
@@ -61,19 +59,13 @@ class ExplainCog(commands.Cog):
         if message.content.startswith("/purge") or message.content.startswith("/purge confirm"):
             return
 
-        # Check if message is in a thread and parent message has been processed by the bot
-        if isinstance(message.channel, discord.Thread):
-            async with self.thread_response_lock:
-                if not message.content.startswith('/explain'):
-                    # Process the message as if it was an explain command
-                    await self.handle_explanation(message, message.content)
+        # If message is in a thread and doesn't start with /explain, treat it as an explain command
+        if isinstance(message.channel, discord.Thread) and not message.content.startswith('/explain'):
+            ctx = await self.bot.get_context(message)
+            await self.handle_explanation(ctx, message.content)
 
     async def handle_explanation(self, ctx, user_query: str):
         """Handle the explanation generation and response."""
-        if ctx.message.id in self.active_explanations:
-            return
-        
-        self.active_explanations.add(ctx.message.id)
         try:
             username = ctx.author.name
             logger.debug(f"Processing explain command from user: {username}")
@@ -81,7 +73,6 @@ class ExplainCog(commands.Cog):
 
             thinking_message = await ctx.send("Analyzing your query... 🤔")
             loading = True
-            last_stage_shown = False
 
             async def update_thinking_message():
                 stages = [
@@ -101,12 +92,8 @@ class ExplainCog(commands.Cog):
                         await asyncio.sleep(2)
                         stage_duration += 2
                         
-                        # If we've shown all stages and more than 8 seconds has passed,
-                        # stay on the last stage
                         if stage_duration >= 8:
                             await thinking_message.edit(content=stages[-1])
-                            nonlocal last_stage_shown
-                            last_stage_shown = True
                             while loading:
                                 await asyncio.sleep(1)
                         else:
@@ -121,45 +108,38 @@ class ExplainCog(commands.Cog):
             loader_task = asyncio.create_task(update_thinking_message())
             await asyncio.sleep(0.5)
 
-            try:
-                explanation = await asyncio.to_thread(generate_response_with_context, user_query, username)
-                explanation = explanation.strip()
+            explanation = await asyncio.to_thread(generate_response_with_context, user_query, username)
+            explanation = explanation.strip()
+            
+            loading = False
+            await loader_task
+            await thinking_message.delete()
+            
+            if isinstance(ctx.channel, discord.Thread):
+                # If we're in a thread, just send the response directly
+                clean_text, code_blocks = extract_code_blocks(explanation)
                 
-                loading = False
-                await loader_task
-                await thinking_message.delete()
+                for idx, code_block in enumerate(code_blocks, 1):
+                    language = code_block["language"]
+                    if len(code_block["code"]) <= 500:
+                        await ctx.channel.send(f"```{language}\n{code_block['code']}```")
+                    else:
+                        file = discord.File(
+                            io.StringIO(code_block["code"]),
+                            filename=f"code_snippet_{idx}.{get_file_extension(language)}"
+                        )
+                        await ctx.channel.send(file=file)
                 
-                if isinstance(ctx.channel, discord.Thread):
-                    # If we're in a thread, just send the response directly
-                    clean_text, code_blocks = extract_code_blocks(explanation)
-                    
-                    for idx, code_block in enumerate(code_blocks, 1):
-                        language = code_block["language"]
-                        if len(code_block["code"]) <= 500:
-                            await ctx.channel.send(f"```{language}\n{code_block['code']}```")
-                        else:
-                            file = discord.File(
-                                io.StringIO(code_block["code"]),
-                                filename=f"code_snippet_{idx}.{get_file_extension(language)}"
-                            )
-                            await ctx.channel.send(file=file)
-                    
-                    if clean_text:
-                        text_chunks = chunk_message_by_paragraphs(clean_text)
-                        for chunk in text_chunks:
-                            if chunk.strip():
-                                await ctx.channel.send(chunk.strip())
-                else:
-                    # Create a new thread for the response
-                    await DiscordResponseHandler.send_explanation_in_thread(ctx.message, explanation)
-                
-                await log_manager.stream_log(ctx.message, explanation)
-
-            except Exception as e:
-                loading = False
-                await loader_task
-                logger.error(f"Error in response handling: {str(e)}")
-                raise
+                if clean_text:
+                    text_chunks = chunk_message_by_paragraphs(clean_text)
+                    for chunk in text_chunks:
+                        if chunk.strip():
+                            await ctx.channel.send(chunk.strip())
+            else:
+                # Create a new thread for the response
+                await DiscordResponseHandler.send_explanation_in_thread(ctx.message, explanation)
+            
+            await log_manager.stream_log(ctx.message, explanation)
 
         except Exception as e:
             logger.error(f"Command execution error: {str(e)}")
@@ -169,8 +149,6 @@ class ExplainCog(commands.Cog):
                 except:
                     pass
             await ctx.send(f"An error occurred: {str(e)}")
-        finally:
-            self.active_explanations.remove(ctx.message.id)
 
     @commands.command(name='explain')
     async def explain(self, ctx, *, user_query: str):
