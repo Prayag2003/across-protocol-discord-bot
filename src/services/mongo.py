@@ -44,7 +44,7 @@ class MongoService:
                 raise
 
     def _create_vector_search_index(self):
-        """Create vector search index if it doesn't exist"""
+        """Create vector search index if it doesn't exist."""
         try:
             existing_indexes = list(self.announcements_collection.list_indexes())
             index_names = [idx.get('name') for idx in existing_indexes]
@@ -68,18 +68,59 @@ class MongoService:
                     "name": "vector_index"
                 }
                 
+                # Use the correct method for creating indexes
                 self.announcements_collection.create_search_index(
                     model=index_model
                 )
                 logger.info("Vector search index created successfully")
             else:
                 logger.info("Vector search index already exists")
-            
-            logger.info(f"Current indexes: {', '.join(index_names)}")
-            
+                
         except Exception as e:
-            logger.error(f"Error creating vector search index: {str(e)}, full error: {e.details if hasattr(e, 'details') else str(e)}")
-            raise
+            if hasattr(e, 'code') and e.code == 68:  # IndexAlreadyExists error code
+                logger.warning("Vector search index already exists; skipping creation.")
+            else:
+                logger.error(f"Error creating vector search index: {str(e)}")
+                raise
+
+
+    # def _create_vector_search_index(self):
+    #     """Create vector search index if it doesn't exist"""
+    #     try:
+    #         existing_indexes = list(self.announcements_collection.list_indexes())
+    #         index_names = [idx.get('name') for idx in existing_indexes]
+            
+    #         if "vector_index" not in index_names:
+    #             logger.info("Creating vector search index...")
+                
+    #             index_model = {
+    #                 "definition": {
+    #                     "mappings": {
+    #                         "dynamic": True,
+    #                         "fields": {
+    #                             "embedding": {
+    #                                 "dimensions": 1536,
+    #                                 "similarity": "cosine",
+    #                                 "type": "knnVector"
+    #                             }
+    #                         }
+    #                     }
+    #                 },
+    #                 "name": "vector_index"
+    #             }
+                
+    #             self.announcements_collection.create_search_index(
+    #                 model=index_model
+    #             )
+    #             logger.info("Vector search index created successfully")
+    #         else:
+    #             logger.info("Vector search index already exists")
+            
+    #         logger.info(f"Current indexes: {', '.join(index_names)}")
+            
+    #     except Exception as e:
+    #         logger.error(f"Error creating vector search index: {str(e)}, full error: {e.details if hasattr(e, 'details') else str(e)}")
+    #         raise
     
     def preprocess_text(self, text: str) -> str:
         logger.info(f"Preprocessing text")
