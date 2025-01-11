@@ -1,4 +1,5 @@
 import os
+import json
 import openai
 import numpy as np
 from loguru import logger
@@ -12,22 +13,74 @@ from dateutil.parser import parse as parse_iso
 load_dotenv()
 
 class MongoService:
+    _instance = None
+    _is_initialized = False
+
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super(MongoService, cls).__new__(cls)
+        return cls._instance
+
     def __init__(self):
+        if not MongoService._is_initialized:
+            try:
+                mongo_uri = os.getenv("MONGO_URI")
+                db_name = os.getenv("MONGO_DB_NAME")
+                self.client = MongoClient(mongo_uri)
+                self.db = self.client[db_name]
+                
+                # Collections
+                self.announcements_collection = self.db[os.getenv("ANNOUNCEMENTS_COLLECTION")]
+                openai.api_key = os.getenv("OPENAI_API_KEY")
+                
+                # Check and create vector search index only once
+                self._create_vector_search_index()
+                
+                MongoService._is_initialized = True
+                logger.info("MongoService initialized successfully")
+
+            except Exception as e:
+                logger.error(f"Error initializing MongoService: {str(e)}")
+                raise
+
+    def _create_vector_search_index(self):
+        """Create vector search index if it doesn't exist"""
         try:
-            mongo_uri = os.getenv("MONGO_URI")
-            db_name = os.getenv("MONGO_DB_NAME")
-            self.client = MongoClient(mongo_uri)
-            self.db = self.client[db_name]
+            existing_indexes = list(self.announcements_collection.list_indexes())
+            index_names = [idx.get('name') for idx in existing_indexes]
             
-            # Collections
-            self.announcements_collection = self.db[os.getenv("ANNOUNCEMENTS_COLLECTION")]
-            openai.api_key = os.getenv("OPENAI_API_KEY")
-            indexes = list(self.announcements_collection.list_indexes())
-
+            if "vector_index" not in index_names:
+                logger.info("Creating vector search index...")
+                
+                index_model = {
+                    "definition": {
+                        "mappings": {
+                            "dynamic": True,
+                            "fields": {
+                                "embedding": {
+                                    "dimensions": 1536,
+                                    "similarity": "cosine",
+                                    "type": "knnVector"
+                                }
+                            }
+                        }
+                    },
+                    "name": "vector_index"
+                }
+                
+                self.announcements_collection.create_search_index(
+                    model=index_model
+                )
+                logger.info("Vector search index created successfully")
+            else:
+                logger.info("Vector search index already exists")
+            
+            logger.info(f"Current indexes: {', '.join(index_names)}")
+            
         except Exception as e:
-            logger.error(f"Error initializing MongoService: {str(e)}")
+            logger.error(f"Error creating vector search index: {str(e)}, full error: {e.details if hasattr(e, 'details') else str(e)}")
             raise
-
+    
     def preprocess_text(self, text: str) -> str:
         logger.info(f"Preprocessing text")
         return ' '.join(text.split()).strip()
@@ -86,68 +139,94 @@ class MongoService:
         except Exception as e:
             logger.error(f"Error upserting announcement: {str(e)}")
             return False
-    
+
     def search_announcements(self, query: str) -> List[Dict]:
         logger.info(f"Searching relevant announcements | query: {query}")
         try:
             processed_query = self.preprocess_text(query)
             query_embedding = self.generate_embedding(processed_query)
             
+            # Debug log for query and embedding
+            logger.debug(f"Processed query: {processed_query}")
+            logger.debug(f"Generated embedding shape: {len(query_embedding)}")
+            
             # Log collection stats
             doc_count = self.announcements_collection.count_documents({})
             logger.info(f"Collection has {doc_count} documents")
+            
+            # Check if vector index exists
+            # indexes = self.announcements_collection.list_indexes()
+            # print("Indexes: ", indexes)
+            # vector_index_exists = any("vector_index" in idx.get("name", "") for idx in indexes)
+            # logger.info(f"Vector index exists: {vector_index_exists}")
 
-            # Vector search pipeline
             vector_pipeline = [
                 {
-                    "$search": {
-                        "knnBeta": {
-                            "vector": query_embedding,
-                            "path": "embedding",
-                            "k": 5
-                        }
+                    "$vectorSearch": {
+                        "index": "vector_index",
+                        "path": "embedding",
+                        "queryVector": query_embedding,
+                        "numCandidates": 100, 
+                        "limit": 5
                     }
                 },
                 {
                     "$project": {
                         "_id": 1,
                         "metadata": 1,
-                        "score": {"$meta": "searchScore"}
+                        "score": {"$meta": "vectorSearchScore"}
                     }
                 }
             ]
 
-            # Execute vector search pipeline
             logger.info("Executing vector search pipeline...")
             try:
                 results = list(self.announcements_collection.aggregate(vector_pipeline))
                 logger.info(f"Found {len(results)} results from vector search")
-            except Exception as e:
-                logger.error(f"Vector search failed, falling back to text search: {str(e)}")
-                # Fallback text search pipeline
-                text_pipeline = [
-                    {
-                        "$match": {
-                            "$text": {"$search": processed_query}
-                        }
-                    },
-                    {
-                        "$project": {
-                            "_id": 1,
-                            "metadata": 1,
-                            "score": {"$meta": "textScore"}
-                        }
-                    },
-                    {"$sort": {"score": -1}}
-                ]
-                results = list(self.announcements_collection.aggregate(text_pipeline))
+                
+                if not results:
+                    logger.warning("Vector search returned no results, checking collection sample...")
 
-            # Log found documents for debugging
-            for result in results:
-                logger.info(f"Found document:")
+                    sample_doc = self.announcements_collection.find_one()
+                    logger.debug(f"Sample document structure: {json.dumps(sample_doc, indent=2)}")
+                    
+                    
+                    logger.info("Falling back to text search...")
+                    text_pipeline = [
+                        {
+                            "$match": {
+                                "$text": {"$search": processed_query}
+                            }
+                        },
+                        {
+                            "$project": {
+                                "_id": 1,
+                                "metadata": 1,
+                                "score": {"$meta": "textScore"}
+                            }
+                        },
+                        {"$sort": {"score": -1}},
+                        {"$limit": 5}
+                    ]
+                    results = list(self.announcements_collection.aggregate(text_pipeline))
+                    logger.info(f"Text search found {len(results)} results")
+
+            except Exception as e:
+                logger.error(f"Search failed: {str(e)}", exc_info=True)
+                # Log the MongoDB server version and topology
+                server_info = self.announcements_collection.database.client.server_info()
+                logger.debug(f"MongoDB server version: {server_info.get('version')}")
+                return []
+
+            # Enhanced result logging
+            for idx, result in enumerate(results):
+                logger.info(f"Document {idx + 1}:")
+                logger.info(f"ID: {result.get('_id')}")
                 logger.info(f"Timestamp: {result['metadata'].get('timestamp', 'N/A')}")
+                logger.info(f"Channel: {result['metadata'].get('channel', 'N/A')}")
                 logger.info(f"Content preview: {result['metadata'].get('content', '')[:100]}...")
                 logger.info(f"Search score: {result.get('score', 0)}")
+                logger.info("-" * 50)
 
             # Process results
             contexts = []
@@ -162,7 +241,7 @@ class MongoService:
                     }
                     contexts.append(context)
                 except Exception as e:
-                    logger.error(f"Error processing result: {str(e)}")
+                    logger.error(f"Error processing result: {str(e)}", exc_info=True)
 
             # Final sort by timestamp
             contexts.sort(
@@ -178,15 +257,22 @@ class MongoService:
                 for ctx in contexts[:2]:
                     logger.info(f"- Content preview: {ctx['content'][:100]}")
                     logger.info(f"- Timestamp: {ctx['timestamp']}")
+                    logger.info(f"- Channel: {ctx['channel']}")
+                    logger.info(f"- Similarity score: {ctx['similarity']}")
             else:
-                logger.info("No contexts found after processing")
+                logger.warning("No contexts found after processing")
+                # Log the query parameters for debugging
+                logger.debug(f"Search parameters:")
+                logger.debug(f"- Original query: {query}")
+                logger.debug(f"- Processed query: {processed_query}")
+                logger.debug(f"- Embedding dimensions: {len(query_embedding)}")
 
             return contexts
 
         except Exception as e:
-            logger.error(f"Error during search: {str(e)}\nTraceback:", exc_info=True)
+            logger.error(f"Critical error during search: {str(e)}", exc_info=True)
             return []
-
+    
     def _create_prompt(self, query: str, contexts: List[Dict]) -> str:
         prompt = f"User Query: {query}\n\nRelevant Announcements (sorted by most recent first):\n\n"
         
@@ -206,100 +292,10 @@ class MongoService:
             "2. If conflicting statements exist, prioritize the most recent one.\n"
             "3. Provide specific details and timestamps when possible to offer clear context.\n"
             "4. If the announcements lack relevant details, explicitly mention this.\n"
-            "5. When discussing API or endpoint status, be explicit about which ones are up or down.\n"
         )
         
         logger.debug(f"Generated prompt: {prompt}")
         return prompt
-
-
-    # def search_announcements(self, query: str) -> List[Dict]:
-    #     logger.info(f"Searching relevant announcements | query: {query}")
-    #     try:
-    #         processed_query = self.preprocess_text(query)
-    #         query_embedding = self.generate_embedding(processed_query)
-
-    #         logger.info("Performing vector similarity search in MongoDB using knnBeta...")
-
-    #         # vector search pipeline
-    #         vector_pipeline = [
-    #             {
-    #                 "$search": {
-    #                     "knnBeta": {
-    #                         "vector": query_embedding,
-    #                         "path": "embedding",
-    #                         "k": 5
-    #                     }
-    #                 }
-    #             },
-    #             {
-    #                 "$project": {
-    #                     "_id": 1,
-    #                     "metadata": 1,
-    #                     "embedding": 1,
-    #                     "score": {"$meta": "searchScore"}
-    #                 }
-    #             }
-    #         ]
-            
-    #         # Text search pipeline
-    #         text_pipeline = [
-    #             {
-    #                 "$search": {
-    #                     "text": {
-    #                         "query": processed_query,
-    #                         "path": "metadata.content"
-    #                     }
-    #                 }
-    #             },
-    #             {
-    #                 "$project": {
-    #                     "_id": 1,
-    #                     "metadata": 1,
-    #                     "embedding": 1,
-    #                     "score": {"$meta": "searchScore"}
-    #                 }
-    #             }
-    #         ]
-
-    #         vector_results = list(self.announcements_collection.aggregate(vector_pipeline))
-    #         text_results = list(self.announcements_collection.aggregate(text_pipeline))
-            
-    #         # Combine results and remove duplicates based on _id
-    #         seen_ids = set()
-    #         combined_results = []
-
-    #         for result in vector_results + text_results:
-    #             if result["_id"] not in seen_ids:
-    #                 seen_ids.add(result["_id"])
-    #                 combined_results.append(result)
-
-    #         # results = list(self.announcements_collection.aggregate(pipeline))
-    #         print("Combined results: {}".format(combined_results))
-
-    #         contexts = []
-    #         for result in combined_results:
-    #             logger.info(f"Processing result | ID:{result['_id']}")
-    #             announcement = self.announcements_collection.find_one({"_id": result["_id"]})
-    #             if announcement:
-    #                 contexts.append({
-    #                     "content": announcement["metadata"]["content"],
-    #                     "channel": announcement["metadata"]["channel"],
-    #                     "timestamp": announcement["metadata"]["timestamp"],
-    #                     "similarity": result["score"]
-    #                 })
-            
-    #         # Sort contexts by timestamp in descending order (most recent first)
-    #         contexts.sort(
-    #             key=lambda x: self.parse_timestamp(x["timestamp"]),
-    #             reverse=True
-    #         )
-
-    #         logger.info(f"Found {len(contexts)} relevant announcements, sorted by timestamp.")
-    #         return contexts
-    #     except Exception as e:
-    #         logger.error(f"Error during search: {str(e)}")
-    #         return []
 
     def generate_response_from_mongo(self, user_query: str) -> Dict:
         try:
@@ -328,7 +324,7 @@ class MongoService:
                     {"role": "system", "content": system_prompt},
                     {"role": "user", "content": user_prompt}
                 ],
-                temperature=0.3,
+                temperature=0.2,
                 max_tokens=500
             )
 
