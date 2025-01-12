@@ -2,9 +2,19 @@ from datetime import datetime, timedelta
 from typing import List
 from pymongo import MongoClient
 from pymongo.collection import Collection
-from .rlhf_trainer import FeedbackEntry
 from loguru import logger
+from dataclasses import dataclass
 
+@dataclass
+class FeedbackEntry:
+    message_id: str
+    query: str
+    response: str
+    feedback_type: str  
+    user_id: str
+    timestamp: datetime
+    replies: List[dict] = None
+    
 class FeedbackManager:
     def __init__(self, mongo_uri: str, database: str = "ross", collection: str = "feedback"):
         self.client = MongoClient(mongo_uri)
@@ -27,7 +37,8 @@ class FeedbackManager:
                     response=doc["interaction"].get("response"),
                     feedback_type=doc["feedback"].get("type"),
                     user_id=doc["original_user"].get("id"),
-                    timestamp=doc["timestamp"]
+                    timestamp=doc["timestamp"],
+                    replies=doc["replies"]
                 )
                 feedbacks.append(feedback)
             else:

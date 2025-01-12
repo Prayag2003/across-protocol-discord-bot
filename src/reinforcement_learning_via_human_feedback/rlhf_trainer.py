@@ -4,10 +4,9 @@ import asyncio
 from enum import Enum
 from datetime import datetime
 from typing import List, Dict, Optional
-from dataclasses import dataclass
 from openai import AsyncOpenAI
 from loguru import logger
-from .preprocess_jsonl import process_jsonl_content
+from .feedback_manager import FeedbackEntry
 
 class OpenAIModel(Enum):
     """Available models for fine-tuning"""
@@ -20,15 +19,6 @@ class RLHFError(Exception):
 class ModelNotAvailableError(RLHFError):
     """Raised when the selected model is not available for fine-tuning"""
     pass
-
-@dataclass
-class FeedbackEntry:
-    message_id: str
-    query: str
-    response: str
-    feedback_type: str  
-    user_id: str
-    timestamp: datetime
 
 class RLHFTrainer:
     def __init__(self, api_key: str, model_name: Optional[str] = None):
@@ -58,13 +48,13 @@ class RLHFTrainer:
             for feedback in feedbacks:
                 base_system_msg = "You are a helpful discord bot assistant for the Across protocol."
                 
-                if feedback.reply:
-                    # When admin reply exists, create a more emphatic training entry
+                if feedback.replies:
+                    admin_feedback_reply = feedback.replies[0]["content"]
                     if feedback.feedback_type == 'positive':
                         system_instruction = (
                             f"IMPORTANT ADMIN FEEDBACK - FOLLOW THIS GUIDANCE:\n\n"
                             f"1. This response format has been explicitly approved by an admin.\n"
-                            f"2. SPECIFIC ADMIN GUIDANCE: {feedback.reply}\n"
+                            f"2. SPECIFIC ADMIN GUIDANCE: {admin_feedback_reply}\n"
                             f"3. This is the exact type of response quality and style we want.\n"
                             f"4. Future responses to similar queries should follow this example and admin guidance.\n"
                             f"5. This response exemplifies our standards for user interaction."
@@ -73,13 +63,12 @@ class RLHFTrainer:
                         system_instruction = (
                             f"CRITICAL ADMIN FEEDBACK - MANDATORY IMPROVEMENTS NEEDED:\n\n"
                             f"1. This response requires specific changes according to admin feedback.\n"
-                            f"2. REQUIRED CHANGES: {feedback.reply}\n"
+                            f"2. REQUIRED CHANGES: {admin_feedback_reply}\n"
                             f"3. This response must be improved following the admin's guidance.\n"
                             f"4. Future responses must avoid similar issues and implement the suggested improvements.\n"
                             f"5. Take this feedback as a critical learning opportunity."
                         )
                 else:
-                    # Default feedback without admin reply
                     system_instruction = (
                         "Respond it was a nice response, go ahead with this."
                         if feedback.feedback_type == 'positive'
@@ -95,66 +84,18 @@ class RLHFTrainer:
                     ]
                 }
                 
-                # If there's an admin reply, add a reinforcement message
-                if feedback.reply:
-                    reinforcement_entry = {
-                        "messages": [
-                            {"role": "system", "content": base_system_msg},
-                            {"role": "user", "content": feedback.query},
-                            {"role": "system", "content": f"Remember: {feedback.reply}"},
-                            {"role": "assistant", "content": feedback.response}
-                        ]
-                    }
-                    dataset.append(reinforcement_entry)
-                
                 dataset.append(entry)
-                logger.debug(
-                    f"Processed feedback for query: '{feedback.query[:50]}...' "
-                    f"with feedback type: {feedback.feedback_type}"
-                    + (f" and admin reply: '{feedback.reply}'" if feedback.reply else "")
-                )
+                # logger.debug(
+                #     f"Processed feedback for query: '{feedback.query[:50]}...' "
+                #     f"with feedback type: {feedback.feedback_type}"
+                #     + (f" and admin reply: '{admin_feedback_reply}'" if feedback.replies else "")
+                # )
                 
             logger.info(f"Generated labeled dataset with {len(dataset)} entries.")
             return dataset
         except Exception as e:
             logger.error(f"Error creating labeled dataset: {str(e)}")
             raise RLHFError(f"Failed to create labeled dataset: {str(e)}")
-
-    # async def create_labeled_dataset(self, feedbacks: List[FeedbackEntry]) -> List[Dict]:
-    #     """
-    #     Creates a dataset from feedback entries with labels.
-    #     Each entry has the format: (query, response, label) where
-    #     label is 1 for positive feedback and 0 for negative feedback.
-    #     """
-    #     dataset = []
-    #     try:
-    #         for feedback in feedbacks:
-    #             if feedback.feedback_type == 'positive':
-    #                 entry = {
-    #                     "messages": [
-    #                         {"role": "system", "content": "You are a helpful discord bot assistant for the Across protocol."},
-    #                         {"role": "user", "content": feedback.query},
-    #                         {"role": "system", "content": "Desired response wanted: " + feedback.reply if feedback.reply else "Respond it was a nice response, go ahead with this."},
-    #                         {"role": "assistant", "content": feedback.response}
-    #                     ]
-    #                 }
-    #             else:
-    #                 entry = {
-    #                     "messages": [
-    #                         {"role": "system", "content": "You are a helpful discord bot assistant for the Across protocol."},
-    #                         {"role": "user", "content": feedback.query},
-    #                         {"role": "system", "content": "Desired response wanted: " + feedback.reply if feedback.reply else "Please generate a better response next time."},
-    #                         {"role": "assistant", "content": feedback.response}
-    #                     ]
-    #                 }
-    #             dataset.append(entry)
-    #             logger.debug(f"Processed feedback for query: '{feedback.query[:50]}...' with feedback type: {feedback.feedback_type}")
-    #         logger.info(f"Generated labeled dataset with {len(dataset)} entries.")
-    #         return dataset
-    #     except Exception as e:
-    #         logger.error(f"Error creating labeled dataset: {str(e)}")
-    #         raise RLHFError(f"Failed to create labeled dataset: {str(e)}")
-
 
     async def prepare_training_file(self, dataset: List[Dict], file_prefix: str = "rlhf") -> str:
         """
@@ -218,7 +159,7 @@ class RLHFTrainer:
             logger.info(f"Successfully created training job: {job.id}")
 
             # remove the jsonl file after the uploading is done and its purpose is over
-            os.remove(training_file)
+            # os.remove(training_file)
             logger.info(f"Removed training file: {training_file}")
 
             return job.id

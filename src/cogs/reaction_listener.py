@@ -60,13 +60,147 @@ class RLHFListener(commands.Cog):
             log_count = 0
             for log in logs:  
                 log_count += 1
-                # logger.info(f"Fetched log: {log['_id']} for user: {log['original_user']['name']}")
 
             logger.info(f"Successfully fetched {log_count} logs from the last 30 days")
 
         except Exception as e:
             logger.error(f"Error fetching recent logs: {e}")
 
+    @commands.Cog.listener()
+    async def on_message(self, message):
+        """Track new messages with .txt attachments and admin replies."""
+        if not self.is_ready:
+            return
+
+        if message.channel == self.channel:
+            if message.attachments and any(att.filename.endswith('.txt') for att in message.attachments):
+                await self.store_feedback(message)
+            elif message.reference and not message.author.bot:  # Handle replies
+                await self.store_reply(message)
+
+    async def store_reply(self, message):
+        """Store admin replies to feedback logs."""
+        try:
+            if not message.author.guild_permissions.administrator:
+                return
+
+            # Get the original message that was replied to
+            referenced_message = await message.channel.fetch_message(message.reference.message_id)
+            
+            # Ensure the referenced message has a .txt attachment
+            if not any(att.filename.endswith('.txt') for att in referenced_message.attachments):
+                return
+
+            # Find the existing feedback entry
+            existing_feedback = self.feedback_collection.find_one({
+                "interaction.message_id": str(referenced_message.id)
+            })
+
+            if existing_feedback:
+                # Create the new reply
+                new_reply = {
+                    "content": message.content,
+                    "author": {
+                        "name": message.author.name,
+                        "id": str(message.author.id)
+                    },
+                    "timestamp": message.created_at,
+                    "message_id": str(message.id)
+                }
+
+                # Use $set with empty array if replies don't exist, otherwise use $push
+                update_operation = {
+                    "$push": {"replies": new_reply}
+                }
+
+                # Perform the update
+                result = self.feedback_collection.update_one(
+                    {"_id": existing_feedback["_id"]},
+                    update_operation,
+                    upsert=True  # Create if doesn't exist
+                )
+
+                if result.modified_count > 0:
+                    logger.info(f"Stored reply from {message.author.name} for feedback {existing_feedback['_id']}")
+
+                    # Send confirmation embed
+                    embed = discord.Embed(
+                        title="Admin Reply Recorded",
+                        description=(
+                            f"Reply by: {message.author.name}\n"
+                            f"Content: {message.content[:100]}..."
+                        ),
+                        color=discord.Color.blue()
+                    )
+                    await message.add_reaction("✅")
+                    await message.channel.send(embed=embed)
+                else:
+                    logger.warning(f"Failed to store reply for feedback {existing_feedback['_id']}")
+                    await message.add_reaction("❌")
+
+        except Exception as e:
+            logger.error(f"Error storing reply: {e}")
+            await message.add_reaction("❌")
+
+    # async def store_reply(self, message):
+    #     """Store admin replies to feedback logs."""
+    #     try:
+    #         if not message.author.guild_permissions.administrator:
+    #             return
+
+    #         # Get the original message that was replied to
+    #         referenced_message = await message.channel.fetch_message(message.reference.message_id)
+            
+    #         # Ensure the referenced message has a .txt attachment
+    #         if not any(att.filename.endswith('.txt') for att in referenced_message.attachments):
+    #             return
+
+    #         # Find the existing feedback entry
+    #         existing_feedback = self.feedback_collection.find_one({
+    #             "interaction.message_id": str(referenced_message.id)
+    #         })
+
+    #         if existing_feedback:
+    #             # Update the feedback document with the reply
+    #             new_reply = {
+    #                 "content": message.content,
+    #                 "author": {
+    #                     "name": message.author.name,
+    #                     "id": str(message.author.id)
+    #                 },
+    #                 "timestamp": message.created_at,
+    #                 "message_id": str(message.id)
+    #             }
+
+    #             # Initialize or append to the replies array
+    #             if "replies" not in existing_feedback:
+    #                 self.feedback_collection.update_one(
+    #                     {"_id": existing_feedback["_id"]},
+    #                     {"$set": {"replies": [new_reply]}}
+    #                 )
+    #             else:
+    #                 self.feedback_collection.update_one(
+    #                     {"_id": existing_feedback["_id"]},
+    #                     {"$push": {"replies": new_reply}}
+    #                 )
+
+    #             logger.info(f"Stored reply from {message.author.name} for feedback {existing_feedback['_id']}")
+
+    #             # Send confirmation embed
+    #             embed = discord.Embed(
+    #                 title="Admin Reply Recorded",
+    #                 description=(
+    #                     f"Reply by: {message.author.name}\n"
+    #                     f"Content: {message.content[:100]}..."
+    #                 ),
+    #                 color=discord.Color.blue()
+    #             )
+    #             await message.add_reaction("✅")
+    #             await message.channel.send(embed=embed)
+
+    #     except Exception as e:
+    #         logger.error(f"Error storing reply: {e}")
+    #         await message.add_reaction("❌")
 
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload):
@@ -89,16 +223,6 @@ class RLHFListener(commands.Cog):
 
         except Exception as e:
             logger.exception(f"Error in on_raw_reaction_add: {e}")
-
-    @commands.Cog.listener()
-    async def on_message(self, message):
-        """Track new messages with .txt attachments."""
-        if not self.is_ready:
-            return
-
-        if message.channel == self.channel and message.attachments:
-            if any(att.filename.endswith('.txt') for att in message.attachments):
-                await self.store_feedback(message)
 
     async def store_feedback(self, message):
         """Store feedback directly from new message with .txt attachments."""
@@ -141,7 +265,8 @@ class RLHFListener(commands.Cog):
                         "feedback": {
                             "type": None,  # No feedback yet
                             "timestamp": datetime.utcnow()
-                        }
+                        },
+                        "replies": []  # Initialize empty replies array
                     }
 
                     self.feedback_collection.insert_one(feedback_entry)
@@ -265,7 +390,8 @@ class RLHFListener(commands.Cog):
                 "feedback": {
                     "type": feedback_type,
                     "timestamp": datetime.utcnow()
-                }
+                },
+                "replies": []  # Initialize empty replies array
             }
 
             existing_feedback = await self.update_existing_feedback(reaction, user)
@@ -312,7 +438,6 @@ class RLHFListener(commands.Cog):
         except Exception as e:
             logger.exception(f"Error updating existing feedback: {e}")
             return False
-
 
 async def setup(bot):
     await bot.add_cog(RLHFListener(bot))

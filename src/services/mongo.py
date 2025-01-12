@@ -31,6 +31,7 @@ class MongoService:
                 
                 # Collections
                 self.announcements_collection = self.db[os.getenv("ANNOUNCEMENTS_COLLECTION")]
+                self.logs_collection = self.db[os.getenv("LOGS_COLLECTION")]
                 openai.api_key = os.getenv("OPENAI_API_KEY")
                 
                 # Check and create vector search index only once
@@ -68,7 +69,6 @@ class MongoService:
                     "name": "vector_index"
                 }
                 
-                # Use the correct method for creating indexes
                 self.announcements_collection.create_search_index(
                     model=index_model
                 )
@@ -83,45 +83,6 @@ class MongoService:
                 logger.error(f"Error creating vector search index: {str(e)}")
                 raise
 
-
-    # def _create_vector_search_index(self):
-    #     """Create vector search index if it doesn't exist"""
-    #     try:
-    #         existing_indexes = list(self.announcements_collection.list_indexes())
-    #         index_names = [idx.get('name') for idx in existing_indexes]
-            
-    #         if "vector_index" not in index_names:
-    #             logger.info("Creating vector search index...")
-                
-    #             index_model = {
-    #                 "definition": {
-    #                     "mappings": {
-    #                         "dynamic": True,
-    #                         "fields": {
-    #                             "embedding": {
-    #                                 "dimensions": 1536,
-    #                                 "similarity": "cosine",
-    #                                 "type": "knnVector"
-    #                             }
-    #                         }
-    #                     }
-    #                 },
-    #                 "name": "vector_index"
-    #             }
-                
-    #             self.announcements_collection.create_search_index(
-    #                 model=index_model
-    #             )
-    #             logger.info("Vector search index created successfully")
-    #         else:
-    #             logger.info("Vector search index already exists")
-            
-    #         logger.info(f"Current indexes: {', '.join(index_names)}")
-            
-    #     except Exception as e:
-    #         logger.error(f"Error creating vector search index: {str(e)}, full error: {e.details if hasattr(e, 'details') else str(e)}")
-    #         raise
-    
     def preprocess_text(self, text: str) -> str:
         logger.info(f"Preprocessing text")
         return ' '.join(text.split()).strip()

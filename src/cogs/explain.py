@@ -56,13 +56,22 @@ class ExplainCog(commands.Cog):
         if message.author.bot:
             return
 
-        if message.content.startswith("/purge") or message.content.startswith("/purge confirm"):
+        if message.content.startswith("/purge"):
             return
 
-        # If message is in a thread and doesn't start with /explain, treat it as an explain command
-        if isinstance(message.channel, discord.Thread) and not message.content.startswith('/explain'):
-            ctx = await self.bot.get_context(message)
-            await self.handle_explanation(ctx, message.content)
+        # Check if this is a message in a thread and if the thread was created for an explanation
+        if (isinstance(message.channel, discord.Thread) and 
+            message.channel.owner_id == self.bot.user.id and  # Only process in threads created by the bot
+            message.channel.parent_id):  # Ensure it's a valid thread with a parent
+            
+            # Remove '/explain' from the start of the message if present
+            query = message.content
+            if query.startswith('/explain'):
+                query = query[8:].strip()
+            
+            if query:  # Only process if there's actual content
+                ctx = await self.bot.get_context(message)
+                await self.handle_explanation(ctx, query)
 
     async def handle_explanation(self, ctx, user_query: str):
         """Handle the explanation generation and response."""
