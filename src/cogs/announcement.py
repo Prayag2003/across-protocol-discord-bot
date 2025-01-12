@@ -21,7 +21,7 @@ class AnnouncementChannelManager:
     @staticmethod
     async def get_announcement_channels(guild: discord.Guild) -> List[discord.TextChannel]:
         """Find announcement-like channels in a guild."""
-        announcement_pattern = re.compile(r"announcement[s]?|update[s]?|new[s]?", re.IGNORECASE)
+        announcement_pattern = re.compile(r"announcement[s]?|update[s]?|new[s]?|chain-updates", re.IGNORECASE)
         channels = [
             channel for channel in guild.text_channels
             if announcement_pattern.search(channel.name)

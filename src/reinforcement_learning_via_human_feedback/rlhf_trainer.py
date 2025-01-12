@@ -1,3 +1,4 @@
+import os
 import json
 import asyncio
 from enum import Enum
@@ -10,13 +11,7 @@ from .preprocess_jsonl import process_jsonl_content
 
 class OpenAIModel(Enum):
     """Available models for fine-tuning"""
-    
     GPT_4o_06082024 = "gpt-4o-2024-08-06"
-    # GPT_4_0613 = "gpt-4-0613"
-    # GPT35_TURBO = "gpt-3.5-turbo" 
-    # GPT35_TURBO_0613 = "gpt-3.5-turbo-0613"
-    # BABBAGE_002 = "babbage-002"
-    # DAVINCI_002 = "davinci-002"
 
 class RLHFError(Exception):
     """Base exception for RLHF-related errors"""
@@ -87,20 +82,29 @@ class RLHFTrainer:
             logger.error(f"Error creating labeled dataset: {str(e)}")
             raise RLHFError(f"Failed to create labeled dataset: {str(e)}")
 
+
     async def prepare_training_file(self, dataset: List[Dict], file_prefix: str = "rlhf") -> str:
         """
         Writes the labeled dataset to a JSONL file for training.
+        Ensures files are stored in the 'train' directory.
         """
         try:
+            # Ensure the 'train' directory exists
+            train_dir = "train"
+            os.makedirs(train_dir, exist_ok=True)
+
+            # Create the file path with a timestamp
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
             filename = f"{file_prefix}_{timestamp}.jsonl"
+            file_path = os.path.join(train_dir, filename)
 
-            with open(filename, 'w') as f:
+            # Write dataset to the file
+            with open(file_path, 'w') as f:
                 for entry in dataset:
                     f.write(json.dumps(entry) + '\n')
-                    
-            logger.info(f"Training file {filename} created with {len(dataset)} entries.")
-            return filename
+
+            logger.info(f"Training file {file_path} created with {len(dataset)} entries.")
+            return file_path
         except Exception as e:
             logger.error(f"Error preparing training file: {str(e)}")
             raise RLHFError(f"Failed to prepare training file: {str(e)}")
@@ -116,7 +120,8 @@ class RLHFTrainer:
                     purpose='fine-tune'
                 )
 
-            logger.info(f"File upload response: {file_upload}")    
+            logger.info(f"File upload response: {file_upload}")   
+            
             
             job = await self.client.fine_tuning.jobs.create(
                 training_file=file_upload.id,
@@ -138,6 +143,11 @@ class RLHFTrainer:
                 logger.info(f"Training event: {event.message} at {event.created_at}")
             
             logger.info(f"Successfully created training job: {job.id}")
+
+            # remove the jsonl file after the uploading is done and its purpose is over
+            os.remove(training_file)
+            logger.info(f"Removed training file: {training_file}")
+
             return job.id
             
         except Exception as e:
