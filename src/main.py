@@ -26,7 +26,7 @@ async def main():
     """
 
     # Start the "scraping and prepare KB" script without waiting for it
-    # update_documentation_by_scraping_again_and_prepare_new_knowledge_base()
+    update_documentation_by_scraping_again_and_prepare_new_knowledge_base()
 
     # Create bot instance
     bot = create_bot()
