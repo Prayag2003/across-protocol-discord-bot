@@ -222,13 +222,13 @@ class MongoService:
 
             # Enhanced result logging
             for idx, result in enumerate(results):
-                logger.info(f"Document {idx + 1}:")
-                logger.info(f"ID: {result.get('_id')}")
-                logger.info(f"Timestamp: {result['metadata'].get('timestamp', 'N/A')}")
-                logger.info(f"Channel: {result['metadata'].get('channel', 'N/A')}")
-                logger.info(f"Content preview: {result['metadata'].get('content', '')[:100]}...")
+                # logger.info(f"Document {idx + 1}:")
+                # logger.info(f"ID: {result.get('_id')}")
+                # logger.info(f"Timestamp: {result['metadata'].get('timestamp', 'N/A')}")
+                # logger.info(f"Channel: {result['metadata'].get('channel', 'N/A')}")
+                # logger.info(f"Content preview: {result['metadata'].get('content', '')[:100]}...")
                 logger.info(f"Search score: {result.get('score', 0)}")
-                logger.info("-" * 50)
+                # logger.info("-" * 50)
 
             # Process results
             contexts = []
@@ -254,20 +254,20 @@ class MongoService:
             logger.info(f"Final processed contexts count: {len(contexts)}")
             
             # Log processed contexts for debugging
-            if contexts:
-                logger.info("Sample of found contexts:")
-                for ctx in contexts[:2]:
-                    logger.info(f"- Content preview: {ctx['content'][:100]}")
-                    logger.info(f"- Timestamp: {ctx['timestamp']}")
-                    logger.info(f"- Channel: {ctx['channel']}")
-                    logger.info(f"- Similarity score: {ctx['similarity']}")
-            else:
-                logger.warning("No contexts found after processing")
-                # Log the query parameters for debugging
-                logger.debug(f"Search parameters:")
-                logger.debug(f"- Original query: {query}")
-                logger.debug(f"- Processed query: {processed_query}")
-                logger.debug(f"- Embedding dimensions: {len(query_embedding)}")
+            # if contexts:
+            #     logger.info("Sample of found contexts:")
+            #     for ctx in contexts[:2]:
+            #         logger.info(f"- Content preview: {ctx['content'][:100]}")
+            #         logger.info(f"- Timestamp: {ctx['timestamp']}")
+            #         logger.info(f"- Channel: {ctx['channel']}")
+            #         logger.info(f"- Similarity score: {ctx['similarity']}")
+            # else:
+            #     logger.warning("No contexts found after processing")
+            #     # Log the query parameters for debugging
+            #     logger.debug(f"Search parameters:")
+            #     logger.debug(f"- Original query: {query}")
+            #     logger.debug(f"- Processed query: {processed_query}")
+            #     logger.debug(f"- Embedding dimensions: {len(query_embedding)}")
 
             return contexts
 
@@ -296,7 +296,7 @@ class MongoService:
             "4. If the announcements lack relevant details, explicitly mention this.\n"
         )
         
-        logger.debug(f"Generated prompt: {prompt}")
+        # logger.debug(f"Generated prompt: {prompt}")
         return prompt
 
     def generate_response_from_mongo(self, user_query: str) -> Dict:

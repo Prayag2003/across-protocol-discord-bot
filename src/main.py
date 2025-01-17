@@ -18,7 +18,7 @@ async def main():
     1. Starts the `execute_files.py` script as a non-blocking subprocess.
     2. Creates the bot instance.
     3. Sets up event listeners.
-    4. Loads the 'explain' cog for handling `/explain` commands.
+    4. Loads the 'ask' cog for handling `/ask` commands.
     5. Starts the bot using the Discord TOKEN.
 
     @param None: This function takes no parameters.
@@ -36,7 +36,7 @@ async def main():
     
     # Load cogs
     await bot.load_extension('cogs.announcement')
-    await bot.load_extension('cogs.explain')
+    await bot.load_extension('cogs.ask')
     await bot.load_extension('cogs.reaction_listener')
     await bot.load_extension('cogs.delete')
     await bot.load_extension('cogs.help_cog')

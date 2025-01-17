@@ -9,7 +9,23 @@ from pymongo import MongoClient
 from sklearn.metrics.pairwise import cosine_similarity
 from inference.logger import log_query_and_response
 from inference.template.prompt_template import generate_prompt_template
+from utils.query_transformer import Web3QueryPreprocessor
 load_dotenv()
+
+_query_preprocessor = None
+
+def get_query_preprocessor():
+    global _query_preprocessor
+    if _query_preprocessor is None:
+        _query_preprocessor = Web3QueryPreprocessor()
+    return _query_preprocessor
+
+def preprocess_query(query: str) -> str:
+    """
+    Preprocess the query using the Web3QueryPreprocessor
+    """
+    preprocessor = get_query_preprocessor()
+    return preprocessor.preprocess(query)
 
 def get_latest_fine_tuned_model() -> str:
     try:
@@ -54,11 +70,10 @@ def generate_embedding_for_query(client, text):
     except Exception as e:
         raise Exception(f"Error generating embedding: {str(e)}")
 
-def compute_similarity(query_embedding, embeddings_list, query):
+def compute_similarity(query_embedding, embeddings_list):
     """Enhanced similarity computation"""
     similarities = []
     logger.info("Computing similarities for the query embedding...")
-    query_terms = query.lower().split()
 
     for entry in embeddings_list:
         try:
@@ -77,10 +92,10 @@ def compute_similarity(query_embedding, embeddings_list, query):
 
     return similarities
 
-def find_most_similar_documents(query_embedding, embeddings_list, query, top_n=3):
+def find_most_similar_documents(query_embedding, embeddings_list, top_n=3):
     """Find most similar documents with improved filtering"""
     logger.info(f"Found top {top_n} similar documents...")
-    similarities = compute_similarity(query_embedding, embeddings_list, query)
+    similarities = compute_similarity(query_embedding, embeddings_list)
     
     filtered_similarities = [
         (url, sim, content) for url, sim, content in similarities 
@@ -140,8 +155,9 @@ def generate_response_with_context(user_query: str, username: str):
         logger.error(f"Failed to load embeddings: {str(e)}")
         return "Failed to retrieve embeddings from file and MongoDB."
 
-    query_embedding = generate_embedding_for_query(client, user_query)
-    most_similar_docs = find_most_similar_documents(query_embedding, embeddings_list, user_query, top_n=3)
+    query = preprocess_query(user_query)
+    query_embedding = generate_embedding_for_query(client, query)
+    most_similar_docs = find_most_similar_documents(query_embedding, embeddings_list, top_n=3)
     logger.info(f"Found {len(most_similar_docs)} most similar documents.")
 
     context = generate_context_from_documents(most_similar_docs)
@@ -209,47 +225,3 @@ def generate_response_with_context(user_query: str, username: str):
     except Exception as e:
         logger.error(f"Error generating response: {str(e)}")
         return "Sorry, there was an error generating the response."
-
-
-# def generate_response_with_context(user_query: str, username: str):
-
-#     logger.info(f"Processing query: {user_query}")
-#     client = get_openai_client()
-
-#     model_name = get_latest_fine_tuned_model()
-#     logger.info(f"Using model: {model_name}")
-
-#     embeddings_path = os.path.join('knowledge_base', 'embeddings', 'merged_knowledge_base_embeddings.json')
-
-#     try:
-#         embeddings_list = load_embeddings(embeddings_path)
-#         logger.info("Successfully loaded embeddings.")
-#     except Exception as e:
-#         logger.error(f"Failed to load embeddings: {str(e)}")
-#         return "Failed to retrieve embeddings from file and MongoDB."
-
-#     query_embedding = generate_embedding_for_query(client, user_query)
-#     most_similar_docs = find_most_similar_documents(query_embedding, embeddings_list, user_query, top_n=3)
-#     logger.info(f"Found {len(most_similar_docs)} most similar documents.")
-
-#     context = generate_context_from_documents(most_similar_docs)
-#     logger.info(f"Generated context with {len(context)} characters.")
-
-#     messages = generate_prompt_template(context, user_query)
-
-#     try:
-#         response = client.chat.completions.create(
-#             model=model_name,
-#             messages=messages,
-#             max_tokens=1000,
-#             temperature=0.15,
-#         )
-
-#         response_text = response.choices[0].message.content.strip()
-#         logger.info(f"Generated response.")
-#         log_query_and_response(user_query, response_text, username)
-#         return response_text
-
-#     except Exception as e:
-#         logger.error(f"Error generating response: {str(e)}")
-#         return "Sorry, there was an error generating the response."

@@ -4,8 +4,8 @@ from discord.ui import View, Button
 
 COMMANDS = [
     {
-        "command": "/explain [query]",
-        "description": "Provides explanation about documentation",
+        "command": "/ask [query]",
+        "description": "Provides explanation about Documentation",
         "category": "General"
     },
     {

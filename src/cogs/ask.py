@@ -46,7 +46,7 @@ class DiscordResponseHandler:
             logger.error(f"Thread creation error: {e}")
             return None
 
-class ExplainCog(commands.Cog):
+class AskCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -64,9 +64,9 @@ class ExplainCog(commands.Cog):
             message.channel.owner_id == self.bot.user.id and  # Only process in threads created by the bot
             message.channel.parent_id):  # Ensure it's a valid thread with a parent
             
-            # Remove '/explain' from the start of the message if present
+            # Remove '/ask' from the start of the message if present
             query = message.content
-            if query.startswith('/explain'):
+            if query.startswith('/ask'):
                 query = query[8:].strip()
             
             if query:  # Only process if there's actual content
@@ -77,7 +77,7 @@ class ExplainCog(commands.Cog):
         """Handle the explanation generation and response."""
         try:
             username = ctx.author.name
-            logger.debug(f"Processing explain command from user: {username}")
+            logger.debug(f"Processing ask command from user: {username}")
             logger.debug(f"Query: {user_query}")
 
             thinking_message = await ctx.send("Analyzing your query... 🤔")
@@ -159,11 +159,11 @@ class ExplainCog(commands.Cog):
                     pass
             await ctx.send(f"An error occurred: {str(e)}")
 
-    @commands.command(name='explain')
-    async def explain(self, ctx, *, user_query: str):
+    @commands.command(name='ask')
+    async def ask(self, ctx, *, user_query: str):
         """Generate an explanation for the user query."""
         await self.handle_explanation(ctx, user_query)
 
 async def setup(bot):
-    """Setup function to add the Explain Cog to the bot."""
-    await bot.add_cog(ExplainCog(bot))
+    """Setup function to add the ask Cog to the bot."""
+    await bot.add_cog(AskCog(bot))
