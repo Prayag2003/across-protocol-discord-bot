@@ -10,3 +10,5 @@ pinecone
 apscheduler
 tabulate
 pandas
+nltk 
+textblob
