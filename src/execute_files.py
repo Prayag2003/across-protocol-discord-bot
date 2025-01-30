@@ -16,10 +16,11 @@ def execute_files():
     # Ensure paths are relative to the script directory
     base_dir = os.path.dirname(os.path.abspath(__file__))
     files = [
-        os.path.join(base_dir, 'scraper', 'scraper.py'),
-        os.path.join(base_dir, 'scraper', 'create_knowledge_base_from_json.py'),
-        os.path.join(base_dir, 'knowledge_base', 'generate_embeddings.py'),
-        os.path.join(base_dir, 'knowledge_base', 'merge_embeddings.py')
+        os.path.join(base_dir, 'main_pipeline.py'),
+        # os.path.join(base_dir, 'scraper', 'scraper.py'),
+        # os.path.join(base_dir, 'scraper', 'create_knowledge_base_from_json.py'),
+        # os.path.join(base_dir, 'knowledge_base', 'generate_embeddings.py'),
+        # os.path.join(base_dir, 'knowledge_base', 'merge_embeddings.py')
     ]
     
     for file in files:

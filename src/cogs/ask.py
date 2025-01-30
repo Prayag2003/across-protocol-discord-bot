@@ -1,4 +1,6 @@
 import io
+import re
+import os
 import asyncio
 import discord
 from loguru import logger
@@ -6,9 +8,23 @@ from collections import Counter
 from pymongo import MongoClient
 from discord.ext import commands
 from utils.logging import log_manager
-from typing import Optional
+from typing import Optional, List
 from inference.inference import generate_response_with_context
 from utils.message import chunk_message_by_paragraphs, extract_code_blocks, get_file_extension
+from inference.query import InferenceEngine
+from embedding.announcement_embedder import AnnouncementEmbedder
+
+class AnnouncementChannelManager:
+    @staticmethod
+    async def get_announcement_channels(guild: discord.Guild) -> List[discord.TextChannel]:
+        """Find announcement-like channels in a guild."""
+        announcement_pattern = re.compile(r"announcement[s]?|update[s]?|new[s]?|chain-updates", re.IGNORECASE)
+        channels = [
+            channel for channel in guild.text_channels
+            if announcement_pattern.search(channel.name)
+        ]
+        # print(channels)
+        return channels
 
 class DiscordResponseHandler:
     @staticmethod
@@ -49,6 +65,33 @@ class DiscordResponseHandler:
 class AskCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.inference_engine = InferenceEngine(vectorstore_path="vector_store")
+        self.announcement_channels: List[discord.TextChannel] = []
+        self.announcement_embedder = AnnouncementEmbedder(output_base_dir = "vector_store")
+
+    async def update_announcement_channels(self, guild: discord.Guild):
+        """Update cached announcement channels for a given guild."""
+        logger.info(f"Announcement channels updated for {guild.name}: {self.announcement_channels}")
+        self.announcement_channels = await AnnouncementChannelManager.get_announcement_channels(guild)
+
+    @commands.Cog.listener()
+    async def on_ready(self):
+        """Populate announcement channels cache when the bot is ready."""
+        try:
+            logger.info("Bot is ready! Starting to populate announcement channels.")
+            await self.bot.wait_until_ready()
+
+            if not self.bot.guilds:
+                logger.warning("The bot is not part of any guilds.")
+                return
+
+            for guild in self.bot.guilds:
+                logger.info(f"Processing guild: {guild.name} (ID: {guild.id})")
+                await self.update_announcement_channels(guild)
+
+            logger.info("Announcement channels cache initialized. {}".format(self.announcement_channels))
+        except Exception as e:
+            logger.error(f"Error initializing announcement channels: {e}")
 
     @commands.Cog.listener()
     async def on_message(self, message):
@@ -58,6 +101,69 @@ class AskCog(commands.Cog):
 
         if message.content.startswith("/purge"):
             return
+
+        # Check if the message is in an announcement channel
+        if message.channel.name in [channel.name for channel in self.announcement_channels]:
+            try:
+                content = (
+                    message.content or
+                    " ".join(embed.description or embed.title or '' for embed in message.embeds) or
+                    " ".join(attachment.url for attachment in message.attachments)
+                )
+                if not content.strip():
+                    logger.info(f"No processable content in {message.channel.name} by {message.author.name}.")
+                    return
+
+                logger.info(f"Processing message in {message.channel.name}: {content[:30] + '...' + content[-30:]}")
+
+                # Format the content into a Document
+                document = self.announcement_embedder.format_announcement(
+                    content=content.strip(),
+                    channel_name=message.channel.name,
+                    author_name=message.author.name,
+                    timestamp=message.created_at.isoformat(),
+                    url=f"https://discord.com/channels/{message.guild.id}/{message.channel.id}/{message.id}"
+                )
+
+                # Save to Vector Search
+                self.announcement_embedder.save_to_vectorstore(document)
+                logger.info("Announcement vectorized and stored in Chroma DB Search.")
+
+            except Exception as e:
+                logger.error(f"Failed to process announcement: {e}")
+
+        # if message.channel.name in [channel.name for channel in self.announcement_channels]:
+        #     try:
+        #         content = (
+        #             message.content or
+        #             " ".join(embed.description or embed.title or '' for embed in message.embeds) or
+        #             " ".join(attachment.url for attachment in message.attachments)
+        #         )
+        #         if not content.strip():
+        #             logger.info(f"No processable content in {message.channel.name} by {message.author.name}.")
+        #             return
+
+        #         logger.info(f"Processing message in {message.channel.name}: {content[:30] + '...' + content[-30:]}")
+
+        #         metadata = {
+        #             "content": content.strip(),
+        #             "channel": message.channel.name,
+        #             "author": message.author.name,
+        #             "timestamp": message.created_at.isoformat(),
+        #             "url": f"https://discord.com/channels/{message.guild.id}/{message.channel.id}/{message.id}"
+        #         }
+
+        #         # logger.info(f"Metadata: {metadata}")
+
+        #         # Save to Vector Search
+        #         success = self.announcement_embedder.save_to_vectorstore(metadata)
+        #         if success:
+        #             logger.info(f"Announcement vectorized and stored in MongoDB Vector Search")
+        #         else:
+        #             logger.error("Failed to store announcement in MongoDB Vector Search.")
+
+        #     except Exception as e:
+        #         logger.error(f"Failed to process announcement: {e}")
 
         # Check if this is a message in a thread and if the thread was created for an explanation
         if (isinstance(message.channel, discord.Thread) and 
@@ -116,8 +222,9 @@ class AskCog(commands.Cog):
 
             loader_task = asyncio.create_task(update_thinking_message())
             await asyncio.sleep(0.5)
-
-            explanation = await asyncio.to_thread(generate_response_with_context, user_query, username)
+            
+            # explanation = await asyncio.to_thread(generate_response_with_context, user_query, username)
+            explanation = await asyncio.to_thread(self.inference_engine.process_query, query_text=user_query, username=username)
             explanation = explanation.strip()
             
             loading = False
