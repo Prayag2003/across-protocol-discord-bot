@@ -35,7 +35,7 @@ async def main():
     await setup_events(bot)
     
     # Load cogs
-    await bot.load_extension('cogs.announcement')
+    # await bot.load_extension('cogs.announcement')
     await bot.load_extension('cogs.ask')
     await bot.load_extension('cogs.reaction_listener')
     await bot.load_extension('cogs.delete')

@@ -12,3 +12,10 @@ tabulate
 pandas
 nltk 
 textblob
+langchain_community 
+tiktoken 
+langchain-openai 
+langchainhub 
+chromadb 
+langchain 
+langchain-chroma>=0.1.2
