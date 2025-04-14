@@ -1,5 +1,11 @@
 # Ross - AI-Powered Assistant for Across Protocol
 
+## Architecture Diagram
+![alt text](assets/architechture.png)
+
+## Workflow Overview
+![alt text](assets/workflow.png)
+
 ## **Priority 1: Key Functionality** (Estimated Time: 2 weeks)
 
 ### **1.1 Accessibility through Wallet Connectivity & Financial Assistance**
